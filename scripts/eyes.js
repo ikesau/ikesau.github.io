@@ -10,46 +10,15 @@ class Eye {
     this.height = width * 0.75;
     this.openPercentage = 0;
   }
-  setIsOpen(isOpen) {
-    this.isOpen = isOpen;
-  }
-  setHasBeenClosed(hasBeenClosed) {
-    this.hasBeenClosed = hasBeenClosed;
-  }
   draw() {
-    if (!this.isOpen) return;
-    push();
-    translate(this.pos.x, this.pos.y);
-    fill(scleraFills[scleraFillIndex]);
-    beginShape();
-    vertex(-this.width, 0);
-    bezierVertex(
-      -this.width / 2,
-      -this.height,
-      this.width / 2,
-      -this.height,
-      this.width,
-      0
-    );
-    bezierVertex(
-      this.width / 2,
-      this.height,
-      -this.width / 2,
-      this.height,
-      -this.width,
-      0
-    );
-    endShape();
-    fill(0);
+    if (!this.isOpen && this.openPercentage < 0.01) return;
     const pupil = createVector(mouseX, mouseY).sub(this.pos).limit(this.height);
-    circle(pupil.x, pupil.y, this.width * 0.9);
-    const maxOpenPercentage = this.hasBeenClosed
-      ? 0
-      : map(pupil.y, -this.height, this.height, 1, 0.6);
-    stroke(0);
-    if (this.isOpen) {
-      this.openPercentage = lerp(this.openPercentage, maxOpenPercentage, 0.4);
-    }
+    const maxOpenPercentage = map(pupil.y, -this.height, this.height, 1, 0.6);
+    this.openPercentage = lerp(
+      this.openPercentage,
+      this.isOpen ? maxOpenPercentage : 0,
+      0.4
+    );
     const topLidY = map(
       this.openPercentage,
       0,
@@ -57,26 +26,6 @@ class Eye {
       this.height * 0.5,
       -this.height
     );
-    scale(1, 1.1);
-    beginShape();
-    vertex(-this.width, 0);
-    bezierVertex(
-      -this.width / 2,
-      -this.height,
-      this.width / 2,
-      -this.height,
-      this.width,
-      0
-    );
-    bezierVertex(
-      this.width / 2,
-      topLidY,
-      -this.width / 2,
-      topLidY,
-      -this.width,
-      0
-    );
-    endShape();
     const bottomLidY = map(
       this.openPercentage,
       0,
@@ -84,25 +33,30 @@ class Eye {
       this.height * 0.5,
       this.height
     );
+    push();
+    translate(this.pos.x, this.pos.y);
+    fill(scleraFills[scleraFillIndex]);
     beginShape();
     vertex(-this.width, 0);
     bezierVertex(
       -this.width / 2,
-      bottomLidY,
+      topLidY,
       this.width / 2,
-      bottomLidY,
+      topLidY,
       this.width,
       0
     );
     bezierVertex(
       this.width / 2,
-      this.height,
+      bottomLidY,
       -this.width / 2,
-      this.height,
+      bottomLidY,
       -this.width,
       0
     );
     endShape();
+    fill(0);
+    circle(pupil.x, pupil.y, this.width * 0.9);
     pop();
   }
 }
@@ -134,8 +88,8 @@ class Ripple {
     this.radius += 3;
     eyes.forEach((eye) => {
       if (p5.Vector.sub(this.pos, eye.pos).mag() < this.radius) {
-        if (!eye.hasBeenClosed) {
-          eye.setIsOpen(true);
+        if (!eye.isOpen && !eye.openPercentage) {
+          eye.isOpen = true;
         }
       }
     });
@@ -150,6 +104,7 @@ function setup() {
   createEyesOutOfNothingAndPutThemIntoABox();
 }
 function draw() {
+  background(0);
   eyes.forEach((eye) => eye.draw());
   if (ripple && !ripple.isComplete) ripple.expand();
 }
@@ -159,7 +114,7 @@ function mousePressed() {
   }
   if (ripple.isComplete) {
     const eyeThatIsStillOpenDespiteEveryOpportunityYouHad = eyes.find(
-      (eye) => !eye.hasBeenClosed
+      (eye) => eye.isOpen
     );
     if (!eyeThatIsStillOpenDespiteEveryOpportunityYouHad) {
       createEyesOutOfNothingAndPutThemIntoABox();
@@ -171,7 +126,7 @@ function mousePressed() {
       p5.Vector.sub(eye.pos, createVector(mouseX, mouseY)).mag() < eyeWidth
   );
   if (clickedEye && clickedEye.isOpen) {
-    clickedEye.setHasBeenClosed(true);
+    clickedEye.isOpen = false;
   }
 }
 function keyPressed() {
