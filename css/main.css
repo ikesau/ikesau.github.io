@@ -20,8 +20,14 @@ h3 {
 
 .projects-container a {
   height: 100px;
+  overflow: hidden;
 }
 
 .eyes-thumbnail {
   background-color: #000;
+}
+
+.life-thumbnail {
+  width: 100%;
+  object-fit: cover;
 }
