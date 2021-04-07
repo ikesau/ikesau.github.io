@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  {%- include head.html extra_css="gallery" -%}
+  <body>
+    <main aria-label="content">
+      {% for image in site.data.aotearoa_photos %}
+      <div class="gallery-image-container">
+        <img src="assets/images/{{page.title}}/{{image.filename}}" />
+        <div class="gallery-image-description">
+          <h3>{{image.title}}</h3>
+          <p>{{image.description}}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </main>
+  </body>
+</html>
