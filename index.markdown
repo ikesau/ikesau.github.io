@@ -22,8 +22,9 @@ layout: default
       >
     </li>
     <li><a href="/aotearoa_photos.html">aotearoa photos</a></li>
-    <li><a href="/eyes.html">eyes</a></li>
-    <li><a href="/life.html"> life </a></li>
+    <!-- under renovation -->
+    <!-- <li><a href="/eyes.html">eyes</a></li>
+    <li><a href="/life.html"> life </a></li> -->
   </ul>
   <h2>bye</h2>
 </div>
