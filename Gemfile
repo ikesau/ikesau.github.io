@@ -3,7 +3,7 @@ source "https://rubygems.org"
 # Run Jekyll with `bundle exec jekyll serve`
 
 # https://github.com/github/pages-gem
-gem 'github-pages', group: :jekyll_plugins
+gem "github-pages", "~> 214", group: :jekyll_plugins
 
 # Windows and JRuby does not include zoneinfo files, so bundle the tzinfo-data gem
 # and associated library.
