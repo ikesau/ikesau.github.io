@@ -4,8 +4,6 @@ description: >-
   website happy
 baseurl: ""
 url: "https://ikesau.co"
-twitter_username: ikeasu
-github_username: ikesau
 exclude:
   - .sass-cache/
   - .jekyll-cache/
