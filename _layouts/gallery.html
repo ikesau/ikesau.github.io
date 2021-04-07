@@ -5,7 +5,10 @@
     <main aria-label="content">
       {% for image in site.data.aotearoa_photos %}
       <div class="gallery-image-container">
-        <img src="assets/images/{{page.title}}/{{image.filename}}" />
+        <img
+          loading="lazy"
+          src="assets/images/{{page.title}}/{{image.filename}}"
+        />
         <div class="gallery-image-description">
           <h3>{{image.title}}</h3>
           <p>{{image.description}}</p>
