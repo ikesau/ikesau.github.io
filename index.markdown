@@ -21,7 +21,24 @@ layout: default
         >twitter</a
       >
     </li>
+    <li>
+      <a
+        href="https://en.wikipedia.org/wiki/Special:Contributions/Ike_Saunders"
+        target="_blank"
+        rel="noopener noreferrer"
+        >wikipedia</a
+      >
+    </li>
+    <li>
+      <a
+        href="https://observablehq.com/@ikesau"
+        target="_blank"
+        rel="noopener noreferrer"
+        >observable</a
+      >
+    </li>
     <li><a href="/aotearoa_photos.html">aotearoa photos</a></li>
+    <li><a href="/cool_websites.html">other cool websites</a></li>
     <!-- under renovation -->
     <!-- <li><a href="/eyes.html">eyes</a></li>
     <li><a href="/life.html"> life </a></li> -->
