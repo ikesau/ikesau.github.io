@@ -36,5 +36,13 @@ layout: default
         >orca</a
       > - dwarf fortress meets vim meets a MIDI sequencer
     </li>
+    <li>
+      <a
+        href="https://www.geocities.ws/ccqsk/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >realistik studios</a
+      > - ♥♥♥
+    </li>
   </ul>
 </div>
