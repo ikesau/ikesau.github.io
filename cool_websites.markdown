@@ -44,5 +44,45 @@ layout: default
         >realistik studios</a
       > - ♥♥♥
     </li>
+    <li>
+      <a
+        href="https://libgen.is/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >libgen</a
+      > - book piracy
+    </li>
+    <li>
+      <a
+        href="https://sci-hub.do"
+        target="_blank"
+        rel="noopener noreferrer"
+        >sci-hub</a
+      > - journal piracy
+    </li>
+    <li>
+      <a
+        href="https://arxiv.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >arxiv</a
+      > - open journal for physics/maths/compsci/astronomy preprints
+    </li>
+    <li>
+      <a
+        href="https://warmplace.ru/soft/ans/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >virtual ANS</a
+      > - turn pictures into music
+    </li>
+    <li>
+      <a
+        href="https://ipfs.io/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >ipfs.io</a
+      > - seamless decentralized web protocol for creating an open internet
+    </li>
   </ul>
 </div>
