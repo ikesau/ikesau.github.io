@@ -40,11 +40,12 @@ layout: default
     <li><a href="/aotearoa_photos.html">aotearoa photos</a></li>
     <li><a href="/cool_websites.html">other cool websites</a></li>
   </ul>
-  <h4>interactive code things</h4>
+  <h4>various code sketches</h4>
   <ul>
     <li><a href="/eyes.html">eyes</a></li>
     <li><a href="/life.html"> life </a></li>
     <li><a href="/koru.html"> koru </a></li>
+    <li><a href="/scanner.html"> scanner</a></li>
   </ul>
   <p>a friend is someone whose voice it feels good to hear</p>
   <h2>bye</h2>
