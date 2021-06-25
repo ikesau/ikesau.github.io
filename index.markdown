@@ -43,7 +43,8 @@ layout: default
   <h4>various code sketches</h4>
   <ul>
     <li><a href="/eyes.html">eyes</a></li>
-    <li><a href="/life.html"> life </a></li>
+    <li><a href="/life.html">life </a></li>
+    <li><a href="/n-body.html">n-body </a></li>
   </ul>
   <p>a friend is someone whose voice it feels good to hear</p>
   <h2>bye</h2>
