@@ -38,6 +38,14 @@ layout: default
     </li>
     <li>
       <a
+        href="https://100r.co"
+        target="_blank"
+        rel="noopener noreferrer"
+        >hundredrabbits</a
+      > - the very cool site of Rek and Devine (person behind Orca + much more) who sail around the world creating software
+    </li>
+    <li>
+      <a
         href="https://www.geocities.ws/ccqsk/"
         target="_blank"
         rel="noopener noreferrer"
