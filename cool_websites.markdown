@@ -84,5 +84,45 @@ layout: default
         >ipfs.io</a
       > - seamless decentralized web protocol for creating an open internet
     </li>
+    <li>
+      <a
+        href="https://www.awesometapes.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >awesometapes.com</a
+      > - a huge collection of music from africa
+    </li>
+    <li>
+      <a
+        href="https://ubu.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >ubu.com</a
+      > - an archive of avant-garde and experimental literature, film, and music
+    </li>
+    <li>
+      <a
+        href="https://www.tekgnostics.com/LIBRARY.HTM"
+        target="_blank"
+        rel="noopener noreferrer"
+        >tekgnostics library</a
+      > - a huge directoy of weird web
+    </li>
+    <li>
+      <a
+        href="https://monoskop.org/Monoskop"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Monoskop</a
+      > - art + humanities wiki
+    </li>
+    <li>
+      <a
+        href="https://0100101110101101.org/works/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >0100101110101101</a
+      > - eva & franco mattes' works (i like BEFNOED)
+    </li>
   </ul>
 </div>
