@@ -172,5 +172,7 @@ layout: default
   </div>
   <p>water the flowers - clean the volcanoes</p>
 
+  <img src="assets/images/lauft.svg" alt="je n'ai plus peur de perdue mon temps"/>
+
   <h2>bye</h2>
 </div>
