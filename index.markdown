@@ -46,6 +46,10 @@ layout: default
     <li><a href="/life.html">life </a></li>
     <li><a href="/n-body.html">n-body </a></li>
   </ul>
+  <h4>other projects</h4>
+  <ul>
+    <li><a href="https://observablehq.com/@ikesau/a-novel-analysis">a novel analysis</a></li>
+  </ul>
   <p>a friend is someone whose voice it feels good to hear</p>
   <div style="padding: 32px;background: #111;color: white;">
     <p>Nobody can protect</p>
