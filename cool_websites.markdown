@@ -132,5 +132,13 @@ layout: default
         >0100101110101101</a
       > - eva & franco mattes' works (i like BEFNOED)
     </li>
+    <li>
+      <a
+        href="https://www.wordnik.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >wordnik</a
+      > - the best free online dictionary & thesaurus i've found
+    </li>
   </ul>
 </div>
