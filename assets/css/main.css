@@ -11,3 +11,9 @@ h2,
 h3 {
   line-height: 1.2;
 }
+
+#who-are-you {
+  background: #ffeaee;
+  padding: 32px;
+  font-style: italic;
+}

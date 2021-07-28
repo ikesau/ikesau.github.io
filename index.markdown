@@ -174,9 +174,23 @@ layout: default
     <p>Wealth, status, pride,</p>
     <p>are their own ruin</p>
   </div>
-  <p>water the flowers - clean the volcanoes</p>
-
+  <p>water the flowers, clean the volcanoes</p>
+  
   <img src="assets/images/lauft.svg" alt="je n'ai plus peur de perdue mon temps"/>
+
+  <script>
+    const clippings = fetch("/assets/clippings.txt")
+      .then(res => res.text())
+      .then(text => text.split("\r"))
+      .then(clippings => clippings.filter(x => x !== "\n"))
+      .then(clippings => {
+        console.log("clippings", clippings)
+        const container = document.querySelector("#who-are-you")
+        const clipping = clippings[Math.floor(Math.random() * clippings.length)]
+        container.textContent = clipping
+      })
+  </script>
+  <div id="who-are-you">I ain’t afeared of anything on this side o’ the grave</div>
 
   <h2>bye</h2>
 </div>
