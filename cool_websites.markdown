@@ -140,5 +140,21 @@ layout: default
         >wordnik</a
       > - the best free online dictionary & thesaurus i've found
     </li>
+    <li>
+      <a
+        href="https://lvllvl.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >lvllvl</a
+      > - cool browser based pixel art thing
+    </li>
+    <li>
+      <a
+        href="https://nopaint.art/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >nopaint.art</a
+      > - press Paint if you like what you see or No if you don't.
+    </li>
   </ul>
 </div>
