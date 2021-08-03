@@ -43,8 +43,9 @@ layout: default
   <h4>various code sketches</h4>
   <ul>
     <li><a href="/eyes.html">eyes</a></li>
-    <li><a href="/life.html">life </a></li>
-    <li><a href="/n-body.html">n-body </a></li>
+    <li><a href="/life.html">life</a></li>
+    <li><a href="/n-body.html">n-body</a></li>
+    <li><a href="/pixel-persian.html">pixel persian</a></li>
   </ul>
   <h4>other projects</h4>
   <ul>
