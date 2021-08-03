@@ -156,5 +156,13 @@ layout: default
         >nopaint.art</a
       > - press Paint if you like what you see or No if you don't.
     </li>
+    <li>
+      <a
+        href="http://roberthodgin.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >robert hodgin</a
+      > - some inspirationally aesthetic simulation projects
+    </li>
   </ul>
 </div>
