@@ -181,5 +181,7 @@ layout: default
 
 <a href="a-quote.html">get a quote</a>
 
+  <img width="100%" src="assets/images/splash.png" alt="a generative black and white image that resembles waves emanating from a pond's centre"/>
+  <img width="100%" src="assets/images/rocket.png" alt="another generative black and white image that resembles a team rocket base"/>
   <h2>bye</h2>
 </div>
