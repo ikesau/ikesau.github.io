@@ -1,9 +1,15 @@
+.log {
+  margin-bottom: 128px;
+}
+
 .log-key {
   display: flex;
   margin-bottom: 32px;
 }
 .log-key span {
   margin: 0 1vw;
+  line-height: 24px;
+  font-size: 12px;
 }
 .log-entry {
   display: flex;
@@ -22,7 +28,7 @@
   .log-entry__date {
     color: #aeaeae;
     margin-right: 0;
-    left: 16px;
+    left: 10px;
   }
 }
 
