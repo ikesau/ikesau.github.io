@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  {%- include head.html extra_css="log"-%}
+
+  <body>
+    <main aria-label="Content">
+      {{ content }}
+      <h2>Key:</h2>
+      <div class="log-key">
+        {% for task in site.data.log[0].tasks %}
+        <div class="log-entry-task {{task[0]}} true"></div>
+        <span>{{task[0]}}</span>
+        {% endfor %}
+      </div>
+      <div class="log">
+        {% for entry in site.data.log %}
+        <div class="log-entry">
+          <span class="log-entry__date">{{entry.date}}</span>
+          {% for task in entry.tasks %}
+          <div class="log-entry-task {{task[0]}} {{task[1]}}"></div>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+    </main>
+  </body>
+</html>
