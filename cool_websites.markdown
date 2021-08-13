@@ -164,5 +164,13 @@ layout: default
         >robert hodgin</a
       > - some inspirationally aesthetic simulation projects
     </li>
+    <li>
+      <a
+        href="http://worrydream.com/ClimateChange/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >what can a technologist do about climate change?</a
+      > - an article by <a href="https://twitter.com/worrydream" target="_blank" rel="noopener noreferrer">bret victor</a> written in 2015
+    </li>
   </ul>
 </div>
