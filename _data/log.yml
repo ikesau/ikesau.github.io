@@ -43,5 +43,5 @@
     exercise: true
     pilates: true
     medidate: true
-    journal: false
+    journal: true
     bedtime: true
