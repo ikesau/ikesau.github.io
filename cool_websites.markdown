@@ -172,5 +172,13 @@ layout: default
         >what can a technologist do about climate change?</a
       > - an article by <a href="https://twitter.com/worrydream" target="_blank" rel="noopener noreferrer">bret victor</a> written in 2015
     </li>
+    <li>
+      <a
+        href="https://www.cold-takes.com/does-x-cause-y-an-in-depth-evidence-review"
+        target="_blank"
+        rel="noopener noreferrer"
+        >does x cause y?</a
+      > - pitfalls of social science
+    </li>
   </ul>
 </div>
