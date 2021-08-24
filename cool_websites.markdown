@@ -180,5 +180,13 @@ layout: default
         >does x cause y?</a
       > - pitfalls of social science
     </li>
+    <li>
+      <a
+        href="https://www.benkuhn.net/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >ben kuhn's blog</a
+      > - wow, interesting!
+    </li>
   </ul>
 </div>
