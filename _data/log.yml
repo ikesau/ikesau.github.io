@@ -85,3 +85,19 @@
     medidate: true
     journal: true
     bedtime: true
+
+- date: 24-07-21
+  tasks:
+    exercise: false
+    pilates: true
+    medidate: true
+    journal: false
+    bedtime: true
+
+- date: 25-07-21
+  tasks:
+    exercise: false
+    pilates: true
+    medidate: true
+    journal: true
+    bedtime: true
