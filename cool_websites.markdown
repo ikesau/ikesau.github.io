@@ -182,11 +182,11 @@ layout: default
     </li>
     <li>
       <a
-        href="https://www.benkuhn.net/"
+        href="https://cryptii.com/"
         target="_blank"
         rel="noopener noreferrer"
-        >ben kuhn's blog</a
-      > - wow, interesting!
+        >cryptii</a
+      > - encrypt and decrypt messages
     </li>
   </ul>
 </div>
