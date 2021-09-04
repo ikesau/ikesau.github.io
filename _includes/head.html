@@ -13,10 +13,7 @@
   <meta name="HandheldFriendly" content="true" />
 
   <link rel="stylesheet" href="assets/css/main.css" />
-  <!-- css -->
-  {% if include.extra_css %}
-  <link rel="stylesheet" href="assets/css/{{include.extra_css}}.css" />
-  {% endif %}
+
   <!-- p5js -->
   {% if page.layout == "p5js" %}
   <script
@@ -25,5 +22,9 @@
   ></script>
   <script src="/assets/js/{{page.title}}.js" type="text/javascript"></script>
   <link rel="stylesheet" href="assets/css/p5js.css" />
+  {% endif %}
+  <!-- css -->
+  {% if include.extra_css %}
+  <link rel="stylesheet" href="assets/css/{{include.extra_css}}.css" />
   {% endif %}
 </head>
