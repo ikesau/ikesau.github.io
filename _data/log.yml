@@ -141,3 +141,43 @@
     medidate: false
     journal: true
     bedtime: true
+
+- date: 31-07-21
+  tasks:
+    exercise: true
+    pilates: true
+    medidate: false
+    journal: true
+    bedtime: true
+
+- date: 01-08-21
+  tasks:
+    exercise: false
+    pilates: true
+    medidate: false
+    journal: true
+    bedtime: true
+
+- date: 02-08-21
+  tasks:
+    exercise: true
+    pilates: true
+    medidate: false
+    journal: false
+    bedtime: true
+
+- date: 03-08-21
+  tasks:
+    exercise: true
+    pilates: true
+    medidate: false
+    journal: true
+    bedtime: true
+
+- date: 04-08-21
+  tasks:
+    exercise: true
+    pilates: true
+    medidate: true
+    journal: true
+    bedtime: true
