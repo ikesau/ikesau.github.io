@@ -1,6 +1,6 @@
 let messageContainer;
 let quotes;
-const responses = [
+const reactions = [
   "lol",
   "fr",
   "bet",
@@ -17,37 +17,47 @@ const responses = [
   "😂",
   "yea",
   "verily",
+  "amen",
+  "lo",
+  "bruh",
 ];
 function preload() {
   quotes = loadJSON("assets/json/t_kjv_strings.json");
 }
 function setup() {
+  noCanvas();
   quotes = Object.values(quotes);
   messageContainer = createDiv();
   messageContainer.class("message-container");
 }
-let responsesCopy = [...responses];
-function getRandomResponse() {
-  const index = floor(random(responsesCopy.length));
-  const response = responsesCopy[index];
-  responsesCopy.splice(index, 1);
-  if (responsesCopy.length === 0) {
-    responsesCopy = [...responses];
+let reactionsCopy = [...reactions];
+function getRandomReaction() {
+  const index = floor(random(reactionsCopy.length));
+  const reaction = reactionsCopy[index];
+  reactionsCopy.splice(index, 1);
+  if (reactionsCopy.length === 0) {
+    reactionsCopy = [...reactions];
   }
-  return response;
+  return reaction;
 }
 function draw() {
   const position = random() > 0.5 ? "message-left" : "message-right";
   const children = messageContainer.child();
   const lastChild = children[children.length - 1];
-  const isResponse =
-    lastChild && !lastChild.classList.contains(position) && random() < 0.5;
-  const message = isResponse ? getRandomResponse() : random(quotes);
+  const isResponse = lastChild && !lastChild.classList.contains(position);
+  const shouldReact =
+    isResponse &&
+    !lastChild.classList.contains("message--is-reaction") &&
+    random() < 2 / 5;
+  const shouldSpeechBubblify = isResponse || !lastChild;
+  const message = shouldReact ? getRandomReaction() : String(random(quotes));
   const messageDiv = createDiv(message);
   messageDiv.parent(messageContainer);
   messageDiv.addClass("message");
   messageDiv.addClass(position);
-  if (random() < 0.3 && !isResponse) {
+  shouldReact && messageDiv.addClass("message--is-reaction");
+  shouldSpeechBubblify && messageDiv.addClass("message--speech-bubble");
+  if (random() < 0.5 && !isResponse) {
     setTimeout(() => {
       messageDiv.addClass("message--react");
       messageDiv.addClass(
@@ -67,10 +77,11 @@ function draw() {
   const { height } = messageDiv.size();
   const margin = 64;
   if (
-    window.innerHeight + window.scrollY + height + margin >=
+    window.innerHeight + window.scrollY + height * 2 + margin >=
     document.body.scrollHeight
   ) {
     messageDiv.elt.scrollIntoView({ behavior: "smooth" });
   }
-  frameRate(random(0.1, 0.5));
+  frameRate(random(0.3, 0.5));
 }
+//# sourceMappingURL=../sketch/sketch/build.js.map
