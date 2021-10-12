@@ -188,5 +188,13 @@ layout: default
         >cryptii</a
       > - encrypt and decrypt messages
     </li>
+    <li>
+      <a
+        href="https://ncase.me/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >nicky case</a
+      > - creative interactive animations and games
+    </li>
   </ul>
 </div>
