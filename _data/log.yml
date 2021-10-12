@@ -181,3 +181,75 @@
     medidate: true
     journal: true
     bedtime: true
+
+- date: 05-08-21
+  tasks:
+    exercise: false
+    pilates: true
+    medidate: false
+    journal: true
+    bedtime: true
+
+- date: 06-08-21
+  tasks:
+    exercise: false
+    pilates: false
+    medidate: false
+    journal: true
+    bedtime: true
+
+- date: 07-08-21
+  tasks:
+    exercise: false
+    pilates: true
+    medidate: false
+    journal: true
+    bedtime: true
+
+- date: 08-08-21
+  tasks:
+    exercise: false
+    pilates: true
+    medidate: false
+    journal: true
+    bedtime: true
+
+- date: 09-08-21
+  tasks:
+    exercise: false
+    pilates: true
+    medidate: false
+    journal: false
+    bedtime: false
+
+- date: 10-08-21
+  tasks:
+    exercise: false
+    pilates: true
+    medidate: true
+    journal: false
+    bedtime: true
+
+- date: 11-08-21
+  tasks:
+    exercise: false
+    pilates: true
+    medidate: true
+    journal: false
+    bedtime: true
+
+- date: 12-08-21
+  tasks:
+    exercise: false
+    pilates: true
+    medidate: false
+    journal: false
+    bedtime: true
+
+- date: 13-08-21
+  tasks:
+    exercise: false
+    pilates: true
+    medidate: true
+    journal: false
+    bedtime: true
