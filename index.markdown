@@ -47,6 +47,7 @@ layout: default
     <li><a href="/n-body.html">n-body</a></li>
     <li><a href="/pixel-persian.html">pixel persian</a></li>
     <li><a href="/texting.html">texting</a></li>
+    <li><a href="/tragic.html">tragic</a></li>
   </ul>
   <h4>other projects</h4>
   <ul>
