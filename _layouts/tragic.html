@@ -61,9 +61,10 @@
     const width = 1000;
     const numOfPoints = 40;
     const lineSpacing = 20;
+    const tau = Math.PI * 2;
     const svg = d3
       .create("svg")
-      .attr("viewBox", `0, -20, ${width}, ${lyrics.length * lineSpacing + 20}`);
+      .attr("viewBox", `0, -40, ${width}, ${lyrics.length * lineSpacing + 60}`);
 
     const line = d3.line();
 
@@ -94,5 +95,23 @@
 
     const body = document.querySelector("a");
     body.append(svg.node());
+
+    function animate(time) {
+      const loopPercent = time / 1000;
+      svg
+        .selectAll("path")
+        .data(lyrics)
+        .join("path")
+        .attr("d", (d, i) => {
+          const shiftedCurve = curve.map(([x, y]) => [
+            x,
+            y + i * lineSpacing + Math.sin(loopPercent + x) * 20,
+          ]);
+          return line(shiftedCurve);
+        });
+      window.requestAnimationFrame(animate);
+    }
+
+    window.requestAnimationFrame(animate);
   </script>
 </html>
