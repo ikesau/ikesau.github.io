@@ -196,5 +196,13 @@ layout: default
         >nicky case</a
       > - creative interactive animations and games
     </li>
+    <li>
+      <a
+        href="https://archive.org/details/GeneralIndex"
+        target="_blank"
+        rel="noopener noreferrer"
+        >The General Index</a
+      > - An enormous database of journal metadata
+    </li>
   </ul>
 </div>
