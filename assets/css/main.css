@@ -18,3 +18,11 @@ h3 {
   margin: 32px;
   font-style: italic;
 }
+
+img {
+  max-height: 300px;
+  max-width: 100%;
+  width: auto;
+  margin: 48px auto;
+  display: block;
+}
