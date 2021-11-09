@@ -48,6 +48,7 @@ layout: default
     <li><a href="/pixel-persian.html">pixel persian</a></li>
     <li><a href="/texting.html">texting</a></li>
     <li><a href="/tragic.html">tragic</a></li>
+    <li><a href="/euclidean-rhythms.html">euclidean rhythms</a></li>
   </ul>
   <h4>other things</h4>
   <ul>
