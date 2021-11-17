@@ -28,6 +28,8 @@
   {% if include.extra_css %}
   <link rel="stylesheet" href="assets/css/{{include.extra_css}}.css" />
   {% endif %} {% if include.d3 %}
-  <script src="https://unpkg.com/d3@7.1.1/dist/d3.min.js"></script>
+  <script src="assets/vendor/d3.min.js"></script>
+  {% endif %} {% if page.layout == "javascript-sketch" %}
+  <script type="module" src="assets/js/{{page.title}}.js"></script>
   {% endif %}
 </head>
