@@ -1,4 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  {%- include head.html extra_css=page.extra_css -%}
+  {%- include head.html extra_css=page.extra_css d3=page.d3 -%}
+  <body>
+    <main aria-label="Content">{{ content }}</main>
+  </body>
 </html>

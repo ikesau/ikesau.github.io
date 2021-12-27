@@ -49,6 +49,7 @@ layout: default
     <li><a href="/texting.html">texting</a></li>
     <li><a href="/tragic.html">tragic</a></li>
     <li><a href="/euclidean-rhythms.html">euclidean rhythms</a></li>
+    <li><a href="/death-calendar.html">death calendar</a></li>
   </ul>
   <h4>other things</h4>
   <ul>
