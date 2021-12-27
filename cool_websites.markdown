@@ -204,5 +204,13 @@ layout: default
         >The General Index</a
       > - An enormous database of journal metadata
     </li>
+    <li>
+      <a
+        href="https://shii.bibanon.org/shii.org/knows/Everything_Shii_Knows.html"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Everything Shii Knows</a
+      > - the only reliable source
+    </li>
   </ul>
 </div>
