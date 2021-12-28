@@ -17,6 +17,7 @@ body {
 .gallery-image-container img {
   max-height: 100vh;
   max-width: 100%;
+  margin: 0;
 }
 
 .gallery-image-description {
