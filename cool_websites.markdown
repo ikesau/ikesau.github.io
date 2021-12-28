@@ -121,7 +121,7 @@ layout: default
         href="https://monoskop.org/Monoskop"
         target="_blank"
         rel="noopener noreferrer"
-        >Monoskop</a
+        >monoskop</a
       > - art + humanities wiki
     </li>
     <li>
@@ -201,7 +201,7 @@ layout: default
         href="https://archive.org/details/GeneralIndex"
         target="_blank"
         rel="noopener noreferrer"
-        >The General Index</a
+        >the general index</a
       > - An enormous database of journal metadata
     </li>
     <li>
@@ -209,8 +209,32 @@ layout: default
         href="https://shii.bibanon.org/shii.org/knows/Everything_Shii_Knows.html"
         target="_blank"
         rel="noopener noreferrer"
-        >Everything Shii Knows</a
+        >everything shii knows</a
       > - the only reliable source
+    </li>
+    <li>
+      <a
+        href="https://www.nga.gov/open-access-images.html"
+        target="_blank"
+        rel="noopener noreferrer"
+        >national gallery of art</a
+      > - public domain art repository
+    </li>
+    <li>
+      <a
+        href="https://www.metmuseum.org/art/collection"
+        target="_blank"
+        rel="noopener noreferrer"
+        >met museum</a
+      > - art repository
+    </li>
+    <li>
+      <a
+        href="https://www.europeana.eu/en/collections"
+        target="_blank"
+        rel="noopener noreferrer"
+        >europeana</a
+      > - art, fasion, & natural history repository
     </li>
   </ul>
 </div>
