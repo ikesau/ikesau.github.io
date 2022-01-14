@@ -236,5 +236,13 @@ layout: default
         >europeana</a
       > - art, fasion, & natural history repository
     </li>
+    <li>
+      <a
+        href="https://play.ertdfgcvb.xyz"
+        target="_blank"
+        rel="noopener noreferrer"
+        >play.ertdfgcvb.xyz</a
+      > - really cool generative ASCII art
+    </li>
   </ul>
 </div>
