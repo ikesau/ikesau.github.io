@@ -252,5 +252,13 @@ layout: default
         >HORG</a
       > - a taxonomy of breadbag clips
     </li>
+    <li>
+      <a
+        href="https://www.c82.net/euclid/book1/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >byrne's euclid</a
+      > - an animated reproduction of oliver byrne’s elements from 1847
+    </li>
   </ul>
 </div>
