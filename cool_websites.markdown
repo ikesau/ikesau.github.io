@@ -74,7 +74,7 @@ layout: default
         target="_blank"
         rel="noopener noreferrer"
         >arxiv</a
-      > - open journal for physics/maths/compsci/astronomy preprints
+      > - open journal for physics/maths/compsci/astronomy preprints. (convert any article to html5 by changing the URL to use https://ar5iv.org/ instead)
     </li>
     <li>
       <a
