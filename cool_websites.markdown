@@ -234,7 +234,7 @@ layout: default
         target="_blank"
         rel="noopener noreferrer"
         >europeana</a
-      > - art, fasion, & natural history repository
+      > - art, fashion, & natural history repository
     </li>
     <li>
       <a
