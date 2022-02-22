@@ -268,5 +268,13 @@ layout: default
         >quantum country</a
       > - an explanation of quantum computing with a built-in spaced repetition system
     </li>
+    <li>
+      <a
+        href="https://andymatuschak.org/books/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >why books donʼt work</a
+      > - an essay on learning from the maker of the above, andy matuschak
+    </li>
   </ul>
 </div>
