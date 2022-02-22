@@ -284,5 +284,13 @@ layout: default
         >parametric press issue 02: carbon history</a
       > - an interactive article that engages you in the history and context of climate change
     </li>
+    <li>
+      <a
+        href="https://www.hsph.harvard.edu/nutritionsource/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >the nutrition source</a
+      > - a succinct overview of evidence-supported best practices for food and health
+    </li>
   </ul>
 </div>
