@@ -276,5 +276,13 @@ layout: default
         >why books donʼt work</a
       > - an essay on learning from the maker of the above, andy matuschak
     </li>
+    <li>
+      <a
+        href="https://parametric.press/issue-02/carbon-history/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >parametric press issue 02: carbon history</a
+      > - an interactive article that engages you in the history and context of climate change
+    </li>
   </ul>
 </div>
