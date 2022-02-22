@@ -260,5 +260,13 @@ layout: default
         >byrne's euclid</a
       > - an animated reproduction of oliver byrne’s elements from 1847
     </li>
+    <li>
+      <a
+        href="https://quantum.country"
+        target="_blank"
+        rel="noopener noreferrer"
+        >quantum country</a
+      > - an explanation of quantum computing with a built-in spaced repetition system
+    </li>
   </ul>
 </div>
