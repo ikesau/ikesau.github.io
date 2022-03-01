@@ -1,8 +1,8 @@
 ### how this works
 
 1. set up ruby with `rvm`
-1. `rvm install 3.0.0`
-1. `rvm use 3.0.0`
+1. `rvm install 2.7.1`
+1. `rvm use 2.7.1`
 1. `bundle install`
 1. `bundle exec jekyll serve --trace`
 
