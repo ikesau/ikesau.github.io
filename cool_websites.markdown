@@ -292,5 +292,13 @@ layout: default
         >the nutrition source</a
       > - a succinct overview of evidence-supported best practices for food and health
     </li>
+    <li>
+      <a
+        href="https://aestheticsforbirds.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        >aesthetics for birds</a
+      > - a blog on art criticism and philosophy
+    </li>
   </ul>
 </div>
