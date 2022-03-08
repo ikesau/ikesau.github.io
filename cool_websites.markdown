@@ -300,5 +300,13 @@ layout: default
         >aesthetics for birds</a
       > - a blog on art criticism and philosophy
     </li>
+    <li>
+      <a
+        href="https://www.strongtowns.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Strong Towns</a
+      > - urbanism advocacy
+    </li>
   </ul>
 </div>
