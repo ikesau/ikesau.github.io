@@ -55,9 +55,18 @@ layout: default
   <ul>
     <li><a href="https://observablehq.com/@ikesau/a-novel-analysis">a novel analysis</a></li>
     <li><a href="/log.html">a month of good habits(?)</a></li>
-    <li><a href="/justin-keenan-meaningless-choices-and-impractical-advice.html">Justin Keenan - Meaningless Choices and Impractical Advice</a></li>
+    <li><a href="/justin-keenan-meaningless-choices-and-impractical-advice.html">justin keenan - meaningless choices and impractical advice</a></li>
   </ul>
-  <h4>hmmm</h4>
+
+  <img class="consciousness" alt="hmmm" src="assets/images/hmmm.gif">
+  <script>
+    const img = document.querySelector(".consciousness")
+    const cursors = ["context-menu", "help", "pointer", "cell", "crosshair", "text", "vertical-text", "alias", "move", "no-drop", "not-allowed", "all-scroll"]
+    function setRandomCursor() {
+      img.style.cursor = cursors[Math.floor(Math.random() * cursors.length)]
+    }
+    setInterval(setRandomCursor, 100)
+  </script>
   <ul>
     <li><a href="/dead_birds.html">dead birds</a></li>
   </ul>
