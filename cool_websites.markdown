@@ -305,8 +305,24 @@ layout: default
         href="https://www.strongtowns.org/"
         target="_blank"
         rel="noopener noreferrer"
-        >Strong Towns</a
+        >strong towns</a
       > - urbanism advocacy
+    </li>
+    <li>
+      <a
+        href="https://ciechanow.ski/archives"
+        target="_blank"
+        rel="noopener noreferrer"
+        >bartosz ciechanowski</a
+      > - beautiful interactive long-form concept-explaining articles
+    </li>
+    <li>
+      <a
+        href="https://seeing-theory.brown.edu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >seeing theory</a
+      > - probability visualized and explained
     </li>
   </ul>
 </div>
