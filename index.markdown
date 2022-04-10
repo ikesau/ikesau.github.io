@@ -70,6 +70,7 @@ layout: default
   <ul>
     <li><a href="/dead_birds.html">dead birds</a></li>
   </ul>
+  <img class="dont-ask-what-just-put-it-in-the-grease" src="assets/images/magic-cauldron.gif" alt="underneath burrard bridge"/>
   <p>a friend is someone whose voice it feels good to hear</p>
   <div style="padding: 32px;background: #111;color: white;">
     <p>Nobody can protect</p>
