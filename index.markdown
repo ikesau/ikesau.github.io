@@ -41,7 +41,7 @@ layout: default
     <li><a href="/cool_websites.html">other cool websites</a></li>
   </ul>
   <h4>various code sketches</h4>
-  <ul>
+  <ul class='decorating-vice'>
     <li><a href="/eyes.html">eyes</a></li>
     <li><a href="/life.html">life</a></li>
     <li><a href="/n-body.html">n-body</a></li>
