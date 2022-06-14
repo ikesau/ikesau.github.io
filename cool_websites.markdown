@@ -324,5 +324,13 @@ layout: default
         >seeing theory</a
       > - probability visualized and explained
     </li>
+    <li>
+      <a
+        href="https://howmanyplants.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        >how many plants</a
+      > - a beautifully designed houseplant care resource
+    </li>
   </ul>
 </div>
