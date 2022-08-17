@@ -332,5 +332,21 @@ layout: default
         >how many plants</a
       > - a beautifully designed houseplant care resource
     </li>
+    <li>
+      <a
+        href="https://ncase.me/nutshell/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >nutshell</a
+      > - inter-site snippetting
+    </li>
+    <li>
+      <a
+        href="https://www.telescopictext.org/text/KPx0nlXlKTciC"
+        target="_blank"
+        rel="noopener noreferrer"
+        >telescopic text</a
+      > - a fun interactive text experiment
+    </li>
   </ul>
 </div>
