@@ -348,5 +348,13 @@ layout: default
         >telescopic text</a
       > - a fun interactive text experiment
     </li>
+    <li>
+      <a
+        href="https://libraryofbabel.info/browse.cgi"
+        target="_blank"
+        rel="noopener noreferrer"
+        >library of babel</a
+      > - the last website you will ever need
+    </li>
   </ul>
 </div>
