@@ -356,5 +356,13 @@ layout: default
         >library of babel</a
       > - the last website you will ever need
     </li>
+    <li>
+      <a
+        href="https://www.shellcheck.net"
+        target="_blank"
+        rel="noopener noreferrer"
+        >ShellCheck</a
+      > - bash shell script automatic analysis
+    </li>
   </ul>
 </div>
