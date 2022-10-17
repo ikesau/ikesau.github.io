@@ -364,5 +364,13 @@ layout: default
         >ShellCheck</a
       > - bash shell script automatic analysis
     </li>
+    <li>
+      <a
+        href="https://stendec.io/morse/koch.html"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Koch method to learn Morse</a
+      > - learn morse code
+    </li>
   </ul>
 </div>
