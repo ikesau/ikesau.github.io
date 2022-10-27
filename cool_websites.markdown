@@ -372,5 +372,13 @@ layout: default
         >Koch method to learn Morse</a
       > - learn morse code
     </li>
+    <li>
+      <a
+        href="https://wh0.github.io/2020/01/02/scissors.html"
+        target="_blank"
+        rel="noopener noreferrer"
+        >which emoji scissors close</a
+      > - ✂️
+    </li>
   </ul>
 </div>
