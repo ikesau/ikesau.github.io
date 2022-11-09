@@ -380,5 +380,13 @@ layout: default
         >which emoji scissors close</a
       > - ✂️
     </li>
+    <li>
+      <a
+        href="https://www.numbersaplenty.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        >numbers a plenty</a
+      > - fun facts about natural numbers
+    </li>
   </ul>
 </div>
