@@ -385,7 +385,7 @@ layout: default
         href="https://www.numbersaplenty.com"
         target="_blank"
         rel="noopener noreferrer"
-        >numbers a plenty</a
+        >numbers aplenty</a
       > - fun facts about natural numbers
     </li>
     <li>
