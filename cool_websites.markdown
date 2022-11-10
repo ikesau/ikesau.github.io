@@ -388,5 +388,13 @@ layout: default
         >numbers a plenty</a
       > - fun facts about natural numbers
     </li>
+    <li>
+      <a
+        href="https://everynoise.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >everynoise</a
+      > - a scatterplot of snippets of thousands of genres of music
+    </li>
   </ul>
 </div>
