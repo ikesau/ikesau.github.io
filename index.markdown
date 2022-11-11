@@ -3,7 +3,66 @@ layout: default
 ---
 
 <div>
-  <h2>hello</h2>
+  
+<style>
+    .the-header-of-theseus {
+        margin: 0;
+        text-align: center;
+        height: 40px;
+    }
+    .plank {
+        margin: 0;
+        display: inline;
+        font-size: 32px;
+    }
+</style>
+<div class="the-header-of-theseus">
+<h1 class="plank">i</h1>
+<h1 class="plank">k</h1>
+<h1 class="plank">e</h1>
+<h1 class="plank">s</h1>
+<h1 class="plank">a</h1>
+<h1 class="plank">u</h1>
+<h1 class="plank">.</h1>
+<h1 class="plank">c</h1>
+<h1 class="plank">o</h1>
+</div>
+
+<script>
+    const letters = [...document.querySelectorAll(".plank")]
+    const pickRandom = (array) => array[Math.floor(Math.random() * array.length)]
+    const systemFonts = [
+        "Arial",
+        "Helvetica Neue",
+        "Helvetica",
+        "sans-serif",
+        "Georgia",
+        "Times New Roman",
+        "Times",
+        "serif",
+        "Consolas",
+        "Menlo",
+        "Monaco",
+        "Lucida Console",
+        "Liberation Mono",
+        "DejaVu Sans Mono",
+        "Bitstream Vera Sans Mono",
+        "Courier New",
+        "monospace",
+    ]
+
+    setInterval(() => {
+        const letter = pickRandom(letters);
+        if (Math.random() > 0.5) {
+        const font = pickRandom(systemFonts);
+        letter.style.fontFamily = font
+        } else {
+            letter.style.textTransform = letter.style.textTransform === "uppercase" ? "" : "uppercase"
+        }
+    },
+     200)
+</script>
+<h2>hello</h2>
   <ul>
     <li>
       <a
