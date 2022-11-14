@@ -6,7 +6,7 @@ layout: default
   
 <style>
     .the-header-of-theseus {
-        margin: 0;
+        margin: 32px 0 0 0;
         text-align: center;
         height: 40px;
     }
@@ -16,7 +16,7 @@ layout: default
         font-size: 32px;
     }
 </style>
-<div class="the-header-of-theseus">
+<header class="the-header-of-theseus">
 <h1 class="plank">i</h1>
 <h1 class="plank">k</h1>
 <h1 class="plank">e</h1>
@@ -26,7 +26,7 @@ layout: default
 <h1 class="plank">.</h1>
 <h1 class="plank">c</h1>
 <h1 class="plank">o</h1>
-</div>
+</header>
 
 <script>
     const letters = [...document.querySelectorAll(".plank")]
