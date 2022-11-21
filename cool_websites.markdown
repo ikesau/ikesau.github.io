@@ -361,7 +361,7 @@ layout: default
         href="https://www.shellcheck.net"
         target="_blank"
         rel="noopener noreferrer"
-        >ShellCheck</a
+        >shell check</a
       > - bash shell script automatic analysis
     </li>
     <li>
@@ -369,7 +369,7 @@ layout: default
         href="https://stendec.io/morse/koch.html"
         target="_blank"
         rel="noopener noreferrer"
-        >Koch method to learn Morse</a
+        >koch method to learn morse</a
       > - learn morse code
     </li>
     <li>
@@ -395,6 +395,16 @@ layout: default
         rel="noopener noreferrer"
         >everynoise</a
       > - a scatterplot of snippets of thousands of genres of music
+    </li>
+    <li>
+      <a
+        href="https://teropa.info/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >tero parviainen's website</a
+      > - many cool <a href="https://teropa.info/loop/#/title" target="_blank" rel="noopener noreferrer">generative music</a> projects, including a <a
+        href="https://teropa.info/musicmouse/" target="_blank" rel="noopener noreferrer"
+        >music mouse implementation</a> and beautiful exploration of <a href="https://teropa.info/blog/2017/01/23/terry-rileys-in-c.html" target="_blank" rel="noopener noreferrer"><em>In C</em></a>.
     </li>
   </ul>
 </div>
