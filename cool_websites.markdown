@@ -406,5 +406,13 @@ layout: default
         href="https://teropa.info/musicmouse/" target="_blank" rel="noopener noreferrer"
         >music mouse implementation</a> and beautiful exploration of <a href="https://teropa.info/blog/2017/01/23/terry-rileys-in-c.html" target="_blank" rel="noopener noreferrer"><em>In C</em></a>.
     </li>
+    <li>
+      <a
+        href="https://musicforprogramming.net/latest/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >musicForProgramming();</a
+      > - a collection of minimal musical mixes 
+    </li>
   </ul>
 </div>
