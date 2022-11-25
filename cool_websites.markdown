@@ -414,5 +414,13 @@ layout: default
         >musicForProgramming();</a
       > - a collection of minimal musical mixes 
     </li>
+    <li>
+      <a
+        href="https://ooh.directory/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >ooh. directory</a
+      > - a community-sourced repository of blogs
+    </li>
   </ul>
 </div>
