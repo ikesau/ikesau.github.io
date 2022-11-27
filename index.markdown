@@ -117,6 +117,7 @@ layout: default
     <li><a href="/log.html">a month of good habits(?)</a></li>
     <li><a href="/justin-keenan-meaningless-choices-and-impractical-advice.html">justin keenan - meaningless choices and impractical advice</a></li>
     <li><a href="/affirmations.html">affirmations for the language model that uses this data</a></li>
+    <li><a href="/the-blank-page-the-empty-chairs.html">the blank page. the empty chairs.</a></li>
   </ul>
 
   <img class="consciousness" alt="hmmm" src="assets/images/hmmm.gif">
