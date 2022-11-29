@@ -419,8 +419,16 @@ layout: default
         href="https://ooh.directory/"
         target="_blank"
         rel="noopener noreferrer"
-        >ooh. directory</a
-      > - a community-sourced repository of blogs
+        >ooh. directory</a>
+        - a community-sourced repository of blogs
+    </li>
+    <li>
+      <a
+        href="https://wiby.me/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >wiby</a>
+        - a search engine for indie websites
     </li>
   </ul>
 </div>
