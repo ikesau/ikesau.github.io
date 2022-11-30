@@ -430,5 +430,13 @@ layout: default
         >wiby</a>
         - a search engine for indie websites
     </li>
+    <li>
+      <a
+        href="https://screenplays.io"
+        target="_blank"
+        rel="noopener noreferrer"
+        >screenplays.io</a>
+        - a large repository of screenplays. read 'em before it gets taken down!
+    </li>
   </ul>
 </div>
