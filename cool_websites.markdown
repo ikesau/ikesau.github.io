@@ -438,5 +438,13 @@ layout: default
         >screenplays.io</a>
         - a large repository of screenplays. read 'em before it gets taken down!
     </li>
+    <li>
+      <a
+        href="https://www.ptt.cc/bbs/index.html"
+        target="_blank"
+        rel="noopener noreferrer"
+        >PTT</a>
+        - the taiwanese bbs
+    </li>
   </ul>
 </div>
