@@ -446,5 +446,13 @@ layout: default
         >PTT</a>
         - the taiwanese bbs
     </li>
+    <li>
+      <a
+        href="https://quoteinvestigator.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >quote investigator</a>
+        - snopes for quote attribution
+    </li>
   </ul>
 </div>
