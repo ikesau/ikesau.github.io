@@ -454,5 +454,13 @@ layout: default
         >quote investigator</a>
         - snopes for quote attribution
     </li>
+    <li>
+      <a
+        href="https://search.marginalia.nu"
+        target="_blank"
+        rel="noopener noreferrer"
+        >marginalia</a>
+        - indie web search
+    </li>
   </ul>
 </div>
