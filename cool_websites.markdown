@@ -462,5 +462,13 @@ layout: default
         >marginalia</a>
         - indie web search
     </li>
+    <li>
+      <a
+        href="https://erich-friedman.github.io/packing/squinsqu/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >squares in squares</a>
+        - square packing world records
+    </li>
   </ul>
 </div>
