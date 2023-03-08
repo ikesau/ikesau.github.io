@@ -470,5 +470,13 @@ layout: default
         >squares in squares</a>
         - square packing world records
     </li>
+    <li>
+      <a
+        href="https://shelby.cool/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >shelby.cool</a>
+        - website #goals
+    </li>
   </ul>
 </div>
