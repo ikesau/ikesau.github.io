@@ -478,5 +478,13 @@ layout: default
         >shelby.cool</a>
         - website #goals
     </li>
+    <li>
+      <a
+        href="https://solarpunks.net/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >solarpunks.net</a>
+        - a blog at the intersection of technology, politics, and environmentalism
+    </li>
   </ul>
 </div>
