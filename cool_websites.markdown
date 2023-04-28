@@ -486,5 +486,13 @@ layout: default
         >solarpunks.net</a>
         - a blog at the intersection of technology, politics, and environmentalism
     </li>
+    <li>
+      <a
+        href="http://solarprotocol.net/index.html"
+        target="_blank"
+        rel="noopener noreferrer"
+        >solarprotocol.net</a>
+        - a internet network protocol based on serving from whichever server has the most solar power at any given time
+    </li>
   </ul>
 </div>
