@@ -77,7 +77,23 @@ layout: default
         href="https://twitter.com/ikesau"
         target="_blank"
         rel="noopener noreferrer"
-        >twitter</a
+        >twitter (in desuetude)</a
+      >
+    </li>
+    <li>
+      <a
+        href="https://mastodon.nz/@ikesau"
+        target="_blank"
+        rel="noopener noreferrer"
+        >mastodon</a
+      >
+    </li>
+    <li>
+      <a
+        href="https://www.last.fm/user/ikesau"
+        target="_blank"
+        rel="noopener noreferrer"
+        >last.fm</a
       >
     </li>
     <li>
