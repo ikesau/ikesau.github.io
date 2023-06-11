@@ -140,6 +140,7 @@ layout: default
     <li><a href="https://observablehq.com/@ikesau/learning-french-numbers-with-addition">french number practice</a></li>
     <li><a href="https://observablehq.com/@ikesau/image-to-ascii">converting images to ascii</a></li>
     <li><a href="https://observablehq.com/@ikesau/code-39-generator">code 39 generator</a></li>
+    <li><a href="https://observablehq.com/@ikesau/scale-to-the-universe">scale to the universe</a></li>
     <li><a href="/log.html">a month of good habits(?)</a></li>
     <li><a href="/justin-keenan-meaningless-choices-and-impractical-advice.html">justin keenan - meaningless choices and impractical advice</a></li>
     <li><a href="/affirmations.html">affirmations for the language model that uses this data</a></li>
