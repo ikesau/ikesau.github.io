@@ -494,5 +494,21 @@ layout: default
         >solarprotocol.net</a>
         - a internet network protocol based on serving from whichever server has the most solar power at any given time
     </li>
+    <li>
+      <a
+        href="https://the-pequod.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >the pequod</a>
+        - an enormous collection of book reviews written by a man named jeffrey smith
+    </li>
+    <li>
+      <a
+        href="https://webcurios.co.uk/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >web curios</a>
+        - a regular(-ish) newsletterblogtypething all about stuff on the internet that its author finds interesting and thinks you might too
+    </li>
   </ul>
 </div>
