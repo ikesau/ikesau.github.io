@@ -464,7 +464,7 @@ layout: default
     </li>
     <li>
       <a
-        href="https://erich-friedman.github.io/packing/squinsqu/"
+        href="https://kingbird.myphotos.cc/packing/squares_in_squares.html"
         target="_blank"
         rel="noopener noreferrer"
         >squares in squares</a>
