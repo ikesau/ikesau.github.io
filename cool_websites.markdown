@@ -510,5 +510,21 @@ layout: default
         >web curios</a>
         - a regular(-ish) newsletterblogtypething all about stuff on the internet that its author finds interesting and thinks you might too
     </li>
+    <li>
+      <a
+        href="https://openstax.org/subjects/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >openstax</a>
+        - high quality open source web textbooks on loads of subjects
+    </li>
+    <li>
+      <a
+        href="https://www.opensyllabus.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >open syllabus</a>
+        - an amazing compilation of western university syllabi, a portal into the foundational texts of any subject you're curious about
+    </li>
   </ul>
 </div>
