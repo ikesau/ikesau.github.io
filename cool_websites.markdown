@@ -526,5 +526,13 @@ layout: default
         >open syllabus</a>
         - an amazing compilation of western university syllabi, a portal into the foundational texts of any subject you're curious about
     </li>
+    <li>
+      <a
+        href="https://wavacity.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >wavacity</a>
+        - a port of audacity that runs entirely in the browser
+    </li>
   </ul>
 </div>
