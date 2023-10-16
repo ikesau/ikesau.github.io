@@ -534,5 +534,13 @@ layout: default
         >wavacity</a>
         - a port of audacity that runs entirely in the browser
     </li>
+    <li>
+      <a
+        href="https://dataspace.copernicus.eu/browser/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >copernicus browser</a>
+        - the eu's satellite data portal
+    </li>
   </ul>
 </div>
