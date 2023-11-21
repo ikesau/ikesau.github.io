@@ -542,5 +542,13 @@ layout: default
         >copernicus browser</a>
         - the eu's satellite data portal
     </li>
+    <li>
+      <a
+        href="https://1mb.club"
+        target="_blank"
+        rel="noopener noreferrer"
+        >1MB.club</a>
+        - a collection of websites that are less than 1MB :')
+    </li>
   </ul>
 </div>
