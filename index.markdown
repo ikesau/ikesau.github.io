@@ -122,6 +122,7 @@ layout: default
     </li>
     <li><a href="/aotearoa_photos.html">aotearoa photos</a></li>
     <li><a href="/cool_websites.html">other cool websites</a></li>
+    <li><a href="/things-i-like.html">things i like</a></li>
   </ul>
   <h4>various code sketches</h4>
   <ul class='decorating-vice'>
