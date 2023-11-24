@@ -27,10 +27,25 @@ details[open] {
 
 section {
     margin: 16px 0;
+    padding: 8px;
 }
 
-a:visited {
-    color: initial;
+a, a:visited {
+    color: blue;
+    display: inline-block;
+}
+
+a:hover {
+    animation: oscillate 200ms infinite steps(1, start);
+}
+
+@keyframes oscillate {
+  0%, 50% {
+    transform: rotate(-1deg);
+  }
+  51%, 100% {
+    transform: rotate(1deg);
+  }
 }
 </style>
 <details>
@@ -46,7 +61,7 @@ because it's more fun to create an aesthetic object out of this urge than it is 
 
 </details>
 
-<section style="background-color: #92cbad; padding: 8px; font-family: serif;">
+<section style="background-color: #92cbad; font-family: serif;">
 <a href="https://www.youtube.com/watch?v=FaoJaLmZaL4"><h2>Casper Electronics DIY synth building. Part 1: Oscillators</h2></a>
 <img src="assets/images/casper synth.webp" alt="a top-down view of a breadboard synth with a circuit schematic drawn in whiteboard marker on the table surface" loading="lazy">
 <p>synth guys have the biggest fetish for aesthetics</p>
@@ -58,6 +73,35 @@ because it's more fun to create an aesthetic object out of this urge than it is 
 <a href="https://eggpaper.bandcamp.com/album/ulysses-hellier"><h2>hellier ulysses s/t</h2></a>
 <img src="assets/images/hellier ulysses.webp" alt="the album art for the hellier ulysses self titled put out by the studio egg paper. it features the name of the band and some cropped film frames of a running dog" loading="lazy">
 <p>
-a transitional species between <a href="https://en.wikipedia.org/wiki/Women_(band)">women-music</a> and <a href="https://en.wikipedia.org/wiki/Palm_(band)">weird ryhthm music.</a> it's less than 10 minutes long and each song has an amazingly taut structure. alongside the unexpectedly intriciate rhythm section and muffled production, there are a couple of tiny synth parts (e.g. 0:25 in <em>How to Become a Small Dead Dog</em>) that are, in my estimation, essential to its character. 
+a transitional species between <a href="https://en.wikipedia.org/wiki/Women_(band)">women-music</a> and <a href="https://en.wikipedia.org/wiki/Palm_(band)">polyrhythm indie.</a> it's less than 10 minutes long and each song has an amazingly taut structure. alongside the muffled production and unexpectedly intriciate rhythm section, there are a couple of synth parts (e.g. 0:25 in <em>How to Become a Small Dead Dog</em>) that are, in my estimation, essential to its character. 
 </p>
 <section>
+
+<section style="background-color: #ffecb1; font-family: cursive; color: #cb0000;">
+<a href="https://www.youtube.com/watch?v=PtXfDX0bMVE">
+<h2>staying in line</h2>
+</a>
+<img src="assets/images/good will come to you.webp">
+<div id='ping-pong'>
+<p><span>good will coooooooooooooome to you</span></p>
+<p><span>good will cooooooooooooooome to me</span></p>
+<p><span>good will coooooooooooooooome to us</span></p>
+<p><span>good will cooooooooooooooooooooome</span></p>
+<script>
+const lakjsdhf = document.body.querySelectorAll("#ping-pong span")
+
+for (let liasudh = 0; liasudh < lakjsdhf.length; liasudh++) {
+setTimeout(() => {
+const asdkjhg = lakjsdhf[liasudh]
+const ghjaksdf = document.createElement("marquee");
+ghjaksdf.innerText = asdkjhg.innerText
+ghjaksdf.setAttribute("behavior", "alternate")
+asdkjhg.parentNode.replaceChild(ghjaksdf, asdkjhg);
+
+    }, liasudh * 500)
+
+}
+</script>
+
+</div>
+</section>
