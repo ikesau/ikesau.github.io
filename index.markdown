@@ -31,36 +31,17 @@ layout: default
 <script>
     const letters = [...document.querySelectorAll(".plank")]
     const pickRandom = (array) => array[Math.floor(Math.random() * array.length)]
-    const systemFonts = [
-        "Arial",
-        "Helvetica Neue",
-        "Helvetica",
-        "sans-serif",
-        "Georgia",
-        "Times New Roman",
-        "Times",
-        "serif",
-        "Consolas",
-        "Menlo",
-        "Monaco",
-        "Lucida Console",
-        "Liberation Mono",
-        "DejaVu Sans Mono",
-        "Bitstream Vera Sans Mono",
-        "Courier New",
-        "monospace",
-    ]
+    
 
     setInterval(() => {
         const letter = pickRandom(letters);
-        if (Math.random() > 0.5) {
-        const font = pickRandom(systemFonts);
-        letter.style.fontFamily = font
-        } else {
-            letter.style.textTransform = letter.style.textTransform === "uppercase" ? "" : "uppercase"
-        }
+        // if (Math.random() > 0.5) {
+        letter.style.fontWeight = Math.random() * 1000
+        // } else {
+        //     letter.style.textTransform = letter.style.textTransform === "uppercase" ? "" : "uppercase"
+        // }
     },
-     200)
+     100)
 </script>
 <h2>hello</h2>
   <ul>
@@ -127,7 +108,7 @@ layout: default
 <a href="/things-i-like.html"><h3>things i like</h3></a>
 
   <ul>
-  {% for post in site.categories.thing-i-like | limit: 5%}
+  {% for post in site.categories.thing-i-like limit:5 %}
     <li>
       <a href="{{ post.url }}">{{ post.title }}</a>
     </li>
