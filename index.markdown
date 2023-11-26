@@ -122,9 +122,19 @@ layout: default
     </li>
     <li><a href="/aotearoa_photos.html">aotearoa photos</a></li>
     <li><a href="/cool_websites.html">other cool websites</a></li>
-    <li><a href="/things-i-like.html">things i like</a></li>
   </ul>
-  <h4>various code sketches</h4>
+
+<a href="/things-i-like.html"><h3>things i like</h3></a>
+
+  <ul>
+  {% for post in site.categories.thing-i-like | limit: 5%}
+    <li>
+      <a href="{{ post.url }}">{{ post.title }}</a>
+    </li>
+  {% endfor %}
+  </ul>
+
+  <h3>various code sketches</h3>
   <ul class='decorating-vice'>
     <li><a href="/eyes.html">eyes</a></li>
     <li><a href="/life.html">life</a></li>
@@ -135,7 +145,7 @@ layout: default
     <li><a href="/euclidean-rhythms.html">euclidean rhythms</a></li>
     <li><a href="/death-calendar.html">death calendar</a></li>
   </ul>
-  <h4>other things</h4>
+  <h3>other things</h3>
   <ul>
     <li><a href="https://observablehq.com/@ikesau/a-novel-analysis">a novel analysis</a></li>
     <li><a href="https://observablehq.com/@ikesau/learning-french-numbers-with-addition">french number practice</a></li>

@@ -12,7 +12,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="HandheldFriendly" content="true" />
 
-  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="{{ 'assets/css/main.css' | absolute_url}}" />
 
   <!-- p5js -->
   {% if page.layout == "p5js" %}
@@ -32,4 +32,11 @@
   {% endif %} {% if page.layout == "javascript-sketch" %}
   <script type="module" src="assets/js/{{page.title}}.js"></script>
   {% endif %}
+
+  <link
+    rel="alternate"
+    type="application/atom+xml"
+    title="{{ site.title }}"
+    href="/feed.xml"
+  />
 </head>

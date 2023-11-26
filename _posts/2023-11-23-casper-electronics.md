@@ -1,0 +1,13 @@
+---
+layout: thing-i-like
+title: "Casper Electronics DIY synth building. Part 1: Oscillators"
+category: thing-i-like
+---
+
+<section style="background-color: #92cbad; font-family: serif;">
+<a href="https://www.youtube.com/watch?v=FaoJaLmZaL4"><h2>{{page.title}}</h2></a>
+<img src="{{'assets/images/casper synth.webp' | absolute_url}}" alt="a top-down view of a breadboard synth with a circuit schematic drawn in whiteboard marker on the table surface" loading="lazy">
+<p>synth guys have the biggest fetish for aesthetics</p>
+
+<p>this guy <em>Casper Electronics</em> is no less meticulous but there's a kind of intentional roughness in this fun and fast-paced demo of some basic sound-making circuitry that an algorithm accurately predicted i would respond positively to</p>
+</section>

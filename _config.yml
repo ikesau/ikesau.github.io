@@ -15,3 +15,6 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
+plugins:
+  - jeykll-feed
+permalink: /:categories/:title:output_ext
