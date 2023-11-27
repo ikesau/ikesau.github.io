@@ -11,6 +11,9 @@ this is a list of things i encounter that i like that <a href="/cool_websites.ht
 </p>
 <p>
 because it's more fun to create an aesthetic object out of this urge than it is to post youtube links into the void on social media
+
+<p><a href="{{'feed.xml' | absolute_url}}">atom feed</a></p>
+
 </p>
 
 </details>

@@ -16,5 +16,5 @@ exclude:
   - vendor/gems/
   - vendor/ruby/
 plugins:
-  - jeykll-feed
+  - jekyll-feed
 permalink: /:categories/:title:output_ext
