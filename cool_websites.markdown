@@ -550,5 +550,13 @@ layout: default
         >1MB.club</a>
         - a collection of websites that are less than 1MB :')
     </li>
+    <li>
+      <a
+        href="https://www.openhumans.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >openhumans.org</a>
+        - open source your genome for open science
+    </li>
   </ul>
 </div>
