@@ -4,7 +4,7 @@ category: thing-i-like
 title: the art of louie zong
 ---
 
-<section style="background-color: #111; color: #4174ff; font-family: serif;">
+<section id='louie-zong' style="background-color: #111; color: #4174ff; font-family: serif;">
 <a href="https://www.louiezong.com" style="color: #4174ff;"><h2>{{page.title}}</h2></a>
 <img src="{{ 'assets/images/louie zong polyphemus moth.webp' | absolute_url }}" alt="a cute painting of a polyphemus moth with mimicked eyes on its wings that appear to be looking at the moon in the sky" loading="lazy">
 <p>
