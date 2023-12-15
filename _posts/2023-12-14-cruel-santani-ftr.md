@@ -4,7 +4,7 @@ title: cruel santani - FTR
 category: thing-i-like
 ---
 
-<section style="background-image: url('/assets/images/cruel-santino-ftr-cigarette-guy.webp'); color: white; min-height: 350px; background-size: contain;">
+<section style="background-image: url('/assets/images/cruel-santino-ftr-cigarette-guy.webp'); color: white; height: 0px; padding-bottom: 54.8%; background-size: contain;">
   <a style="background-color: white;" href="https://www.youtube.com/watch?v=dGhEzL3e72o"
     ><h2 style="margin: 0;">{{ page.title }}</h2></a
   >
