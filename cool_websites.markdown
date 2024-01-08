@@ -566,5 +566,13 @@ layout: default
         >thomas kole - tenochtitlan</a>
         - a meticulous cgi reconstruction of tenochitlan rendered to match present day photographs of its successor, mexico city
     </li>
+    <li>
+      <a
+        href="https://www.pagat.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >card game rules</a>
+        - an enormous repository of card games from around the world in a standard clean format
+    </li>
   </ul>
 </div>
