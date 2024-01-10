@@ -574,5 +574,13 @@ layout: default
         >card game rules</a>
         - an enormous repository of card games from around the world in a standard clean format
     </li>
+    <li>
+      <a
+        href="https://asc-paint.glitch.me/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >ASC_PAINT</a>
+        - a nice little paint webapp with brush, shapes, and fills, but it's ASCII. by jonathan brodsky
+    </li>
   </ul>
 </div>
