@@ -582,5 +582,13 @@ layout: default
         >ASC_PAINT</a>
         - a nice little paint webapp with brush, shapes, and fills, but it's ASCII. by jonathan brodsky
     </li>
+    <li>
+      <a
+        href="http://htmlspirograph.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        >HTML spirograph</a>
+        - a spirograph webapp by <a href="https://iparigrafika.hu/">abel vincze</a>
+    </li>
   </ul>
 </div>
