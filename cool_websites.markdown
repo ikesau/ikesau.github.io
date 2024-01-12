@@ -590,5 +590,13 @@ layout: default
         >HTML spirograph</a>
         - a spirograph webapp by <a href="https://iparigrafika.hu/">abel vincze</a>
     </li>
+    <li>
+      <a
+        href="https://diagram.website"
+        target="_blank"
+        rel="noopener noreferrer"
+        >diagram website</a>
+        - a non exhaustive taxonomy of smolnet (cute little websites)
+    </li>
   </ul>
 </div>
