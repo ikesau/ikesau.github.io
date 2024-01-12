@@ -62,7 +62,7 @@ layout: default
     </li>
     <li>
       <a
-        href="https://sci-hub.do"
+        href="https://sci-hub.hkvisa.net"
         target="_blank"
         rel="noopener noreferrer"
         >sci-hub</a
