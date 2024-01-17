@@ -1,0 +1,48 @@
+---
+layout: thing-i-like
+title: matt herzog speedrunning the moma
+category: thing-i-like
+---
+
+<style>
+  #sub-twenty-five {
+    position: relative;
+    overflow: hidden;
+    height: 356px;
+  }
+  #sub-twenty-five video {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+
+  #sub-twenty-five * {
+    background-color: #fff;
+    display: inline-block;
+  }
+
+  @media (max-width: 682px) {
+    #sub-twenty-five {
+      height: 50vw;
+      min-height: 465px;
+    }
+    #sub-twenty-five video {
+      width: unset;
+      height: 100%;
+    }
+  }
+</style>
+<section id="sub-twenty-five">
+  <a href="https://www.youtube.com/watch?v=Ctd_RJTe9tA">
+    <h2>{{ page.title }}</h2>
+  </a>
+  <p>insane RNG on the lift during the sixth floor section</p>
+  <video autoplay loop>
+    <source
+      src="/assets/vidsdo/matt-herzog-speedrunning-the-moma.mp4"
+      type="video/mp4"
+    />
+  </video>
+</section>
