@@ -8,7 +8,7 @@ title: Staying in line
 <a href="https://www.youtube.com/watch?v=PtXfDX0bMVE">
 <h2>{{ page.title }}</h2>
 </a>
-<img src="{{'assets/images/good will come to you.webp' | absolute_url}}">
+<img src="{{'assets/images/good will come to you.webp' | absolute_url}}" loading="lazy">
 <div id='ping-pong'>
 <p><marquee behavior="alternate">good will coooooooooooooome to you</marquee></p>
 <p><marquee behavior="alternate">good will coooooooooooooome to me</marquee></p>
