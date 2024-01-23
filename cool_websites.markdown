@@ -598,5 +598,13 @@ layout: default
         >diagram website</a>
         - a non exhaustive taxonomy of smolnet (cute little websites)
     </li>
+    <li>
+      <a
+        href="https://www.scanofthemonth.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >scan of the month</a>
+        - high quality 3d scans of objects and accompanying articles
+    </li>
   </ul>
 </div>
