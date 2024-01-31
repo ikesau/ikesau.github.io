@@ -606,5 +606,13 @@ layout: default
         >scan of the month</a>
         - high quality 3d scans of objects and accompanying articles
     </li>
+    <li>
+      <a href="https://allchemy.io/" target="_blank" rel="noopener noreferrer"
+        >allchemy</a>
+      - a playful combination game (see also
+      <a target="_blank" rel="noopener noreferrer" href="https://neal.fun/infinite-craft/"
+      >infinite craft</a>
+      by <a target="_blank" rel="noopener noreferrer" href="neal.fun">neal.fun</a>)
+    </li>
   </ul>
 </div>
