@@ -1,6 +1,6 @@
 ---
 layout: thing-i-like
-title: kaarlo conley this is america drum cover
+title: kaarlo conley - this is america drum cover
 category: thing-i-like
 ---
 

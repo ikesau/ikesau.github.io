@@ -1,6 +1,6 @@
 ---
 layout: thing-i-like
-title: devo in  heaven & the one that gets away palladium 1979
+title: devo - in heaven & the one that gets away palladium 1979
 category: thing-i-like
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: thing-i-like
 category: thing-i-like
-title: Staying in line
+title: un blonde - staying in line
 ---
 
 <section style="background-color: #ffecb1; font-family: cursive; color: #cb0000;">

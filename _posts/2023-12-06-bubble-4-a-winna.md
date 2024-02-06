@@ -1,6 +1,6 @@
 ---
 layout: thing-i-like
-title: sydanie bubble 4 a winna
+title: sydanie - bubble 4 a winna
 category: thing-i-like
 ---
 

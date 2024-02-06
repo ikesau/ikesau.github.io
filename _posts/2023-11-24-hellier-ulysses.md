@@ -1,7 +1,7 @@
 ---
 layout: thing-i-like
 category: thing-i-like
-title: hellier ulysses s/t
+title: hellier ulysses - s/t
 ---
 
 <section>
