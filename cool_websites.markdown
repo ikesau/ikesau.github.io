@@ -616,5 +616,10 @@ layout: default
       by 
       <a target="_blank" rel="noopener noreferrer" href="https://neal.fun">neal.fun</a>)
     </li>
+    <li>
+      <a href="https://berthub.eu/articles/trifecta/" target="_blank" rel="noopener noreferrer"
+        >trifecta</a>
+      - minimal image hosting software
+    </li>
   </ul>
 </div>
