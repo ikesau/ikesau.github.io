@@ -621,5 +621,10 @@ layout: default
         >trifecta</a>
       - minimal image hosting software
     </li>
+    <li>
+      <a href="https://fontreviewjournal.com/" target="_blank" rel="noopener noreferrer"
+        >font review journal</a>
+      - typography criticism
+    </li>
   </ul>
 </div>
