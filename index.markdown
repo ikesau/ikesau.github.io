@@ -115,6 +115,17 @@ layout: default
   {% endfor %}
   </ul>
 
+<a href="/blog.html"><h3>blog</h3></a>
+
+  <ul>
+  {% for post in site.categories.blog limit:5 %}
+    <li>
+      <a href="{{ post.url }}">{{ post.title }}</a>
+      <p style="display: inline-block">{{ post.date | date: "%B %d, %Y"}}</p>
+    </li>
+  {% endfor %}
+  </ul>
+
   <h3>various code sketches</h3>
   <ul class='decorating-vice'>
     <li><a href="/eyes.html">eyes</a></li>
