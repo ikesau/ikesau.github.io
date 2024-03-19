@@ -1,4 +1,4 @@
-summary {
+#i-like-it-when-you-click-me {
   cursor: pointer;
   list-style: none;
   background: #333;
@@ -14,7 +14,7 @@ summary {
   right: 8px;
   top: 8px;
 }
-details[open] {
+#what-is-this[open] {
   border: 1px solid black;
   padding: 8px 32px;
   margin: 16px 0;

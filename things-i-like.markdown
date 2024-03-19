@@ -2,8 +2,8 @@
 layout: thing-i-like
 ---
 
-<details>
-<summary>
+<details id="what-is-this">
+<summary id="i-like-it-when-you-click-me">
 ?
 </summary>
 <p>
