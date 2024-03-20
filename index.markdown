@@ -121,7 +121,7 @@ layout: default
   {% for post in site.categories.blog limit:5 %}
     <li>
       <a href="{{ post.url }}">{{ post.title }}</a>
-      <p style="display: inline-block">{{ post.date | date: "%B %d, %Y"}}</p>
+      <span style="display: inline-block">{{ post.date | date: "%B %d, %Y"}}</span>
     </li>
   {% endfor %}
   </ul>
