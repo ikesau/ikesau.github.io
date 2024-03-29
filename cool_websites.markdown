@@ -631,5 +631,8 @@ layout: default
         >invasive species specialist group 100 worst invasive species list</a>
       - oh no!
     </li>
+    <li>
+      <a href="http://thirty-seven.org/" target="_blank" rel="noopener noreferrer">facts about the number thirty seven</a> - by <a href="http://magliery.com/" target="_blank" rel="noopener noreferrer">tom magliery</a>
+    </li>
   </ul>
 </div>
