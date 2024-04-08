@@ -634,5 +634,8 @@ layout: default
     <li>
       <a href="http://thirty-seven.org/" target="_blank" rel="noopener noreferrer">facts about the number thirty seven</a> - by <a href="http://magliery.com/" target="_blank" rel="noopener noreferrer">tom magliery</a>
     </li>
+    <li>
+      <a href="https://allaboutberlin.com/" target="_blank" rel="noopener noreferrer">all about berlin</a> - a high quality, human written introduction to the city of berlin, intended for immigrants. better than any government resource i've seen.
+    </li>
   </ul>
 </div>
