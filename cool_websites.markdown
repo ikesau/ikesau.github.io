@@ -637,5 +637,8 @@ layout: default
     <li>
       <a href="https://allaboutberlin.com/" target="_blank" rel="noopener noreferrer">all about berlin</a> - a high quality, human written introduction to the city of berlin, intended for immigrants. better than any government resource i've seen.
     </li>
+    <li>
+      <a href="https://xkcd.com/2916" target="_blank" rel="noopener noreferrer">machine</a> - a very fun physics engine "incredible machine" type game by randall munroe and friends
+    </li>
   </ul>
 </div>
