@@ -640,5 +640,8 @@ layout: default
     <li>
       <a href="https://xkcd.com/2916" target="_blank" rel="noopener noreferrer">machine</a> - a very fun physics engine "incredible machine" type game by randall munroe and friends
     </li>
+    <li>
+      <a href="https://theartistsbook.org.za/" target="_blank" rel="noopener noreferrer">Jack Ginsberg Centre for the Book Arts</a> - the internet part of an archive for south african art books
+    </li>
   </ul>
 </div>
