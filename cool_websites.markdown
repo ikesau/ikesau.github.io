@@ -643,5 +643,8 @@ layout: default
     <li>
       <a href="https://theartistsbook.org.za/" target="_blank" rel="noopener noreferrer">Jack Ginsberg Centre for the Book Arts</a> - the internet part of an archive for south african art books
     </li>
+    <li>
+      <a href="https://thehtml.review/03/" target="_blank" rel="noopener noreferrer">the html review</a> - yo dawg i heard you liked other cool websites
+    </li>
   </ul>
 </div>
