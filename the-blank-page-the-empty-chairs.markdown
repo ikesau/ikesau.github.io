@@ -33,7 +33,7 @@ layout: default
 </style>
 
 <div class="aisle">
-<img class="chair" src="assets/images/chair.svg" />
+<img class="chair" loading="lazy" src="assets/images/chair.svg" />
 </div>
 
 # The blank page. The empty chairs.
@@ -56,4 +56,4 @@ The easy part is writing paragraphs of the lightly edited thoughts that breeze t
 
 But at the very least, once it's all sprawled out, I can revise the document till it's coherent for _someone_ and save it. Then the next time I think about subject X, I will be able to recall the vagaries of this process and present them. In this way, an identity is formed for myself and for you.
 
-<img style="width: 100%; max-height: unset;" src="assets/images/my_ideology.gif" />
+<img style="width: 100%; max-height: unset;" loading="lazy" src="assets/images/my_ideology.gif" />
