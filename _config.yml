@@ -15,6 +15,4 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
-plugins:
-  - jekyll-feed
 permalink: /:categories/:title:output_ext
