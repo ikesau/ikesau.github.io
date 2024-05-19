@@ -297,5 +297,6 @@ layout: default
 
   <img width="100%" src="assets/images/splash.png" alt="a generative black and white image that resembles waves emanating from a pond's centre"/>
   <img width="100%" src="assets/images/rocket.png" alt="another generative black and white image that resembles a team rocket base"/>
+  <img style="width: 100%; max-height: unset; margin-left: 0; margin-right: 0" src="/assets/images/dorde martinovic incident tshirt.webp" alt="a templated white tshirt design with the dorde martinovic incident wikipedia article printed on the front">
   <h2>bye</h2>
 </div>
