@@ -646,5 +646,8 @@ layout: default
     <li>
       <a href="https://thehtml.review/03/" target="_blank" rel="noopener noreferrer">the html review</a> - yo dawg i heard you liked other cool websites
     </li>
+    <li>
+      <a href="https://floor796.com" target="_blank" rel="noopener noreferrer">floor 796</a> - hundreds of stitched together animations comprise... floor 796
+    </li>
   </ul>
 </div>
