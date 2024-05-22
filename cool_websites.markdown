@@ -649,5 +649,8 @@ layout: default
     <li>
       <a href="https://floor796.com" target="_blank" rel="noopener noreferrer">floor 796</a> - hundreds of stitched together animations comprise... floor 796
     </li>
+    <li>
+      <a href="https://string.spiel.com/" target="_blank" rel="noopener noreferrer">pluckable strings</a> - you can draw lines and pluck em
+    </li>
   </ul>
 </div>
