@@ -652,5 +652,8 @@ layout: default
     <li>
       <a href="https://string.spiel.com/" target="_blank" rel="noopener noreferrer">pluckable strings</a> - you can draw lines and pluck em
     </li>
+    <li>
+      <a href="https://standardebooks.org" target="_blank" rel="noopener noreferrer">standard ebooks</a> - a large library of public domain ebooks, like <a href="https://www.gutenberg.org/">project gutenberg</a> but with quality control
+    </li>
   </ul>
 </div>
