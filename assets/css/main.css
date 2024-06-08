@@ -35,3 +35,22 @@ img {
   max-height: unset;
   margin: 0;
 }
+
+sup {
+  font-size: 0.825rem;
+  margin-left: 2px;
+  color: blue;
+}
+sup + sup::before {
+  content: ",";
+}
+footer span {
+  color: blue;
+  outline: 1px solid blue;
+  width: 1rem;
+  display: inline-block;
+  height: 1rem;
+  line-height: 1rem;
+  font-size: 0.825rem;
+  text-align: center;
+}
