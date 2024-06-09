@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  {%- include head.html -%}
+  <link rel="stylesheet" href="/assets/css/blog.css" />
+
+  <body>
+    <main aria-label="Content">{{ content }}</main>
+  </body>
+  <script src="/assets/js/popper.min.js"></script>
+  <script src="/assets/js/tippy.min.js"></script>
+  <script>
+    tippy("sup", {
+      content(e) {
+        const labelledBy = e.getAttribute("aria-labelledby");
+        const label = document.getElementById(labelledBy);
+        return label.innerHTML;
+      },
+      allowHTML: true,
+      interactive: true,
+      arrow: false,
+    });
+  </script>
+</html>

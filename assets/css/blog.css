@@ -1,0 +1,28 @@
+sup {
+  font-size: 0.825rem;
+  margin-left: 2px;
+  color: blue;
+}
+
+sup + sup::before {
+  content: ",";
+}
+footer span:first-child {
+  color: blue;
+  outline: 1px solid blue;
+  width: 1rem;
+  display: inline-block;
+  height: 1rem;
+  line-height: 1rem;
+  font-size: 0.825rem;
+  text-align: center;
+}
+
+.tippy-box {
+  background: #fff;
+  border: 1px solid blue;
+  color: #2c2c2c;
+  padding: 8px;
+  border-radius: 0px;
+  font-size: 0.825rem;
+}
