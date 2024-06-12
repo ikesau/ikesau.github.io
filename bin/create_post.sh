@@ -19,7 +19,7 @@ current_date=$(date +%Y-%m-%d)
 destination="./_posts/${current_date}-$1.html"
 
 # Check if the template file exists
-template="./_drafts/thing-i-like-template.html"
+template="./_layouts/thing-i-like-template.html"
 if [ ! -f "$template" ]; then
     echo "Template file not found." exit 1
 fi
