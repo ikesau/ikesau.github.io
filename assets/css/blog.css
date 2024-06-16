@@ -7,6 +7,7 @@ sup {
 sup + sup::before {
   content: ",";
 }
+
 footer span:first-child {
   color: blue;
   outline: 1px solid blue;
@@ -25,4 +26,35 @@ footer span:first-child {
   padding: 8px;
   border-radius: 0px;
   font-size: 0.825rem;
+  font-family: sans-serif;
+}
+
+code {
+  background-color: #ededed;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+pre.snippet {
+  background-color: #f8f8f8;
+  border: 1px solid pink;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #603b42 pink;
+  padding: 8px;
+  border-radius: 3px;
+}
+
+blockquote.chat-from-me {
+  background: #dee5ff;
+  border-radius: 10px;
+  padding: 12px;
+  margin: 0;
+}
+
+blockquote.chat-from-gpt {
+  background: #e6e6e6;
+  border-radius: 10px;
+  padding: 12px;
+  margin: 0;
 }
