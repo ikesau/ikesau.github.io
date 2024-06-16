@@ -658,5 +658,8 @@ layout: default
     <li>
       <a href="https://openarena.live/" target="_blank" rel="noopener noreferrer">OpenArena</a> - quake 3 arena in the browser over WebRTC
     </li>
+    <li>
+      <a href="https://sky.esa.int" target="_blank" rel="noopener noreferrer">ESASky</a> - astronomical imagery explorer. right click on something and search it in one of the offered databases to learn more about what you're looking at
+    </li>
   </ul>
 </div>
