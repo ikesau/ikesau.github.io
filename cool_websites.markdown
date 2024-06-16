@@ -655,5 +655,8 @@ layout: default
     <li>
       <a href="https://standardebooks.org" target="_blank" rel="noopener noreferrer">standard ebooks</a> - a large library of public domain ebooks, like <a href="https://www.gutenberg.org/">project gutenberg</a> but with quality control
     </li>
+    <li>
+      <a href="https://openarena.live/" target="_blank" rel="noopener noreferrer">OpenArena</a> - quake 3 arena in the browser over WebRTC
+    </li>
   </ul>
 </div>
