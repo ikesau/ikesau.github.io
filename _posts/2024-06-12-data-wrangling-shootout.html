@@ -361,7 +361,8 @@ Wallis & Futuna
 <p>
   Here's my <code>scratch.sql</code> file leveraging some cool DuckDB magic that
   can work with inline references to CSV and JSON files, which I can run with
-  <code>cat scratch.sql | duckdb</code>
+  <code>cat scratch.sql | duckdb</code
+  ><sup aria-labelledby="nushell-piping">10</sup>
 </p>
 
 <pre class="snippet">
@@ -440,7 +441,7 @@ GROUP BY
   Unfortunately, as far as I can tell, Observable's SQL cell doesn't allow you
   to query from two tables at once<sup
     aria-labelledby="observable-db-limitation"
-    >10</sup
+    >11</sup
   >, so either you have to join your tables before you upload them, or join them
   with JavaScript and query that third object.
 </p>
@@ -608,6 +609,13 @@ byContinent {
   </p>
   <p>
     <span>10</span>
+    <span id="nushell-piping"
+      >this is with nushell. zsh or bash would allow you to type
+      <code>duckdb < scratch.sql</code></span
+    >
+  </p>
+  <p>
+    <span>11</span>
     <span id="observable-db-limitation"
       >unless you create a full database, which seems like overkill for a task
       of this size</span
