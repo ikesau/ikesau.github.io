@@ -661,5 +661,8 @@ layout: default
     <li>
       <a href="https://sky.esa.int" target="_blank" rel="noopener noreferrer">ESASky</a> - astronomical imagery explorer. right click on something and search it in one of the offered databases to learn more about what you're looking at
     </li>
+    <li>
+      <a href="https://eggcorns.lascribe.net/browse-eggcorns/" target="_blank" rel="noopener noreferrer">eggcorn database</a> - a web sight full of acorns
+    </li>
   </ul>
 </div>
