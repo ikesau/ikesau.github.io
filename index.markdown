@@ -115,7 +115,7 @@ layout: default
   {% endfor %}
   </ul>
 
-<a href="/blog.html"><h3>blog</h3></a>
+<a href="/blog.html"><h3 style='display: inline-block; margin-bottom: 0'>blog</h3></a> <a href="/reblogs.html"><h5 style='display: inline-block; margin-bottom: 0'>(reblogs)</h5></a>
 
   <ul>
   {% for post in site.categories.blog limit:5 %}
