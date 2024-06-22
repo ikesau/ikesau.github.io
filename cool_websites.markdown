@@ -664,5 +664,8 @@ layout: default
     <li>
       <a href="https://eggcorns.lascribe.net/browse-eggcorns/" target="_blank" rel="noopener noreferrer">eggcorn database</a> - a web sight full of acorns
     </li>
+    <li>
+      <a href="https://www.suncalc.org" target="_blank" rel="noopener noreferrer">suncalc</a> - a interface for precisely calculating where the sun will be at any point in time
+    </li>
   </ul>
 </div>
