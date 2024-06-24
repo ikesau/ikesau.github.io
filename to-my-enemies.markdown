@@ -1,6 +1,8 @@
 ---
 layout: default
+sitemap: false
 ---
+
 <!-- https://www.youtube.com/results?search_query=hijokoidan+romance -->
 <div id="the-gutter" style="margin-top: 32px; font-size: 24px;">you little </div>
 

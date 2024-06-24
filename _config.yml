@@ -16,3 +16,5 @@ exclude:
   - vendor/gems/
   - vendor/ruby/
 permalink: /:categories/:title:output_ext
+plugins:
+  - jekyll-sitemap
