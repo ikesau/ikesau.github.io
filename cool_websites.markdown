@@ -667,5 +667,8 @@ layout: default
     <li>
       <a href="https://www.suncalc.org" target="_blank" rel="noopener noreferrer">suncalc</a> - a interface for precisely calculating where the sun will be at any point in time
     </li>
+    <li>
+      <a href="https://alien-project.org/" target="_blank" rel="noopener noreferrer">ALIEN project</a> - an artificial life simulation program based on a specialized physics and rendering engine
+    </li>
   </ul>
 </div>
