@@ -670,5 +670,8 @@ layout: default
     <li>
       <a href="https://alien-project.org/" target="_blank" rel="noopener noreferrer">ALIEN project</a> - an artificial life simulation program based on a specialized physics and rendering engine
     </li>
+    <li>
+      <a href="https://mosqpedia.org/" target="_blank" rel="noopener noreferrer">mosqpedia</a> - a collection and celebration of all the beautiful mosques in the world
+    </li>
   </ul>
 </div>
