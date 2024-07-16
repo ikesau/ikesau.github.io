@@ -59,11 +59,21 @@ blockquote.chat-from-gpt {
   margin: 0;
 }
 
-figure img {
+@media (max-width: 768px) {
+  .blog-post figure {
+    margin: 0;
+  }
+  .blog-post figure img,
+  .blog-post img {
+    height: auto;
+  }
+}
+
+.blog-post figure img {
   margin-bottom: 0;
 }
 
-figure figcaption {
+.blog-post figure figcaption {
   font-style: italic;
   text-align: center;
   font-size: 0.875rem;
