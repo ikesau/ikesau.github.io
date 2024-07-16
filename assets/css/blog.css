@@ -58,3 +58,13 @@ blockquote.chat-from-gpt {
   padding: 12px;
   margin: 0;
 }
+
+figure img {
+  margin-bottom: 0;
+}
+
+figure figcaption {
+  font-style: italic;
+  text-align: center;
+  font-size: 0.875rem;
+}
