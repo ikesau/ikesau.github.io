@@ -59,14 +59,12 @@ blockquote.chat-from-gpt {
   margin: 0;
 }
 
-@media (max-width: 768px) {
-  .blog-post figure {
-    margin: 0;
-  }
-  .blog-post figure img,
-  .blog-post img {
-    height: auto;
-  }
+.blog-post figure {
+  margin: 0;
+}
+.blog-post figure img,
+.blog-post img {
+  height: auto;
 }
 
 .blog-post figure img {
