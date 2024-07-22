@@ -101,3 +101,9 @@
   comment: how to write about conspiracy theories and the process of revising an essay
   date: 2024-07-16
 
+
+- url: https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/
+  title: "Parse, don’t validate"
+  comment: "A good little article on typed function design"
+  date: 2024-07-22
+
