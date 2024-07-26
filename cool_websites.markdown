@@ -673,5 +673,8 @@ layout: default
     <li>
       <a href="https://mosqpedia.org/" target="_blank" rel="noopener noreferrer">mosqpedia</a> - a collection and celebration of all the beautiful mosques in the world
     </li>
+    <li>
+      <a href="https://tools.simonwillison.net/image-resize-quality" target="_blank" rel="noopener noreferrer">image resize and quality comparison</a> - quickly check how much you can compress a jpeg before it becomes illegible
+    </li>
   </ul>
 </div>
