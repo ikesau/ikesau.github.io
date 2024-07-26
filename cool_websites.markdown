@@ -679,5 +679,8 @@ layout: default
     <li>
       <a href="https://playbenny.github.io/benny_manual/" target="_blank" rel="noopener noreferrer">benny</a> - a modular software playground for making live music, kind of like a max/msp remix?
     </li>
+    <li>
+      <a href="http://wrasse.pw/joel/icons/" target="_blank" rel="noopener noreferrer">icons</a> - an enormous archive of gif icons (2490 and counting)
+    </li>
   </ul>
 </div>
