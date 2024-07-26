@@ -676,5 +676,8 @@ layout: default
     <li>
       <a href="https://tools.simonwillison.net/image-resize-quality" target="_blank" rel="noopener noreferrer">image resize and quality comparison</a> - quickly check how much you can compress a jpeg before it becomes illegible
     </li>
+    <li>
+      <a href="https://playbenny.github.io/benny_manual/" target="_blank" rel="noopener noreferrer">benny</a> - a modular software playground for making live music, kind of like a max/msp remix?
+    </li>
   </ul>
 </div>
