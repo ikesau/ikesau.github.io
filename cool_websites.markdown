@@ -682,5 +682,8 @@ layout: default
     <li>
       <a href="http://wrasse.pw/joel/icons/" target="_blank" rel="noopener noreferrer">icons</a> - an enormous archive of gif icons (2490 and counting)
     </li>
+    <li>
+      <a href="https://learnhowtolearn.org/" target="_blank" rel="noopener noreferrer">learn how to learn</a> - a collection of blog posts on how to be a sigma autodidact
+    </li>
   </ul>
 </div>
