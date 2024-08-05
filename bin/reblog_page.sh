@@ -16,11 +16,10 @@ file="/Users/ikesau/code/ikesau.github.io/_data/reblogs.yml"
 
 # Append to the YAML file
 {
-    echo ""  
     echo "- url: $url"
-    echo "  title: $title"
+    echo "  title: \"$title\""
     if [ -n "$comment" ]; then
-        echo "  comment: $comment"
+        echo "  comment: \"$comment\""
     fi
     echo "  date: $(date +'%Y-%m-%d')"
     echo ""  
