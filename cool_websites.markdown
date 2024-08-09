@@ -685,5 +685,8 @@ layout: default
     <li>
       <a href="https://learnhowtolearn.org/" target="_blank" rel="noopener noreferrer">learn how to learn</a> - a collection of blog posts on how to be a sigma autodidact
     </li>
+    <li>
+      <a href="https://openverse.org/" target="_blank" rel="noopener noreferrer">openverse</a> - a search engine of the public domain
+    </li>
   </ul>
 </div>
