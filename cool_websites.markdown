@@ -688,5 +688,8 @@ layout: default
     <li>
       <a href="https://openverse.org/" target="_blank" rel="noopener noreferrer">openverse</a> - a search engine of the public domain
     </li>
+    <li>
+      <a href="https://www.thomasthwaites.com/" target="_blank" rel="noopener noreferrer">thomas thwaites</a> - an artist who asks questions with art + technology
+    </li>
   </ul>
 </div>
