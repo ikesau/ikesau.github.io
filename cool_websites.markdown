@@ -691,5 +691,8 @@ layout: default
     <li>
       <a href="https://www.thomasthwaites.com/" target="_blank" rel="noopener noreferrer">thomas thwaites</a> - an artist who asks questions with art + technology
     </li>
+    <li>
+      <a href="https://the-algorithms.com/" target="_blank" rel="noopener noreferrer">the algorithms</a> - a repository of common computer algorithms, written in many languages
+    </li>
   </ul>
 </div>
