@@ -697,5 +697,8 @@ layout: default
     <li>
       <a href="https://messwithdns.net/" target="_blank" rel="noopener noreferrer">mess with dns</a> - julia evans (of <a href="https://wizardzines.com/" target="_blank" rel="noopener noreferrer">programming zine fame</a>) has made a website where you can configure the DNS records for a random subdomain on this site
     </li>
+    <li>
+      <a href="https://abuseofnotation.github.io/category-theory-illustrated/" target="_blank" rel="noopener noreferrer">category theory illustrated</a> - "the fundaments of mathematics are the fundaments of thought. category theory allows us to formalize those fundaments that we use in our daily (intellectual) lives"
+    </li>
   </ul>
 </div>
