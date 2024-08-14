@@ -694,5 +694,8 @@ layout: default
     <li>
       <a href="https://the-algorithms.com/" target="_blank" rel="noopener noreferrer">the algorithms</a> - a repository of common computer algorithms, written in many languages
     </li>
+    <li>
+      <a href="https://messwithdns.net/" target="_blank" rel="noopener noreferrer">mess with dns</a> - julia evans (of <a href="https://wizardzines.com/" target="_blank" rel="noopener noreferrer">programming zine fame</a>) has made a website where you can configure the DNS records for a random subdomain on this site
+    </li>
   </ul>
 </div>
