@@ -700,5 +700,8 @@ layout: default
     <li>
       <a href="https://abuseofnotation.github.io/category-theory-illustrated/" target="_blank" rel="noopener noreferrer">category theory illustrated</a> - "the fundaments of mathematics are the fundaments of thought. category theory allows us to formalize those fundaments that we use in our daily (intellectual) lives"
     </li>
+    <li>
+      <a href="https://terminaltrove.com" target="_blank" rel="noopener noreferrer">terminal trove</a> - a showcase for computer terminals
+    </li>
   </ul>
 </div>
