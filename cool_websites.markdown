@@ -703,5 +703,8 @@ layout: default
     <li>
       <a href="https://terminaltrove.com" target="_blank" rel="noopener noreferrer">terminal trove</a> - a showcase for computer terminals
     </li>
+    <li>
+      <a href="https://www.freepublicapis.com" target="_blank" rel="noopener noreferrer">free public APIs</a> - a collection of free public APIs
+    </li>
   </ul>
 </div>
