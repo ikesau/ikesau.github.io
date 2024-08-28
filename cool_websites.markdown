@@ -706,5 +706,8 @@ layout: default
     <li>
       <a href="https://www.freepublicapis.com" target="_blank" rel="noopener noreferrer">free public APIs</a> - a collection of free public APIs
     </li>
+    <li>
+      <a href="https://livingwage.mit.edu/" target="_blank" rel="noopener noreferrer">living wage calculator</a> - a U.S. focused collection of tables showing minimum/poverty/living wages for different family structures in each county.
+    </li>
   </ul>
 </div>
