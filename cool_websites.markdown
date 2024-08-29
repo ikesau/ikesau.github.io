@@ -709,5 +709,8 @@ layout: default
     <li>
       <a href="https://livingwage.mit.edu/" target="_blank" rel="noopener noreferrer">living wage calculator</a> - a U.S. focused collection of tables showing minimum/poverty/living wages for different family structures in each county.
     </li>
+    <li>
+      <a href="https://pol.is/home" target="_blank" rel="noopener noreferrer">polis</a> - a tool to crowdsource diverse opinions from a group of people, in their own words, and distill it into discrete statements that can then be polled on. e-democracy of the future.
+    </li>
   </ul>
 </div>
