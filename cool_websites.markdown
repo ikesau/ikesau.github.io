@@ -712,5 +712,8 @@ layout: default
     <li>
       <a href="https://pol.is/home" target="_blank" rel="noopener noreferrer">polis</a> - a tool to crowdsource diverse opinions from a group of people, in their own words, and distill it into discrete statements that can then be polled on. e-democracy of the future.
     </li>
+    <li>
+      <a href="https://applerankings.com" target="_blank" rel="noopener noreferrer">apple rankings</a> - entertaining and passionate apple (fruit) reviews
+    </li>
   </ul>
 </div>
