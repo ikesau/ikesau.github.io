@@ -718,5 +718,8 @@ layout: default
     <li>
       <a href="https://spacehey.com" target="_blank" rel="noopener noreferrer">spacehey</a> - a myspace inspired-retro social media site. there's a thread in the forum where everyone believes in ghosts.
     </li>
+    <li>
+      <a href="https://housefresh.com/" target="_blank" rel="noopener noreferrer">housefresh</a> - a dedicated & independent air purifier review site
+    </li>
   </ul>
 </div>
