@@ -721,5 +721,8 @@ layout: default
     <li>
       <a href="https://housefresh.com/" target="_blank" rel="noopener noreferrer">housefresh</a> - a dedicated & independent air purifier review site
     </li>
+    <li>
+      <a href="https://globalsolaratlas.info" target="_blank" rel="noopener noreferrer">global solar atlas</a> - an interactive world map allowing you to see any region's pertinent solar power stats.
+    </li>
   </ul>
 </div>
