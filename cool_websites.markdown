@@ -724,5 +724,8 @@ layout: default
     <li>
       <a href="https://globalsolaratlas.info" target="_blank" rel="noopener noreferrer">global solar atlas</a> - an interactive world map allowing you to see any region's pertinent solar power stats.
     </li>
+    <li>
+      <a href="https://badd10de.dev/notes/music-theory.html" target="_blank" rel="noopener noreferrer">Music Theory</a> - a comprehensive beginner's guide, by Bad Diode
+    </li>
   </ul>
 </div>
