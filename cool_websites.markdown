@@ -730,5 +730,8 @@ layout: default
     <li>
       <a href="https://htmlforpeople.com/intro/" target="_blank" rel="noopener noreferrer">html for people</a> - a friendly and approachable tutorial explaining how to write html websites for a general audience
     </li>
+    <li>
+      <a href="https://breezewiki.com" target="_blank" rel="noopener noreferrer">breeze wiki</a> - a way to read fandom wikis without all the "extra" content
+    </li>
   </ul>
 </div>
