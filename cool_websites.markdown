@@ -733,5 +733,8 @@ layout: default
     <li>
       <a href="https://breezewiki.com" target="_blank" rel="noopener noreferrer">breeze wiki</a> - a way to read fandom wikis without all the "extra" content
     </li>
+    <li>
+      <a href="https://thescienceplayground.com/" target="_blank" rel="noopener noreferrer">the science playground</a> - a large collection of science based games
+    </li>
   </ul>
 </div>
