@@ -736,5 +736,8 @@ layout: default
     <li>
       <a href="https://thescienceplayground.com/" target="_blank" rel="noopener noreferrer">the science playground</a> - a large collection of science based games
     </li>
+    <li>
+      <a href="https://github.com/typst/typst" target="_blank" rel="noopener noreferrer">typst</a> - an ergonomic alternative to LaTeX
+    </li>
   </ul>
 </div>
