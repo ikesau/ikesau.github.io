@@ -230,3 +230,8 @@
   comment: "The observance of defeat, especially in an election, is often all that keeps a state from tipping into violence"
   date: 2024-10-22
 
+- url: https://github.com/pretzelhammer/rust-blog/blob/master/posts/rust-in-non-rust-servers.md
+  title: "Using Rust in Non-Rust Servers to Improve Performance"
+  comment: "more of a bookmark than a reblog but WHATEVER"
+  date: 2024-10-23
+
