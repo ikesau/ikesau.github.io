@@ -235,3 +235,8 @@
   comment: "more of a bookmark than a reblog but WHATEVER"
   date: 2024-10-23
 
+- url: https://github.com/pretzelhammer/rust-blog/blob/master/posts/learning-rust-in-2024.md
+  title: "Learning Rust in 2024"
+  comment: "same as BELOW"
+  date: 2024-10-23
+
