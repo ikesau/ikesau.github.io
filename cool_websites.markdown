@@ -739,5 +739,8 @@ layout: default
     <li>
       <a href="https://github.com/typst/typst" target="_blank" rel="noopener noreferrer">typst</a> - an ergonomic alternative to LaTeX
     </li>
+    <li>
+      <a href="https://www.hathitrust.org/" target="_blank" rel="noopener noreferrer">hathi trust</a> - a large online collection of public domain texts
+    </li>
   </ul>
 </div>
