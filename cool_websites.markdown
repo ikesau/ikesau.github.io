@@ -742,5 +742,8 @@ layout: default
     <li>
       <a href="https://www.hathitrust.org/" target="_blank" rel="noopener noreferrer">hathi trust</a> - a large online collection of public domain texts
     </li>
+    <li>
+      <a href="https://www.ritsumei.ac.jp/~akitaoka/index-e.html" target="_blank" rel="noopener noreferrer">akiyoshi's illusion pages</a> - circular snakes appear to rotate 'spontaneously', etc...
+    </li>
   </ul>
 </div>
