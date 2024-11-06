@@ -260,3 +260,8 @@
   comment: "In avatar therapy, a clinician gives voice to their patients’ inner demons. For some of the participants in a new trial, the results have been astounding"
   date: 2024-10-29
 
+- url: https://bottosson.github.io/posts/oklab/
+  title: "oklab: A perceptual color space for image processing"
+  comment: "an expertly written explanation of the Oklab color space (aka you don't know how little you know about colour)"
+  date: 2024-11-06
+
