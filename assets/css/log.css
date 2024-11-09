@@ -33,7 +33,7 @@
 }
 
 .log-entry-task {
-  width: calc(650px / 5);
+  width: calc(var(--body-width) / 5);
   height: 24px;
   background: #fff;
 }

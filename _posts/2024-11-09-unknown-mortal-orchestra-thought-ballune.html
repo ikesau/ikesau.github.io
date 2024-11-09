@@ -6,26 +6,28 @@ category: thing-i-like
 
 <style>
   #thought-ballune {
-    background-color: #7eb6d9;
-    width: 100%;
-    margin-bottom: 350px;
+    --ballune-width: 300px;
+    max-width: var(--body-width);
+    min-width: var(--ballune-width);
     box-sizing: border-box;
+    overflow: hidden;
     a {
       color: red;
     }
     .sky {
+      background-color: #7eb6d9;
       width: 100%;
+      border-bottom: calc(var(--ballune-width) + 50px) solid white;
     }
     .ballune {
-      --width: 300px;
       display: flex;
       flex-wrap: wrap;
-      width: var(--width);
-      text-align: center;
+      width: var(--ballune-width);
+      text-wrap: balance;
       color: white;
       transform: rotate(var(--rotation));
       &:nth-child(2n) {
-        margin-left: min(calc(100vw - var(--width)), 50%);
+        margin-left: clamp(0px, calc(100vw - var(--ballune-width) - 50px), 50%);
       }
       p {
         z-index: 1;
@@ -34,7 +36,7 @@ category: thing-i-like
         line-height: 2.5;
         text-align: center;
         &:first-child {
-          margin-top: calc(var(--width) * 0.25);
+          margin-top: calc(var(--ballune-width) * 0.25);
         }
       }
       &:before {
@@ -42,8 +44,8 @@ category: thing-i-like
         background-image: url("/assets/images/thought-ballune.svg");
         background-size: contain;
         background-repeat: no-repeat;
-        width: calc(var(--width) * 2);
-        height: calc(var(--width) * 2);
+        width: var(--ballune-width);
+        height: calc(var(--ballune-width) * 2);
         position: absolute;
         z-index: 0;
       }
