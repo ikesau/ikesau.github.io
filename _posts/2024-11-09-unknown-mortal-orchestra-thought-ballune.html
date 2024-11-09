@@ -15,9 +15,16 @@ category: thing-i-like
       color: red;
     }
     .sky {
-      background-color: #7eb6d9;
+      /* background-color: #7eb6d9; */
+      background-image: linear-gradient(
+        oklab(0.75 -0.04 -0.06),
+        oklab(0.76 0.08 -0.08)
+      );
+      border-radius: 50px;
+      box-sizing: border-box;
+      padding: 20px;
       width: 100%;
-      border-bottom: calc(var(--ballune-width) + 50px) solid white;
+      margin-bottom: calc(var(--ballune-width) + 50px);
     }
     .ballune {
       display: flex;
