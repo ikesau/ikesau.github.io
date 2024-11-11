@@ -1,8 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 442 894" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
-    <path d="M217.925,887.568C217.925,887.568 187.642,786.217 218.097,705.345C243.32,638.369 223.618,544.357 223.618,544.357" style="fill:none;stroke:rgb(255,0,0);stroke-width:11px;"/>
-    <g transform="matrix(1,0,0,0.996819,0,1.73354)">
-        <path d="M212.613,497.666C98.358,493.044 6.828,384.424 6.828,251.3C6.828,115.242 102.436,4.78 220.199,4.78C337.961,4.78 433.57,115.242 433.57,251.3C433.57,383.501 343.305,491.536 230.158,497.555C237.692,509.38 244.694,535.022 243.915,537.42C240.356,548.374 221.872,544.29 220.705,544.204C200.889,542.745 193.764,543.428 194.277,535.985L200.207,524.396C206.43,510.816 209.723,502.52 212.613,497.666Z" style="fill:rgb(255,0,0);stroke:rgb(255,0,0);stroke-width:11.02px;"/>
-    </g>
+<svg
+  width="100%"
+  height="100%"
+  viewBox="0 0 442 894"
+  version="1.1"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xml:space="preserve"
+  xmlns:serif="http://www.serif.com/"
+  style="
+    fill-rule: evenodd;
+    clip-rule: evenodd;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-miterlimit: 1.5;
+  "
+>
+  <path
+    d="M217.925,887.568C217.925,887.568 187.642,786.217 218.097,705.345C243.32,638.369 223.618,544.357 223.618,544.357"
+    style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 2px"
+  />
+  <g transform="matrix(1,0,0,0.996819,0,1.73354)">
+    <path
+      d="M212.613,497.666C98.358,493.044 6.828,384.424 6.828,251.3C6.828,115.242 102.436,4.78 220.199,4.78C337.961,4.78 433.57,115.242 433.57,251.3C433.57,383.501 343.305,491.536 230.158,497.555C237.692,509.38 244.694,535.022 243.915,537.42C240.356,548.374 221.872,544.29 220.705,544.204C200.889,542.745 193.764,543.428 194.277,535.985L200.207,524.396C206.43,510.816 209.723,502.52 212.613,497.666Z"
+      style="fill: rgb(255, 0, 0); stroke: rgb(0, 0, 0); stroke-width: 1px"
+    />
+  </g>
 </svg>
