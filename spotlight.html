@@ -1,0 +1,68 @@
+---
+layout: default
+---
+
+<section id="stage">
+  <style>
+    html {
+      cursor: none;
+    }
+    body {
+      max-width: unset;
+      padding: 0;
+      overflow: hidden;
+    }
+    h2 {
+      text-align: center;
+      position: absolute;
+      margin: 0;
+    }
+    .darkness {
+      background-image: url(/assets/images/svg_noise/300_3.svg);
+      width: 100svw;
+      height: 100svh;
+      mix-blend-mode: darken;
+      background-color: black;
+      filter: brightness(0.3);
+      background-blend-mode: exclusion;
+    }
+    .spotlight {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 200px;
+      height: 200px;
+      background-image: radial-gradient(circle, #fff 0%, black 70%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: color-dodge;
+    }
+  </style>
+  <h2>You found me!</h2>
+  <div class="darkness">
+    <div class="spotlight"></div>
+  </div>
+  <script>
+    function moveSpotlightToCursor(event) {
+      const spotlight = document.querySelector(".spotlight");
+      spotlight.style.left = `${event.clientX}px`;
+      spotlight.style.top = `${event.clientY}px`;
+    }
+    document.addEventListener("mousemove", moveSpotlightToCursor);
+    document.body.setAttribute("inert", "true");
+    // position the h2 in a random position within the screen
+    const h2 = document.querySelector("h2");
+    const width = h2.offsetWidth;
+    const height = h2.offsetHeight;
+    const x = Math.min(
+      window.innerWidth - width,
+      Math.random() * window.innerWidth
+    );
+    const y = Math.min(
+      window.innerHeight - height,
+      Math.random() * window.innerHeight
+    );
+    h2.style.left = `${x}px`;
+    h2.style.top = `${y}px`;
+  </script>
+</section>

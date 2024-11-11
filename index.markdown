@@ -150,6 +150,7 @@ layout: default
     <li><a href="/the-blank-page-the-empty-chairs.html">the blank page. the empty chairs.</a></li>
     <li><a href="/neils_science_fiction_novel_idea.html">neil's science fiction novel idea</a></li>
     <li><a href="/oblique-strategies.html">oblique strategies</a></li>
+    <li><a href="/spotlight.html">spotlight</a></li>
   </ul>
 
   <img class="consciousness" loading="lazy" alt="hmmm" src="assets/images/hmmm.gif">
