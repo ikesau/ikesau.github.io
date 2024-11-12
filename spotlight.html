@@ -59,6 +59,14 @@ layout: default
       spotlight.style.top = `${event.clientY}px`;
     }
     document.addEventListener("mousemove", moveSpotlightToCursor);
+    // touch event handlers
+    document.addEventListener("touchmove", (event) => {
+      moveSpotlightToCursor(event.touches[0]);
+    });
+    document.addEventListener("touchstart", (event) => {
+      moveSpotlightToCursor(event.touches[0]);
+    });
+
     document.body.setAttribute("inert", "true");
     // position the h2 in a random position within the screen
     const h2 = document.querySelector("h2");
