@@ -279,3 +279,8 @@
   comment: "find random old videos from 2015 with this one weird trick"
   date: 2024-11-10
 
+- url: https://www.youtube.com/watch?v=pJfvPMNPZAU
+  title: "Reinforcement Learning - My Algorithm vs State of the Art"
+  comment: "A video about Isaac Lab and using ML to balance double pendulums"
+  date: 2024-11-12
+
