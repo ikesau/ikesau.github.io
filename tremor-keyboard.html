@@ -115,6 +115,10 @@ title: Tremor Keyboard
     cursor: pointer;
   }
 
+  .tremor {
+    transition: 100ms;
+  }
+
   .key {
     display: flex;
     justify-content: center;
@@ -124,7 +128,6 @@ title: Tremor Keyboard
     background-color: #f0f0f0;
     border-radius: 5px;
     user-select: none;
-    transition: 100ms;
     &:active {
       background-color: #e0e0e0;
     }
@@ -154,7 +157,7 @@ title: Tremor Keyboard
       <div id="send-button" onclick="onSendButtonPress()">↑</div>
     </div>
 
-    <div id="keyboard">
+    <div id="keyboard" class="tremor">
       <div class="keyboard-row" id="top"></div>
       <div class="keyboard-row" id="middle"></div>
       <div class="keyboard-row">
@@ -273,8 +276,8 @@ title: Tremor Keyboard
   function tremorKeyboard() {
     const tremors = document.querySelectorAll(".tremor");
     tremors.forEach((key) => {
-      key.style.transform = `translate(${Math.random() * 15 - 1}px, ${
-        Math.random() * 15 - 1
+      key.style.transform = `translate(${Math.random() * 30 - 1}px, ${
+        Math.random() * 30 - 1
       }px)`;
     });
     setTimeout(tremorKeyboard, 100);
