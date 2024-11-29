@@ -745,5 +745,7 @@ layout: default
     <li>
       <a href="https://www.ritsumei.ac.jp/~akitaoka/index-e.html" target="_blank" rel="noopener noreferrer">akiyoshi's illusion pages</a> - circular snakes appear to rotate 'spontaneously', etc...
     </li>
+    <li>
+      <a href="https://stippler.wolfandreas.com/" target="_blank" rel="noopener noreferrer">stippler</a> - a hypnotic web app that uses a "weighted voronoi stippling" algorithm to stipple pictures. stand far back for best results.</li>
   </ul>
 </div>
