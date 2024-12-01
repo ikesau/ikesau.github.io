@@ -746,6 +746,10 @@ layout: default
       <a href="https://www.ritsumei.ac.jp/~akitaoka/index-e.html" target="_blank" rel="noopener noreferrer">akiyoshi's illusion pages</a> - circular snakes appear to rotate 'spontaneously', etc...
     </li>
     <li>
-      <a href="https://stippler.wolfandreas.com/" target="_blank" rel="noopener noreferrer">stippler</a> - a hypnotic web app that uses a "weighted voronoi stippling" algorithm to stipple pictures. stand far back for best results.</li>
+      <a href="https://stippler.wolfandreas.com/" target="_blank" rel="noopener noreferrer">stippler</a> - a hypnotic web app that uses a "weighted voronoi stippling" algorithm to stipple pictures. stand far back for best results.
+    </li>
+    <li>
+      <a href="https://archive.org/details/mit_press_open_access" target="_blank" rel="noopener noreferrer">MIT Press Open Access Books</a> - all of MIT's open access books in one easy-to-read place on archive.org
+    </li>
   </ul>
 </div>
