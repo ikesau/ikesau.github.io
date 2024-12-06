@@ -151,6 +151,7 @@ layout: default
     <li><a href="/neils_science_fiction_novel_idea.html">neil's science fiction novel idea</a></li>
     <li><a href="/oblique-strategies.html">oblique strategies</a></li>
     <li><a href="/spotlight.html">spotlight</a></li>
+    <li><a href="/yt-recut.html">youtube recut</a></li>
   </ul>
 
   <img class="consciousness" loading="lazy" alt="hmmm" src="assets/images/hmmm.gif">
