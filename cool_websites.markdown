@@ -751,5 +751,8 @@ layout: default
     <li>
       <a href="https://archive.org/details/mit_press_open_access" target="_blank" rel="noopener noreferrer">MIT Press Open Access Books</a> - all of MIT's open access books in one easy-to-read place on archive.org
     </li>
+    <li>
+      <a href="https://explorabl.es/all/" target="_blank" rel="noopener noreferrer">explorables</a> - a repository of high quality interactive concept explainers. there are <a href="https://simonwillison.net/tags/explorables/" target="_blank" rel="noopener norefferrer">more explorables on simon willison's website</a>
+    </li>
   </ul>
 </div>
