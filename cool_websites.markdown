@@ -754,5 +754,8 @@ layout: default
     <li>
       <a href="https://explorabl.es/all/" target="_blank" rel="noopener noreferrer">explorables</a> - a repository of high quality interactive concept explainers. there are <a href="https://simonwillison.net/tags/explorables/" target="_blank" rel="noopener norefferrer">more explorables on simon willison's website</a>
     </li>
+    <li>
+      <a href="https://www.destroyallsoftware.com/compendium" target="_blank" rel="noopener noreferrer">programmer's compendium</a> - a (paid) computer science from scratch curriculum
+    </li>
   </ul>
 </div>
