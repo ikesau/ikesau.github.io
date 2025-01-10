@@ -760,5 +760,8 @@ layout: default
     <li>
       <a href="https://www.icce.rug.nl/~soundscapes/DATABASES/AWP/awp-notes_on.shtml" target="_blank" rel="noopener noreferrer">notes on the beatles</a> - alan pollack's extensive analysis of beatles songs
     </li>
+    <li>
+      <a href="https://websitesfromhell.net/" target="_blank" rel="noopener noreferrer">websites from hell</a> - a web temple dedicated to the best of the worst
+    </li>
   </ul>
 </div>
