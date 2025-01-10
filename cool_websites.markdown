@@ -763,5 +763,8 @@ layout: default
     <li>
       <a href="https://websitesfromhell.net/" target="_blank" rel="noopener noreferrer">websites from hell</a> - a web temple dedicated to the best of the worst
     </li>
+    <li>
+      <a href="https://pdimagearchive.org/galleries/all/random/desc" target="_blank" rel="noopener noreferrer">public domain image archive</a> - beautiful art and imagery tastefully presented, all in the public domain
+    </li>
   </ul>
 </div>
