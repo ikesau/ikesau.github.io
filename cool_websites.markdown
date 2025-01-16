@@ -766,5 +766,8 @@ layout: default
     <li>
       <a href="https://pdimagearchive.org/galleries/all/random/desc" target="_blank" rel="noopener noreferrer">public domain image archive</a> - beautiful art and imagery tastefully presented, all in the public domain
     </li>
+    <li>
+      <a href="https://thesoundof.love/" target="_blank" rel="noopener noreferrer">the sound of love</a> - heartfelt comments from songs on youtube
+    </li>
   </ul>
 </div>
