@@ -769,5 +769,8 @@ layout: default
     <li>
       <a href="https://thesoundof.love/" target="_blank" rel="noopener noreferrer">the sound of love</a> - heartfelt comments from songs on youtube
     </li>
+    <li>
+      <a href="https://github.com/santinic/audiblez/" target="_blank" rel="noopener noreferrer">audiblez</a> - open source tts for turning ebooks into audiobooks
+    </li>
   </ul>
 </div>
