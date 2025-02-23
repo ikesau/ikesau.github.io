@@ -8,7 +8,7 @@ sup + sup::before {
   content: ",";
 }
 
-footer span:first-child {
+footer p > span:first-child {
   color: blue;
   outline: 1px solid blue;
   width: 1rem;
