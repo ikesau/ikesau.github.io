@@ -9,3 +9,5 @@
 Markdown files in the root directory create pages correspondending to their names. They can use YAML 'front matter' to specify config and template information.
 
 The gallery template requires a YAML entry in `_data` and photos in `assets/images`
+
+3 useful commands are available with `./bin/site.nu`
