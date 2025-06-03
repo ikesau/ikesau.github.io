@@ -412,7 +412,7 @@ layout: default
         target="_blank"
         rel="noopener noreferrer"
         >musicForProgramming();</a
-      > - a collection of minimal musical mixes 
+      > - a collection of minimal musical mixes
     </li>
     <li>
       <a
@@ -609,11 +609,11 @@ layout: default
     <li>
       <a href="https://allchemy.io/" target="_blank" rel="noopener noreferrer"
         >allchemy</a>
-      - a playful combination game (see also 
+      - a playful combination game (see also
       <a target="_blank" rel="noopener noreferrer" href="https://littlealchemy2.com/">little alchemy</a>
-      or 
+      or
       <a target="_blank" rel="noopener noreferrer" href="https://neal.fun/infinite-craft/">infinite craft</a>
-      by 
+      by
       <a target="_blank" rel="noopener noreferrer" href="https://neal.fun">neal.fun</a>)
     </li>
     <li>
@@ -774,6 +774,9 @@ layout: default
     </li>
     <li>
       <a href="https://doorofperception.com/" target="_blank" rel="noopener noreferrer">door of perception</a> - ben roth's aesthetic inspirations
+    </li>
+    <li>
+      <a href="https://www.fffuel.co/" target="_blank" rel="noopener noreferrer">fffuel</a> - a large collection of SVG pattern generators
     </li>
   </ul>
 </div>
