@@ -43,5 +43,5 @@ def main [] {
     print "Commands:"
     print "  create blog $slug"
     print "  create til $slug"
-    print "  reblog $url $title $description?"
+    print "  reblog $url $title $comment?"
 }
