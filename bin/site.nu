@@ -14,7 +14,7 @@ def "main create til" [slug: string] {
     create-post $slug "_layouts/thing-i-like-template.html"
 }
 
-def "main reblog" [url: string, title: string, description?: string] {
+def "main reblog" [url: string, title: string, comment?: string] {
     let todays_date = date now | format date "%Y-%m-%d"
     mut dataAsPlaintext = open --raw _data/reblogs.yml
 
@@ -23,8 +23,8 @@ def "main reblog" [url: string, title: string, description?: string] {
         title: $title
     }
 
-    if ($description != null) {
-        $record = $record | merge { description: $description }
+    if ($comment != null) {
+        $record = $record | merge { comment: $comment }
     }
 
     $record = $record | merge { date: $todays_date }
@@ -33,6 +33,9 @@ def "main reblog" [url: string, title: string, description?: string] {
 
     $dataAsPlaintext + $"\n($yamlData)" | save -f _data/reblogs.yml
 
+    git add _data/reblogs.yml
+    git commit -m $"Reblog '($title)'"
+    git push
 
 }
 
