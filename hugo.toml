@@ -1,0 +1,14 @@
+baseURL = 'https://ikesau.co'
+languageCode = 'en-ca'
+title = 'ikesau.co'
+theme = 'ikesau'
+[params]
+    description = 'website happy'
+
+permalinks.blog = "/:section/:title/"
+
+[outputs]
+  home = ['html', 'rss']
+
+[frontmatter]
+date = [ "date", ":filename" ]

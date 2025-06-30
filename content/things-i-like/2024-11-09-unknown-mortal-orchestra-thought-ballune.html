@@ -1,0 +1,115 @@
+---
+title: unknown mortal orchestra - thought ballune
+---
+
+<style>
+  #thought-ballune {
+    --ballune-width: 300px;
+    max-width: var(--body-width);
+    min-width: var(--ballune-width);
+    box-sizing: border-box;
+    overflow: hidden;
+    a {
+      color: red;
+    }
+    .sky {
+      /* background-color: #7eb6d9; */
+      background-image: linear-gradient(
+        oklab(0.75 -0.04 -0.06),
+        oklab(0.76 0.08 -0.08)
+      );
+      border-radius: 50px;
+      box-sizing: border-box;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: 100%;
+      margin-bottom: calc(var(--ballune-width) + 50px);
+    }
+    .ballune {
+      grid-column: span 2;
+      display: flex;
+      flex-wrap: wrap;
+      width: var(--ballune-width);
+      text-wrap: balance;
+      color: white;
+      transform: rotate(var(--rotation));
+      &:nth-child(2n) {
+        grid-column: 2 / span 1;
+      }
+      p {
+        z-index: 1;
+        width: 100%;
+        margin: 0;
+        line-height: 2.5;
+        text-align: center;
+        &:first-child {
+          margin-top: calc(var(--ballune-width) * 0.25);
+        }
+      }
+      &:before {
+        content: "";
+        background-image: url("/images/thought-ballune.svg");
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: var(--ballune-width);
+        height: calc(var(--ballune-width) * 2);
+        position: absolute;
+        z-index: 0;
+      }
+    }
+  }
+</style>
+<section id="thought-ballune">
+  <a
+    href="https://unknown-mortal-orchestra.bandcamp.com/track/thought-ballune-2"
+    target="_blank"
+    rel="noopener noreferrer"
+    ><h2>unknown mortal orchestra - thought ballune</h2></a
+  >
+  <p>
+    i'd never really paid much attention to ruban's lyrics but they're pretty
+    fun on this album
+  </p>
+  <div class="sky">
+    <div class="ballune">
+      <p>Building islands in the sky</p>
+      <p>While I'm a prisoner in my mind</p>
+      <p>Will my mommy tell me why?</p>
+      <p>Sometimes, a wrong is a right</p>
+    </div>
+
+    <div class="ballune">
+      <p>I'm a smiling alligator</p>
+      <p>And I tell lies that ring true later</p>
+      <p>So much air when we inflate a thought ballune</p>
+    </div>
+    <div class="ballune">
+      <p>I'm a smiling alligator</p>
+      <p>And I tell lies that ring true later</p>
+      <p>So much air when we inflate a thought ballune</p>
+    </div>
+
+    <div class="ballune">
+      <p>Flying out into the night</p>
+      <p>Why do I feel so uptight?</p>
+      <p>Is it darkness or the light?</p>
+      <p>Sometimes, a wrong is a right</p>
+    </div>
+    <div class="ballune">
+      <p>I'm a smiling alligator</p>
+      <p>And I tell lies that ring true later</p>
+      <p>So much air when we deflate a thought ballune</p>
+    </div>
+    <div class="ballune">
+      <p>I'm a smiling alligator</p>
+      <p>And I tell lies that ring true later</p>
+      <p>So much air when we deflate a thought ballune</p>
+    </div>
+  </div>
+  <script>
+    document.querySelectorAll(".ballune").forEach((ballune) => {
+      ballune.style.setProperty("--rotation", `${Math.random() * 20 - 10}deg`);
+    });
+  </script>
+</section>

@@ -1,0 +1,33 @@
+{{ define "main" }}
+<div class="blog-index">
+  {{ range .Paginator.Pages }}
+  <article class="blog-preview" id="{{.Title | urlize}}">
+    <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+    <!-- <div class="meta">{{ .Date.Format "January 2, 2006" }}</div> -->
+    <div class="summary">{{ .Summary }}</div>
+    {{ if .Truncated }}
+    <a href="{{ .RelPermalink }}" class="just-keep-reading">Keep reading →</a>
+    {{ end }}
+  </article>
+  {{ end }}
+
+  <!-- Pagination -->
+  {{ if gt .Paginator.TotalPages 1 }}
+  <nav class="blog-pagination">
+    <!-- {{ if .Paginator.HasPrev }}
+    <a href="{{ .Paginator.Prev.URL }}">&laquo; Previous</a>
+    {{ end }}  -->
+    {{ range .Paginator.Pagers }} 
+        {{ if eq . $.Paginator }}
+        <span class="current">{{ .PageNumber }}</span>
+        {{ else }}
+        <a href="{{ .URL }}">{{ .PageNumber }}</a>
+        {{ end }} 
+    {{ end }} 
+    <!-- {{ if .Paginator.HasNext }}
+    <a href="{{ .Paginator.Next.URL }}">Next &raquo;</a>
+    {{ end }} -->
+  </nav>
+  {{ end }}
+</div>
+{{ end }}

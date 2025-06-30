@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {{ partial "head.html" . }}
+    {{ if .Params.extra_css }}
+    <link rel="stylesheet" href="/css/{{.Params.extra_css}}.css" />
+    {{ end }}
+    {{ if .Params.d3 }}
+    <script src="/vendor/d3.min.js"></script>
+    {{ end }}
+    <script type="module" src="/js/{{.Title}}.js"></script>
+  </head>
+  <body>
+    <main aria-label="Content">{{ .Content }}</main>
+  </body>
+</html>

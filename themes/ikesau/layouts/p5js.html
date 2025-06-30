@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {{ partial "head.html" . }}
+    <link rel="stylesheet" href="/css/p5js.css" />
+    {{ if .Params.extra_css }}
+    <link rel="stylesheet" href="/css/{{.Params.extra_css}}.css" />
+    {{ end }}
+    <script src="/vendor/p5.min.js" type="text/javascript"></script>
+    {{ if .Params.p5sound }}
+    <script src="/vendor/p5.sound.min.js" type="text/javascript"></script>
+    {{ end }}
+    <script src="/js/{{.Title}}.js" type="text/javascript"></script>
+  </head>
+</html>

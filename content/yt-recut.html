@@ -1,0 +1,332 @@
+---
+title: "yt-recut"
+layout: "blank"
+---
+
+<style>
+  body {
+    margin-top: 24px;
+  }
+  #video-url-form {
+    margin-bottom: 24px;
+    display: flex;
+  }
+  #video-url-form input {
+    flex: 1;
+    margin-right: 8px;
+  }
+  iframe {
+    margin-bottom: 24px;
+  }
+  .skip-input {
+    border: none;
+    background: none;
+    border-bottom: dotted 3px #4b4ba9;
+    width: calc(5 * 1rem);
+    font-weight: bold;
+    font-family: monospace;
+  }
+  #add-skip-button {
+    margin-top: 1rem;
+  }
+  .inline-skip {
+    background: none;
+    border: none;
+    color: #4b4ba9;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  #title-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  #reset-button {
+    margin-top: 24px;
+    height: 40px;
+    color: red;
+    border: 2px solid red;
+    padding: 8px;
+    background: none;
+    font-weight: bold;
+    cursor: pointer;
+    &:hover {
+      background: red;
+      color: white;
+    }
+  }
+</style>
+<div id="title-container">
+  <h1>YouTube Recut</h1>
+  <button
+    id="reset-button"
+    onclick="
+  URLManager.updateURL({ v: null, skips: null });
+  location.reload();
+"
+  >
+    Reset
+  </button>
+</div>
+<p>Add a YouTube video and set timestamp ranges that you want to skip :)</p>
+
+<form id="video-url-form">
+  <input
+    type="text"
+    id="video-url"
+    placeholder="https://www.youtube.com/watch?v=some-id"
+    required="true"
+  />
+  <button>Set Video</button>
+</form>
+
+<div id="player"></div>
+
+<form id="skipForm" onsubmit="return false;">
+  <div>
+    <label for="skipFrom">Skip from</label>
+    <input
+      type="text"
+      class="skip-input"
+      id="skipFrom"
+      placeholder="(hh:mm:ss)"
+      required
+    />
+    <button id="skip-from-current" onclick="SkipManager.setFromCurrent()">
+      Current timestamp
+    </button>
+  </div>
+
+  <div>
+    <label for="skipTo">Skip to</label>
+    <input
+      type="text"
+      class="skip-input"
+      id="skipTo"
+      placeholder="(hh:mm:ss)"
+      required
+    />
+    <button id="skip-to-current" onclick="SkipManager.setToCurrent()">
+      Current timestamp
+    </button>
+  </div>
+  <button onclick="SkipManager.addSkip()" id="add-skip-button">Add Skip</button>
+</form>
+
+<h2>Skips</h2>
+<ul id="skipList"></ul>
+
+<script>
+  // Utility functions
+  const TimeUtil = {
+    secondsToTimestamp(seconds) {
+      const date = new Date(null);
+      date.setSeconds(seconds);
+      return date.toISOString().substr(11, 8);
+    },
+
+    timestampToSeconds(timestamp) {
+      const parts = timestamp.split(":");
+      if (parts.length === 3) {
+        const [hours, minutes, seconds] = parts.map(Number);
+        return hours * 3600 + minutes * 60 + seconds;
+      }
+      if (parts.length === 2) {
+        const [minutes, seconds] = parts.map(Number);
+        return minutes * 60 + seconds;
+      }
+      if (parts.length === 1) {
+        return Number(parts[0]);
+      }
+      return 0;
+    },
+  };
+
+  // URL management
+  const URLManager = {
+    params: new URLSearchParams(window.location.search),
+
+    getParam(key) {
+      return this.params.get(key);
+    },
+
+    updateURL(params) {
+      const newURL = new URL(window.location);
+      Object.entries(params).forEach(([key, value]) => {
+        if (value) {
+          newURL.searchParams.set(key, value);
+        } else {
+          newURL.searchParams.delete(key);
+        }
+      });
+      window.history.pushState({}, "", newURL);
+    },
+  };
+
+  // Video management
+  const VideoManager = {
+    player: null,
+    videoId: null,
+
+    init() {
+      this.videoId = URLManager.getParam("v");
+      const videoUrlForm = document.getElementById("video-url-form");
+      videoUrlForm.style.display = this.videoId ? "none" : "flex";
+
+      videoUrlForm.addEventListener("submit", this.setVideo.bind(this));
+
+      if (this.videoId) {
+        this.loadPlayer();
+      }
+    },
+
+    loadPlayer() {
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      const firstScriptTag = document.getElementsByTagName("script")[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    },
+
+    setVideo(event) {
+      event.preventDefault();
+      const input = document.getElementById("video-url");
+      const url = new URL(input.value);
+      this.videoId = url.searchParams.get("v");
+      URLManager.updateURL({ v: this.videoId });
+      document.getElementById("video-url-form").style.display = "none";
+      this.loadPlayer();
+    },
+
+    onPlayerReady() {
+      SkipManager.init();
+      this.startTimeCheck();
+    },
+
+    startTimeCheck() {
+      setInterval(() => {
+        if (
+          this.player &&
+          this.player.getPlayerState() === YT.PlayerState.PLAYING
+        ) {
+          const currentTime = this.player.getCurrentTime();
+          const skipTo = SkipManager.getSkipDestination(currentTime);
+          if (skipTo) {
+            this.player.seekTo(skipTo, true);
+          }
+        }
+      }, 500);
+    },
+  };
+
+  // Skip management
+  const SkipManager = {
+    skips: [],
+
+    init() {
+      const skipsParam = URLManager.getParam("skips");
+      if (skipsParam) {
+        this.skips = skipsParam.split(",").map((skip) => {
+          const [from, to] = skip.split("-").map(Number);
+          return { from, to };
+        });
+      }
+      this.renderSkipList();
+    },
+
+    addSkip() {
+      const fromInput = document.getElementById("skipFrom");
+      const toInput = document.getElementById("skipTo");
+      const from = TimeUtil.timestampToSeconds(fromInput.value);
+      const to = TimeUtil.timestampToSeconds(toInput.value);
+
+      if (!this.validateSkip(from, to)) return;
+
+      this.skips.push({ from, to });
+      this.updateSkips();
+      this.clearInputs(fromInput, toInput);
+    },
+
+    validateSkip(from, to) {
+      if (from >= to) {
+        alert('Skip "to" time must be greater than "from" time');
+        return false;
+      }
+      if (this.skips.some((skip) => from < skip.to && to > skip.from)) {
+        alert("New skip overlaps with existing skip");
+        return false;
+      }
+      return true;
+    },
+
+    removeSkip(index) {
+      this.skips.splice(index, 1);
+      this.updateSkips();
+    },
+
+    setFromCurrent() {
+      document.getElementById("skipFrom").value = TimeUtil.secondsToTimestamp(
+        Math.round(VideoManager.player.getCurrentTime()),
+      );
+    },
+
+    setToCurrent() {
+      document.getElementById("skipTo").value = TimeUtil.secondsToTimestamp(
+        Math.round(VideoManager.player.getCurrentTime()),
+      );
+    },
+
+    getSkipDestination(currentTime) {
+      return this.skips.find(
+        (skip) => currentTime >= skip.from && currentTime < skip.to,
+      )?.to;
+    },
+
+    updateSkips() {
+      const skipsParam = this.skips
+        .map((skip) => `${skip.from}-${skip.to}`)
+        .join(",");
+      URLManager.updateURL({ skips: skipsParam });
+      this.renderSkipList();
+    },
+
+    clearInputs(...inputs) {
+      inputs.forEach((input) => (input.value = ""));
+    },
+
+    renderSkipList() {
+      const list = document.getElementById("skipList");
+      list.innerHTML = this.skips
+        .map(
+          (skip, index) => `
+        <li>
+          <button class="inline-skip" onclick="VideoManager.player.seekTo(${
+            skip.from
+          }, true)">
+            ${TimeUtil.secondsToTimestamp(skip.from)}
+          </button> to
+          <button class="inline-skip" onclick="VideoManager.player.seekTo(${
+            skip.to
+          }, true)">
+            ${TimeUtil.secondsToTimestamp(skip.to)}
+          </button>
+          <button onclick="SkipManager.removeSkip(${index})">Remove</button>
+        </li>
+      `,
+        )
+        .join("");
+    },
+  };
+
+  // YouTube API callback
+  function onYouTubeIframeAPIReady() {
+    VideoManager.player = new YT.Player("player", {
+      height: "360",
+      width: "640",
+      videoId: VideoManager.videoId,
+      events: {
+        onReady: () => VideoManager.onPlayerReady(),
+      },
+    });
+  }
+
+  window.addEventListener("DOMContentLoaded", () => VideoManager.init());
+</script>

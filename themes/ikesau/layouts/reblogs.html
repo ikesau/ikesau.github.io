@@ -1,0 +1,31 @@
+{{ define "main" }}
+<style>
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  li {
+    margin-bottom: 1rem;
+    border: 1px solid grey;
+    padding: 1rem;
+    position: relative;
+  }
+  .date {
+    display: block;
+    text-align: right;
+    font-size: 0.7rem;
+    color: #757575;
+  }
+</style>
+<ul>
+  {{ range sort .Site.Data.reblogs "date" "desc" }}
+  <li>
+    <a href="{{ .url }}" target="_blank" rel="noopener noreferrer">
+      {{ .title }}
+    </a>
+    <p>{{ .comment }}</p>
+    <span class="date" title="date i first read this">{{ .date }}</span>
+  </li>
+  {{ end }}
+</ul>
+{{ end }}

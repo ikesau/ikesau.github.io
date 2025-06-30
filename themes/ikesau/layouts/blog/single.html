@@ -1,0 +1,28 @@
+{{ define "extra-css" }}
+<link rel="stylesheet" href="/css/blog.css">
+{{ end }}
+
+{{ define "extra-js" }}
+<script src="/vendor/popper.min.js"></script>
+<script src="/vendor/tippy.min.js"></script>
+<script>
+    tippy("sup", {
+      content(e) {
+        const labelledBy = e.getAttribute("aria-labelledby");
+        const label = document.getElementById(labelledBy);
+        return label.innerHTML;
+      },
+      allowHTML: true,
+      interactive: true,
+      arrow: false,
+    });
+</script>
+{{ end }}
+
+
+{{ define "main" }} 
+<article id="{{ .Title | urlize }}">
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+</article>
+{{ end }}

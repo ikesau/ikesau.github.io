@@ -1,0 +1,11 @@
+{{ define "extra-css" }}
+<link rel="stylesheet" href="/css/thing-i-like.css">
+{{ end }}
+
+{{ define "main" }}
+{{ range .Pages }}
+<article class="thing-i-like" id="{{.Title | urlize}}">
+  {{ .Content }}
+</article>
+{{ end }}
+{{ end }}

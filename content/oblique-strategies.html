@@ -1,0 +1,83 @@
+---
+title: "oblique-strategies"
+layout: "blank"
+---
+
+<style>
+  body {
+    margin: 0;
+    max-width: unset;
+    width: 100%;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  p {
+    font-size: 4rem;
+    margin: 0;
+    text-align: center;
+  }
+</style>
+
+<p id="oblique-strategy"></p>
+
+<script>
+  const strategies = [
+    "Use an old idea",
+    "What are you really thinking about just now?",
+    "Honour thy error as a hidden intention",
+    "What would your closest friend do?",
+    "Reverse",
+    "Give way to your worst impulse",
+    "Look closely at the most embarrassing details and amplify them",
+    "Distort time",
+    "How would you have done it?",
+    "Go outside. Shut the door.",
+    "What mistakes did you make last time?",
+    "Which parts can be grouped?",
+    "Take a break",
+    "Water",
+    "What would happen if you did it less?",
+    "Ask people to work against their better judgement",
+    "Use filters",
+    "Think of the radio",
+    "Courage!",
+    "Do we need holes?",
+    "What are the sections sections of? Imagine a caterpillar moving",
+    "Intentions – nobility of – humility of – credibility of",
+    "Tape your mouth",
+    "Shut the door and listen from outside",
+    "Consider different fading systems",
+    "Simple subtraction",
+    "What would your enemy do?",
+    "Ghost echoes",
+    "Strip it to its essence",
+    "Try faking it",
+    "Not building a wall but making a brick",
+    "Make a sudden, destructive unpredictable action; incorporate",
+    "Find and use a tiny delay",
+    "Blank sheet",
+    "The gap between the idea and its expression",
+    "Remember quiet evenings",
+    "Go to an extreme, move back to a more comfortable place",
+    "Ask your body",
+    "Emphasize differences",
+    "Bridges – build – burn",
+    "You are an engineer",
+    "What would happen if you didn't do it?",
+    "Is there something missing?",
+    "Use your own ideas",
+    "Be less critical more often",
+    "What isn't happening here?",
+  ];
+
+  function setRandomStrategy() {
+    const randomIndex = Math.floor(Math.random() * strategies.length);
+    document.getElementById("oblique-strategy").textContent =
+      strategies[randomIndex];
+  }
+
+  setRandomStrategy();
+</script>

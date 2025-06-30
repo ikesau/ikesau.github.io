@@ -1,0 +1,621 @@
+---
+layout: blog
+title: data wrangling shootout
+rouge-css: true
+---
+
+<p>Say I have a CSV with two columns:</p>
+
+<pre class="snippet">
+country, users
+China, 113
+Nicaragua, 29
+Jordan, 89
+</pre>
+
+<p>
+  and I want to aggregate these by continent. What's an easy way to do that?
+</p>
+
+<p>
+  Well I found this
+  <a
+    href="https://github.com/samayo/country-json/blob/master/src/country-by-continent.json"
+    >country-by-continent</a
+  >
+  dataset by <a href="https://github.com/samayo">samayo</a>:
+</p>
+
+<pre class="snippet">
+[
+  {
+    "Country": "Afghanistan",
+    "Continent": "Asia"
+  },
+  {
+    "Country": "Albania",
+    "Continent": "Europe"
+  }
+</pre>
+
+<p>
+  So I have everything I need except for a workflow. Let's evaluate some
+  options.
+</p>
+
+<ol>
+  <li><a href="#option-chatgpt">ChatGPT</a></li>
+  <li><a href="#option-nushell">nushell</a></li>
+  <ul>
+    <li><a href="#option-nushell-with-polars">nushell with polars</a></li>
+  </ul>
+  <li><a href="#option-duckdb">DuckDB</a></li>
+  <li><a href="#option-observable">Observable</a></li>
+  <li><a href="#option-typescript">TypeScript with Bun</a></li>
+</ol>
+
+<h2 id="option-chatgpt">ChatGPT</h2>
+<p>
+  I attached the two files and submitted the following prompt to ChatGPT 4o:
+</p>
+
+<blockquote class="chat-from-me">
+  <p>
+    I have a CSV of users from each country, and a JSON file that shows which
+    continent each country belongs to.
+  </p>
+  <p>
+    I would like to aggregate my users by continent, so that I can see how many
+    users I have in total from North America, Europe, etc.
+  </p>
+</blockquote>
+
+<p>It started working on the problem immediately:</p>
+
+<blockquote class="chat-from-gpt">
+  <pre class="snippet">
+import pandas as pd
+
+users_df = pd.read_csv('/mnt/data/users.csv')
+continent_data = pd.read_json('/mnt/data/cbc.json')
+</pre
+  >
+
+  <p>
+    To aggregate the users by continent, I'll merge the users dataframe with the
+    continent data based on the country and then group by the continent to get
+    the total users for each continent.
+  </p>
+  <p>Here is the plan:</p>
+  <p>Merge the users_df with continent_data on the country.</p>
+  <p>Group the merged data by the continent.</p>
+  <p>Aggregate the user counts.</p>
+  <p>Let's execute this.</p>
+
+  <pre class="snippet">
+merged_df = users_df.merge(
+  continent_data,
+  left_on='Country',
+  right_on='country',
+  how='left'
+)
+
+aggregated_users_by_continent = merged_df
+  .groupby('continent')['Users']
+  .sum()
+  .reset_index()
+
+import ace_tools as tools;
+tools.display_dataframe_to_user(
+  name="Aggregated Users by Continent",
+  dataframe=aggregated_users_by_continent
+)
+</pre
+  >
+</blockquote>
+
+<h3>Result</h3>
+
+<pre class="snippet">
+continent,Users
+Africa,23940
+Antarctica,833
+Asia,18976
+Europe,22472
+America,13256
+Oceania,10539
+South America,5300
+</pre>
+
+<p>
+  So, if these values are correct, I'm almost certain there won't be an easier
+  or more convenient workflow.
+</p>
+
+<p>
+  But that "if" is very ominous to me. How will I be able to verify its
+  correctness once I've deskilled myself by outsourcing all of my
+  <a href="https://en.wikipedia.org/wiki/Amazon_Mechanical_Turk"
+    >Human Intelligence Tasks?</a
+  >
+</p>
+
+<h2 id="option-nushell">nushell</h2>
+
+<p>
+  <a href="https://www.nushell.sh/">nushell</a> is a shell environment that
+  converts all stdout into structured data that can then be piped much more
+  consistently like a functional programming language.
+</p>
+
+<pre class="snippet">
+ls ~/Desktop | where size > 1MiB | get name
+╭───┬───────────────────────────────────────────╮
+│ 0 │ /Users/ikesau/Desktop/song.wav            │
+│ 1 │ /Users/ikesau/Desktop/ttrpg.pdf           │
+╰───┴───────────────────────────────────────────╯
+</pre>
+
+<p>
+  I love it. It balances accessibility with extensibility in a way that inspires
+  me to understand information. I make fewer assumptions about data now that
+  nushell makes it easy (and fun!) to examine things rigourously.
+</p>
+
+<p>
+  How does it handle an aggregation though? First I need to load the two tables:
+</p>
+
+<pre class="snippet">
+let $c = nopen<sup aria-labelledby="nopen">1</sup> country-by-continent.json
+let $u = nopen users.csv
+</pre>
+
+<p>these now exist in my session's scope:</p>
+
+<pre class="snippet">
+$c
+╭─────┬─────────────────────┬───────────────╮
+│   # │      country        │   continent   │
+├─────┼─────────────────────┼───────────────┤
+│   0 │ Afghanistan         │ Asia          │
+│   1 │ Albania             │ Europe        │
+│   2 │ Algeria             │ Africa        │
+</pre>
+
+<p>
+  Now we can join them on Country-country<sup aria-labelledby="annoying-join"
+    >2</sup
+  >
+  and group them:
+</p>
+
+<pre class="snippet">
+$u
+| join --left $c Country country
+| group-by --to-table continent
+| each<sup aria-labelledby='nushell-each'>3</sup> {
+  <span>insert sum</span><sup aria-labelledby='nushell-insert-sum'>4</sup> {
+    <span>get items.Users | math sum</span><sup aria-labelledby='nushell-math-sum-closure'>5</sup>
+  }
+  | <span>select group sum</span><sup aria-labelledby='nushell-select-group-sum'>6</sup>
+}
+</pre>
+
+<h3>Result</h3>
+
+<pre class="snippet">
+╭───┬───────────────┬───────╮
+│ # │     group     │  sum  │
+├───┼───────────────┼───────┤
+│ 0 │ Asia          │ 18976 │
+│ 1 │ Europe        │ 22472 │
+│ 2 │ Africa        │ 23940 │
+│ 3 │ Oceania       │ 10539 │
+│ 4 │ North America │ 13256 │
+│ 5 │ Antarctica    │   833 │
+│ 6 │ South America │  5300 │
+╰───┴───────────────┴───────╯
+</pre>
+
+<p>
+  Okay, not bad. Working out how to sum nested values after grouping them took
+  <em>ages</em> - a lot of <code>describe</code> and reading the docs on which
+  data types are compatible with which functions.<sup
+    aria-labelledby="nushell-error-messages"
+    >7</sup
+  >
+</p>
+
+<p>
+  I think with a bit more practice, I would get a lot faster at writing the
+  pipes correctly, but I'm not a huge fan of polluting my shell history with
+  dozens of failed attempts in the meantime, and editing commands in the
+  terminal is a pain.
+</p>
+
+<h2 id="option-nushell-with-polars">nushell with polars</h2>
+
+<p>
+  It's worth mentioning that nushell also has a
+  <a
+    href="https://www.nushell.sh/blog/2024-04-30-nushell_0_93_0.html#introduction-of-the-polars-plugin-toc"
+    >polars plugin</a
+  >
+  which feels like a great tool for the job.<sup
+    aria-labelledby="nushell-polars"
+    >8</sup
+  >
+  This is a popular usecase for dataframes so finding the correct syntax was
+  simple.
+</p>
+
+<pre class="snippet">
+$u
+| join --left $c Country country
+| polars into-df
+| polars group-by continent
+| polars agg [(polars col Users | polars sum)]
+| polars collect
+</pre>
+
+<h3>Result</h3>
+
+<pre class="snippet">
+╭───┬───────────────┬───────────────╮
+│ # │   continent   │     Users     │
+├───┼───────────────┼───────────────┤
+│ 0 │ Antarctica    │           833 │
+│ 1 │ South America │          5300 │
+│ 2 │ Europe        │         22472 │
+│ 3 │ Africa        │         23940 │
+│ 4 │ Asia          │         18976 │
+│ 5 │ Oceania       │         10539 │
+│ 6 │               │         19175 │
+│ 7 │ North America │         13256 │
+╰───┴───────────────┴───────────────╯
+</pre>
+
+<p>
+  Aha! I was wondering if any of these methods would show the cases where we
+  can't map the country to a continent - presumably that's what that 19175 is -
+  despite the left join in the vanilla nushell method, it didn't catch this
+  issue.
+</p>
+
+<p>
+  So while we're here, let's see if we can list which countries aren't being
+  mapped. I don't think we need a dataframe for this.
+</p>
+
+<pre class="snippet">
+$u
+| join --left $c Country country
+| where continent == null
+| get Country<sup aria-labelledby="nushell-bug">9</sup>
+| to text
+</pre>
+
+<pre class="snippet">
+Türkiye
+Taiwan
+Czechia
+Libya
+Myanmar (Burma)
+Trinidad & Tobago
+Bosnia & Herzegovina
+Côte d’Ivoire
+Kosovo
+Fiji
+Congo - Kinshasa
+Eswatini
+Isle of Man
+Réunion
+Jersey
+Guernsey
+British Virgin Islands
+Curaçao
+(not set)
+St. Kitts & Nevis
+Timor-Leste
+Sint Maarten
+Congo - Brazzaville
+St. Helena
+Turks & Caicos Islands
+St. Vincent & Grenadines
+Antigua & Barbuda
+St. Lucia
+U.S. Virgin Islands
+São Tomé & Príncipe
+Falkland Islands (Islas Malvinas)
+Caribbean Netherlands
+Micronesia
+Åland Islands
+St. Martin
+St. Pierre & Miquelon
+Vatican City
+St. Barthélemy
+Svalbard & Jan Mayen
+U.S. Outlying Islands
+Wallis & Futuna
+</pre>
+
+<p>
+  There are some very populous countries here! This is exactly the sort of
+  problem with relying on ChatGPT: your ability to trust it depends on your
+  ability to verify it, which is only developed through experience.
+</p>
+
+<h2 id="option-duckdb">DuckDB</h2>
+
+<p>
+  <a href="https://duckdb.org/">DuckDB</a> is a portable SQL database client.
+  You can run it as a transient SQL session, or use it as an engine to run SQL
+  scripts. I went with the latter because I prefer to write SQL in a text
+  editor.
+</p>
+
+<p>
+  Here's my <code>scratch.sql</code> file leveraging some cool DuckDB magic that
+  can work with inline references to CSV and JSON files, which I can run with
+  <code>cat scratch.sql | duckdb</code
+  ><sup aria-labelledby="nushell-piping">10</sup>
+</p>
+
+<pre class="snippet">
+SELECT
+    SUM(u.Users),
+    c.continent
+FROM
+    'users.csv' u
+    LEFT JOIN 'country-by-continent.json' c
+    ON u.Country = c.country
+GROUP BY
+    c.continent;
+</pre>
+
+<h3>Result</h3>
+
+<pre class="snippet">
+┌───────────────┬──────────────┐
+│   continent   │ sum(u.Users) │
+│    varchar    │    int128    │
+├───────────────┼──────────────┤
+│ Europe        │        22472 │
+│ South America │         5300 │
+│ Antarctica    │          833 │
+│ Oceania       │        10539 │
+│ North America │        13256 │
+│ Africa        │        23940 │
+│ Asia          │        18976 │
+│               │        19175 │
+└───────────────┴──────────────┘
+</pre>
+
+<p>
+  This is about as easy as it can get, and I like that it's basically just plain
+  SQL, which is never a waste of time to practise.
+</p>
+
+<h2 id="option-observable">Observable</h2>
+
+<p>
+  <a href="https://observablehq.com">Observable</a> is a JavaScript notebook
+  platform with a host of features for interatively visualizing and sharing
+  data. There are a dozen ways I could do this aggregation with Observable,
+  including creating whole databases, but I'm going to go with the most
+  straightforward: attaching files and writing some code.
+</p>
+
+<p>
+  <a href="https://observablehq.com/@ikesau/data-join-test"
+    >Here's a link to the notebook.</a
+  >
+</p>
+
+<p>The gist of the workflow was:</p>
+
+<ol>
+  <li>Upload the files to the notebook</li>
+  <li>Merge them with JavaScript</li>
+  <li>
+    Use Observable's SQL cell to write an aggregating SQL query on the merged
+    data
+  </li>
+  <li>Visualize the aggregated data (an optional nicety)</li>
+</ol>
+
+<h3>Result</h3>
+
+<img
+  width="650"
+  height="233"
+  src="/images/observable-data-join-test.webp"
+  alt="a screen cap of an Observable Table cell, showing the results of the following SQL statement: SELECT continent, SUM(Users) AS sum FROM 'join' GROUP BY continent;"
+/>
+
+<p>
+  Unfortunately, as far as I can tell, Observable's SQL cell doesn't allow you
+  to query from two tables at once<sup
+    aria-labelledby="observable-db-limitation"
+    >11</sup
+  >, so either you have to join your tables before you upload them, or join them
+  with JavaScript and query that third object.
+</p>
+
+<p>
+  It's all quite a lot of process for answering simple questions, but it makes
+  sharing your findings (and visualizing them) incredibly easy. Simon Wilson
+  (the creator of <a href="https://datasette.io/">datasette</a>) uses notebooks
+  all the time to create
+  <a href="https://observablehq.com/@simonw">quick, low-friction tools</a>.
+  While I might not reach for them for the next question as simple as this, I
+  really like Observable as a platform and I hope they're able to keep doing
+  what they're doing.
+</p>
+
+<p>
+  At this point, the only reason I'd consider reaching for another tool is to
+  keep it local and/or to have Copilot support.
+</p>
+
+<h2 id="option-typescript">TypeScript with Bun</h2>
+
+<p>
+  <a href="https://bun.sh/">Bun</a> allows me to run a TypeScript REPL
+  incredibly quickly. All I have to do is create an `index.ts` file somewhere.
+</p>
+
+<pre class="snippet">
+bun run --watch index.ts
+</pre>
+
+<p>
+  Now in my Copilot-supporting text editor of choice I can write up a quick
+  script in TypeScript.
+</p>
+
+<pre class="snippet">
+import fs from "fs/promises"
+import { parse } from "csv-parse"
+
+async function main() {
+  const csv: { Country: string; Users: string }[] = await fs
+    .readFile("users.csv", "utf-8")
+    .then((data) => parse(data, { columns: true, cast: true }).toArray());
+
+  const json = await fs
+    .readFile("country-by-continent.json", "utf-8")
+    .then(JSON.parse)
+    .then((countries: { country: string; continent: string }[]) =>
+      countries.reduce((acc, country) => {
+        acc[country.country] = country.continent;
+        return acc;
+      }, {} as { [country: string]: string })
+    );
+
+  const byContinent = csv.reduce((acc, { Country, Users }) => {
+    const continent = json[Country];
+    acc[continent] = (acc[continent] || 0) + parseInt(Users);
+    return acc;
+  }, {} as Record&gt;string, number&lt;);
+
+  console.log("byContinent", byContinent);
+}
+
+main();
+</pre>
+
+<h3>Result</h3>
+
+<pre class="snippet">
+byContinent {
+  "North America": 13256,
+  Europe: 22472,
+  Asia: 18976,
+  Oceania: 10539,
+  Africa: 23940,
+  "South America": 5300,
+  unknown: 19175,
+  Antarctica: 833
+}
+</pre>
+
+<p>
+  I thought this option was going to be more pleasant! Even with Copilot, a code
+  editor, and a CSV parsing library, manually implementing a grouping algorithm
+  is a chore.
+</p>
+<p>
+  Still. When I need a REPL to test code with, using bun this way is very good.
+</p>
+
+<h2>Conclusion</h2>
+
+<p>
+  I think DuckDB wins? Each technique has its strengths, but writing SQL with
+  Copilot, with automatic JSON/CSV handling is about as practical and quick as
+  it gets.
+</p>
+
+<hr />
+<footer>
+  <p>
+    <span>1</span>
+    <span id="nopen"
+      >I aliased nushell's open command so that I can still open folders from my
+      terminal with <code>open</code>. I could also just remember to write the
+      prefixed <code>^open</code></span
+    >
+  </p>
+  <p>
+    <span>2</span>
+    <span id="annoying-join"
+      >Whether or not this capitalization difference was an issue in any of
+      these tools seemed like a fair part of the test</span
+    >
+  </p>
+  <p>
+    <span>3</span>
+    <span id="nushell-each"
+      >iterate through each row in the table and apply this closure function to
+      it</span
+    >
+  </p>
+  <p>
+    <span>4</span>
+    <span id="nushell-insert-sum">insert a new cell named sum</span>
+  </p>
+  <p>
+    <span>5</span>
+    <span id="nushell-math-sum-closure"
+      >set the value of the cell with a closure that gets the group's Users
+      column and sums it. Be sure to call math sum and not [the alias for cksum]
+      sum! 🤦‍♂️</span
+    >
+  </p>
+  <p>
+    <span>6</span>
+    <span id="nushell-select-group-sum"
+      >create a new table just with the group and sum columns</span
+    >
+  </p>
+  <p>
+    <span>7</span>
+    <span id="nushell-error-messages"
+      >nushell's error messages are <em>very</em> good.</span
+    >
+  </p>
+  <p>
+    <span>8</span>
+    <span id="nushell-polars">
+      It would be better for me if I was had more experience with dataframe
+      operations, but I don’t use pandas or polars much, so I don’t think I have
+      a great shot at actually memorizing the syntax. At least with vanilla
+      nushell I use a lot of the commands daily for random filesystem
+      stuff.</span
+    >
+  </p>
+  <p>
+    <span>9</span>
+    <span id="nushell-bug"
+      >this appears to be bugged in nushell 0.94.1 - it <em>should</em> work but
+      I have to reject the country column first (omitted from the example.) The
+      Country-country join <em>was</em> an issue!</span
+    >
+  </p>
+  <p>
+    <span>10</span>
+    <span id="nushell-piping"
+      >this is with nushell. zsh or bash would allow you to type
+      <code>duckdb < scratch.sql</code></span
+    >
+  </p>
+  <p>
+    <span>11</span>
+    <span id="observable-db-limitation"
+      >unless you create a full database, which seems like overkill for a task
+      of this size</span
+    >
+  </p>
+</footer>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {{ partial "head.html" . }}
+    <link rel="stylesheet" href="/css/gallery.css" />
+  </head>
+  <body>
+    <main aria-label="content">
+      {{ range site.Data.aotearoa_photos }}
+      <div class="gallery-image-container">
+        <img
+          loading="lazy"
+          src="/images/{{$.Title}}/{{.filename}}"
+        />
+        <div class="gallery-image-description">
+          <h3>{{.title | safeHTML}}</h3>
+          <p>{{.description | safeHTML}}</p>
+        </div>
+      </div>
+      {{ end }}
+    </main>
+  </body>
+</html>

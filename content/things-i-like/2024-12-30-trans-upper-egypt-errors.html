@@ -1,0 +1,70 @@
+---
+title: trans upper egypt - errors
+---
+
+<section id="trans-upper-egypt">
+  <style>
+    #trans-upper-egypt {
+      background: black;
+      div {
+        position: relative;
+      }
+      p,
+      h2,
+      a {
+        z-index: 1;
+        position: relative;
+        color: #82b0cb;
+        font-size: 1.5rem;
+        margin: 0;
+        text-transform: uppercase;
+        font-weight: 800;
+      }
+    }
+  </style>
+  <div>
+    <a
+      href="https://mapledeathrecords.bandcamp.com/track/errors"
+      target="_blank"
+      rel="noopener noreferrer"
+      ><p>trans upper egypt - errors</p></a
+    >
+  </div>
+  <div><p>sloppy dub jamma</p></div>
+  <div><p>fucks up the landing in that familiar, tragic way</p></div>
+  <div><p>but still</p></div>
+  <div>
+    <p>
+      i highly recommend
+      <a
+        href="https://mapledeathrecords.bandcamp.com/track/no-speaking"
+        target="_blank"
+        rel="noopener noreferrer"
+        >holiday inn</a
+      >
+      too
+    </p>
+  </div>
+  <script>
+    const divs = document.querySelectorAll("#trans-upper-egypt div");
+    const container = document.querySelector("#trans-upper-egypt");
+    for (let i = 0; i < divs.length; i++) {
+      const div = divs[i];
+      const p = div.querySelector("p");
+      staircaseP(div, p);
+    }
+    function staircaseP(container, p) {
+      for (let i = 0; i < 10; i++) {
+        const copy = document.createElement("p");
+        copy.textContent = p.textContent;
+        copy.style.position = "absolute";
+        copy.style.top = `0`;
+        copy.style.zIndex = 0;
+        copy.style.transform = `translate(${i * 1.5}px, ${i * 1.5}px)`;
+        copy.style.opacity = `${1 - i * 0.1}`;
+        copy.inert = true;
+        container.appendChild(copy);
+      }
+    }
+  </script>
+</section>

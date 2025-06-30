@@ -1,0 +1,58 @@
+{{ define "main" }}
+<div>
+  <h2>hello</h2>
+  <ul class="go-away">
+    {{ range .Site.Data.bio_links }}
+    <li>
+      <a href="{{ .url }}" target="_blank" rel="noopener noreferrer"
+        >{{ .name }}</a
+      >
+    </li>
+    {{ end }}
+  </ul>
+
+  <a href="/things-i-like"><h3>things i like</h3></a>
+
+  <ul>
+    {{ range first 5 (where .Site.RegularPages "Section" "things-i-like") }}
+    <li>
+      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    </li>
+    {{ end }}
+  </ul>
+
+  <a href="/blog"
+    ><h3 style="display: inline-block; margin-bottom: 0">blog</h3></a
+  >
+  <a href="/reblogs"
+    ><h5 style="display: inline-block; margin-bottom: 0">(reblogs)</h5></a
+  >
+
+  <ul>
+    {{ range first 5 (where .Site.RegularPages "Section" "blog") }}
+    <li>
+      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      <span style="display: inline-block"
+        >{{ .Date.Format "January 02, 2006" }}</span
+      >
+    </li>
+    {{ end }}
+  </ul>
+
+  <h3>various code sketches</h3>
+  <ul class="decorating-vice">
+    <li><a href="/eyes">eyes</a></li>
+    <li><a href="/life">life</a></li>
+    <li><a href="/n-body">n-body</a></li>
+    <li><a href="/pixel-persian">pixel persian</a></li>
+    <li><a href="/texting">texting</a></li>
+    <li><a href="/tragic">tragic</a></li>
+    <li><a href="/euclidean-rhythms">euclidean rhythms</a></li>
+    <li><a href="/death-calendar">death calendar</a></li>
+    <li><a href="/spotlight">spotlight</a></li>
+  </ul>
+
+  <!-- Content from your home page content file will be inserted here -->
+  {{ .Content }}
+</div>
+{{ end }}

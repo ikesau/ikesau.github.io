@@ -1,0 +1,41 @@
+<style>
+  @keyframes blink {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  #i-lost-my-head-forget-what-i-said {
+    margin-bottom: 10px;
+    text-wrap: nowrap;
+    a {
+      position: relative;
+      color: var(--theme-colour);
+      text-decoration: none;
+      font-family: monospace;
+      font-weight: bold;
+      line-height: 2;
+      font-size: 2rem;
+      &:hover {
+        filter: brightness(0.92);
+      }
+      #bar {
+        background: currentColor;
+        width: 1rem;
+        display: inline-block;
+        line-height: 1;
+        animation: blink 1s infinite;
+      }
+    }
+  }
+</style>
+<h1 id="i-lost-my-head-forget-what-i-said">
+  <a href="/" aria-label="homepage">
+    i<span id="bar">&ThickSpace;</span>&LT;esau
+  </a>
+</h1>

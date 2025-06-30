@@ -1,0 +1,112 @@
+:root {
+  --body-width: 650px;
+  --theme-colour: oklch(0.7584 0.148 37.71);
+  --theme-colour-light: oklch(0.9095 0.148 37.71);
+}
+
+body {
+  max-width: var(--body-width);
+  margin: auto;
+  padding: 0 10px;
+  font:
+    18px/1.5 -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen-Sans,
+    Ubuntu,
+    Cantarell,
+    "Helvetica Neue",
+    sans-serif;
+  color: #2c2c2c;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+}
+
+.go-away {
+  text-transform: lowercase;
+}
+
+#who-are-you {
+  background: #ffeaee;
+  padding: 32px;
+  margin: 32px;
+  font-style: italic;
+}
+
+img {
+  max-height: 300px;
+  max-width: 100%;
+  width: auto;
+  margin: 48px auto;
+  display: block;
+}
+
+.consciousness {
+  margin: 0;
+}
+
+.dont-ask-what-just-put-it-in-the-grease {
+  max-height: unset;
+  margin: 0;
+}
+
+.blog-preview {
+  padding: 18px;
+  margin: 32px 0;
+  outline: 10px solid #111;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  h2 {
+    margin: 0;
+    a {
+      color: #111;
+      text-decoration: none;
+      padding: 8px;
+      margin-left: -8px;
+      &:hover {
+        color: #fff;
+        background-color: #111;
+      }
+    }
+  }
+
+  .just-keep-reading {
+    color: var(--theme-colour);
+    text-decoration: none;
+    border: 1px solid var(--theme-colour);
+    padding: 4px 8px;
+    &:hover {
+      background-color: var(--theme-colour);
+      color: #fff;
+    }
+  }
+}
+
+.blog-pagination {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 24px;
+  span,
+  a {
+    text-align: center;
+    padding: 8px 0;
+    color: #fff;
+    flex-basis: 100%;
+    background-color: var(--theme-colour);
+  }
+  span {
+    background-color: #c0c0c0;
+  }
+  a:hover {
+    background-color: var(--theme-colour-light);
+  }
+}

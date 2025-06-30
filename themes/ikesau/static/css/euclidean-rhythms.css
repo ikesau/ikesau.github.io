@@ -1,0 +1,204 @@
+body {
+  background: #000;
+  line-height: 1;
+  margin: 0;
+  max-width: unset;
+  padding: 0;
+}
+.start-button-container {
+  background: #000000ab;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  position: absolute;
+  width: 100vw;
+}
+.start-button-container .button {
+  color: #fff;
+  font-size: 24px;
+  margin: auto;
+  max-width: 128px;
+  padding: 24px;
+  text-align: center;
+}
+.controls-container {
+  color: #fff;
+  flex-wrap: wrap;
+  margin: 12px;
+  max-height: 100vh;
+  position: fixed;
+}
+.controls,
+.controls-container {
+  display: flex;
+  flex-direction: column;
+}
+.controls {
+  border: 1px solid;
+  padding: 4px;
+}
+.button {
+  background: #000;
+  border: 1px solid;
+  color: inherit;
+  flex: 1;
+  margin: 2px;
+}
+.add-pattern-button-wrapper {
+  display: flex;
+  order: 1;
+}
+circle.on {
+  r: 8px;
+}
+circle.on.active {
+  r: 10px;
+  transition: 0.1s;
+  transition-timing-function: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+circle.off,
+circle.on.muted {
+  r: 4px;
+}
+.colour-d8973c {
+  border-color: #d8973c;
+  color: #d8973c;
+}
+.colour-c3dfe0 {
+  border-color: #c3dfe0;
+  color: #c3dfe0;
+}
+.colour-5d675b {
+  border-color: #5d675b;
+  color: #5d675b;
+}
+.colour-5a4085 {
+  border-color: #5a4085;
+  color: #5a4085;
+}
+.colour-8b80f9 {
+  border-color: #8b80f9;
+  color: #8b80f9;
+}
+.colour-beb8eb {
+  border-color: #beb8eb;
+  color: #beb8eb;
+}
+.colour-04c7b0 {
+  border-color: #04c7b0;
+  color: #04c7b0;
+}
+.colour-db3d50 {
+  border-color: #db3d50;
+  color: #db3d50;
+}
+.colour-f97068 {
+  border-color: #f97068;
+  color: #f97068;
+}
+.colour-fffdfd {
+  border-color: #fffdfd;
+  color: #fffdfd;
+}
+input[type="range"] {
+  appearance: none;
+  background-color: #000;
+  line-height: 1;
+  margin: 8px 0;
+}
+input[type="range"]:focus {
+  outline: 1px dotted;
+  outline-color: currentColor;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  background: #fff;
+  height: 2px;
+  margin: 8px 0;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  height: 12px;
+  margin-top: -5px;
+  top: 0;
+  width: 12px;
+}
+input[type="range"]::-moz-range-track {
+  background: #fff;
+}
+input[type="range"]::-moz-range-thumb {
+  background: #fff;
+  border: none;
+}
+.colour-d8973c input[type="range"]::-moz-range-track {
+  background: #d8973c;
+}
+.colour-d8973c input[type="range"]::-moz-range-thumb {
+  background: #d8973c;
+  border: none;
+}
+.colour-c3dfe0 input[type="range"]::-moz-range-track {
+  background: #c3dfe0;
+}
+.colour-c3dfe0 input[type="range"]::-moz-range-thumb {
+  background: #c3dfe0;
+  border: none;
+}
+.colour-5d675b input[type="range"]::-moz-range-track {
+  background: #5d675b;
+}
+.colour-5d675b input[type="range"]::-moz-range-thumb {
+  background: #5d675b;
+  border: none;
+}
+.colour-5a4085 input[type="range"]::-moz-range-track {
+  background: #5a4085;
+}
+.colour-5a4085 input[type="range"]::-moz-range-thumb {
+  background: #5a4085;
+  border: none;
+}
+.colour-8b80f9 input[type="range"]::-moz-range-track {
+  background: #8b80f9;
+}
+.colour-8b80f9 input[type="range"]::-moz-range-thumb {
+  background: #8b80f9;
+  border: none;
+}
+.colour-beb8eb input[type="range"]::-moz-range-track {
+  background: #beb8eb;
+}
+.colour-beb8eb input[type="range"]::-moz-range-thumb {
+  background: #beb8eb;
+  border: none;
+}
+.colour-04c7b0 input[type="range"]::-moz-range-track {
+  background: #04c7b0;
+}
+.colour-04c7b0 input[type="range"]::-moz-range-thumb {
+  background: #04c7b0;
+  border: none;
+}
+.colour-db3d50 input[type="range"]::-moz-range-track {
+  background: #db3d50;
+}
+.colour-db3d50 input[type="range"]::-moz-range-thumb {
+  background: #db3d50;
+  border: none;
+}
+.colour-f97068 input[type="range"]::-moz-range-track {
+  background: #f97068;
+}
+.colour-f97068 input[type="range"]::-moz-range-thumb {
+  background: #f97068;
+  border: none;
+}
+.colour-fffdfd input[type="range"]::-moz-range-track {
+  background: #fffdfd;
+}
+.colour-fffdfd input[type="range"]::-moz-range-thumb {
+  background: #fffdfd;
+  border: none;
+}

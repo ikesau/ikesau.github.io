@@ -1,0 +1,48 @@
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width" />
+<title>
+  {{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" .Title
+  site.Title }}{{ end }}
+</title>
+<meta name="description" content="{{ site.Param "description" }}" />
+<link rel="stylesheet" href="/css/main.css" />
+<script>
+  const themeColors = [
+    {
+      base: "oklch(65.3% 0.135 243)",
+      light: "oklch(80.3% 0.135 243)",
+    },
+    {
+      base: "oklch(63.1% 0.194 29)",
+      light: "oklch(78.1% 0.194 29)",
+    },
+    {
+      base: "oklch(74.6% 0.181 152)",
+      light: "oklch(89.6% 0.181 152)",
+    },
+    {
+      base: "oklch(76.3% 0.163 69)",
+      light: "oklch(91.3% 0.163 69)",
+    },
+    {
+      base: "oklch(57.7% 0.153 315)",
+      light: "oklch(72.7% 0.153 315)",
+    },
+  ];
+
+  function setRandomThemeColor() {
+    const randomIndex = Math.floor(Math.random() * themeColors.length);
+    const selectedColorPair = themeColors[randomIndex];
+    document.documentElement.style.setProperty(
+      "--theme-colour",
+      selectedColorPair.base,
+    );
+    document.documentElement.style.setProperty(
+      "--theme-colour-light",
+      selectedColorPair.light,
+    );
+  }
+
+  setRandomThemeColor();
+</script>
+{{ block "extra-css" . }}{{ end }}

@@ -1,0 +1,181 @@
+---
+layout: blog
+title: blocking youtube recommendations
+---
+
+<p>
+  <a
+    href="https://www.youtube.com/watch?v=-eohHwsplvY"
+    rel="noopener noreferrer"
+    target="_blank"
+    title="LCD Soundsystem - New York, I Love You But You're Bringing Me Down with kermit the frog"
+    >youtube i love you, but you're bringing me down</a
+  >
+</p>
+<p>
+  in a bastardized interpretation of
+  <a
+    href="https://en.wikipedia.org/wiki/Fitness_landscape"
+    rel="noopener noreferrer"
+    target="_blank"
+    >fitness landscapes</a
+  >, i've recently been thinking about how every decision i make is a step in
+  some direction in an infinite mountain range. in this space, my altitude isn't
+  environmental fitness. it's something more like "personal value" or "amount
+  self-actualized" where you can imagine standing at the peak of a hill in this
+  endless mountain range as being highly satisfied with myself, highly engaged
+  in my life.
+</p>
+<p>
+  some steps are uphill and take more effort. some steps are downhill and take
+  less. sometimes it's necessary to take a step downhill to conserve energy, or
+  to get to a different path on the mountain. but too many steps down and
+  motherfucker, you're in a depression.
+</p>
+<img
+  loading="lazy"
+  src="/images/cattle_shute.png"
+  width="512"
+  height="266"
+  alt="a cow with its head clamped in a cattle shute vice for easy transport and killing"
+/>
+<p>
+  watching youtube is almost always a step downhill. that in and of itself isn't
+  a bad thing - i really do think youtube is one of this century's triumphs -
+  the issue is how easily youtube turns a single step into a scree run. i've had
+  nights of binging youtube so bad that my eyes ached, and then instead of
+  stopping, i continued to watch just with one eye open at a time. deranged.
+</p>
+<figure>
+  <img
+    loading="lazy"
+    src="/images/cattle_vr.png"
+    width="512"
+    height="290"
+    alt="a cow with a pair of VR goggles on, purportedly done in russia to increase milk production"
+  />
+  <figcaption>
+    <a
+      href="https://www.youtube.com/watch?v=JODWCwycNmg"
+      rel="noopener noreferrer"
+      target="_blank"
+      >“You know, I know this steak doesn't exist...”</a
+    >
+  </figcaption>
+</figure>
+<p>
+  but captivating people is youtube's job. the effectiveness of its
+  recommendation algorithm is what determines the size of the pie that it
+  divvies up and dishes out to an ecosystem of hundreds of thousands of content
+  creators. better recommendations = more time on youtube = more advertisements
+  watched = more money to go around. at no point will any of this system's
+  structural incentives prompt someone to say "you know what? i think youtube's
+  recommendations are too good. let's degrade them a little"<sup
+    aria-labelledby="regulating-youtube"
+    >1</sup
+  >
+</p>
+<figure>
+  <img
+    loading="lazy"
+    src="/images/cattle_trough.png"
+    width="512"
+    height="384"
+    style="max-height: unset"
+    alt="fresians poking their head through a grate to eat from a trough of feed"
+  />
+  <figcaption>“I used to read all the time when I was a calf”</figcaption>
+</figure>
+<p>
+  so if youtube's addictive and unlikely to change, and i will always like to
+  occasionally watch things on it, what is to be done?
+</p>
+<p>block recommendations.</p>
+<p>
+  install
+  <a href="https://ublockorigin.com/" rel="noopener noreferrer" target="_blank"
+    >ublock origin</a
+  >
+  and
+  <a
+    href="https://www.dedoimedo.com/computers/ublock-origin-custom-filters.html"
+    rel="noopener noreferrer"
+    target="_blank"
+    >add the following custom filters</a
+  >:
+</p>
+<pre class="snippet">
+youtube.com###dismissible:matches-path(/watch)
+
+youtube.com##.ytp-endscreen-content:matches-path(/watch)</pre
+>
+<p>
+  this will hide the sidebar and the thumbnails that show up at the end of the
+  video: the website equivalent of moving the bowl of M&Ms that you have in your
+  kitchen to a jar in the cupboard. i've been doing this for a week and the
+  difference is extremely noticeable. i still check out my subscriptions each
+  day and watch videos there that catch my eye, but afterwards, i just close the
+  tab.<sup aria-labelledby="no-hooks">2</sup>
+</p>
+<p>
+  stupor evaded, i can consider an option that might take me uphill. write,
+  read, play music, reply to that message, go for a walk, meditate, just
+  generally cultivate some fuckin' eudaimonia.
+</p>
+<p>
+  the nice thing about this is that i can also turn it off when i want. some
+  integral parts of my personal development were catalysed by a youtube video i
+  discovered hours deep in a binge, many songs i love i first heard on random
+  youtube mixtapes. i can still make the time for that and switch off the
+  filters temporarily, it just turns it into a conscious decision, not something
+  that happens through my focus being sapped in the middle of something else, a
+  process that is slowly turning us into a herd of mediocre dilettantes.
+</p>
+<p>
+  is this just an ornate elaboration of "no pain, no gain" ? yes. have a million
+  people already written about how
+  <em>web 2.0 makes us unhappy, actually</em> ? yes. is this cow thing i've got
+  going on with the pictures ridiculous,
+  <a
+    rel="noopener noreferrer"
+    target="_blank"
+    href="/images/thomas nagel the absurd camus romantic and self-pitying.png"
+    >romantic, and self-pitying</a
+  >
+  ? yes
+</p>
+<p>
+  doesn't matter. if you suspect you might be watching too much youtube to get
+  up the mountain, this is my recommendation.
+</p>
+
+<img
+  loading="lazy"
+  src="/images/bison_on_hill.png"
+  width="512"
+  height="349"
+  style="max-height: unset"
+  alt="a lone wild bison eating grass on a slope with a snowy mountain in the background"
+/>
+<hr />
+<footer>
+  <p>
+    <span>1</span>
+    <span id="regulating-youtube"
+      >except when they get trump elected and echo chamber discourse waves the
+      hammer of regulation above them for a minute</span
+    >
+  </p>
+  <p>
+    <span>2</span>
+    <span id="no-hooks"
+      ><a
+        href="https://www.youtube.com/watch?v=ZHGAsnZmPlw"
+        rel="noopener noreferrer"
+        target="_blank"
+        title="spongebob squarepants - beware the hooks!"
+        >no hooks.</a
+      ></span
+    >
+  </p>
+</footer>
