@@ -1,22 +1,22 @@
 #!/usr/bin/env nu
 
-def "create-post" [slug: string, templatePath: string] {
+def "create-post" [slug: string, templatePath: string, outputPath: string] {
     let todays_date = date now | format date "%Y-%m-%d"
     let template = open $templatePath
-    $template | str replace --all "{{create_post_placeholder}}" $slug | save $"_posts/($todays_date)-($slug).html"
+    $template | str replace --all "{{create_post_placeholder}}" $slug | save $"($outputPath)/($todays_date)-($slug).html"
 }
 
 def "main create blog" [slug: string] {
-    create-post $slug "_layouts/blog-template.html"
+    create-post $slug "bin/templates/blog-template.html" "content/blog"
 }
 
 def "main create til" [slug: string] {
-    create-post $slug "_layouts/thing-i-like-template.html"
+    create-post $slug "bin/templates/til-template.html" "content/things-i-like"
 }
 
 def "main reblog" [url: string, title: string, comment?: string] {
     let todays_date = date now | format date "%Y-%m-%d"
-    mut dataAsPlaintext = open --raw _data/reblogs.yml
+    mut dataAsPlaintext = open --raw data/reblogs.yml
 
     mut record = {
         url: $url
@@ -31,9 +31,9 @@ def "main reblog" [url: string, title: string, comment?: string] {
 
     let yamlData = [$record] | to yaml
 
-    $dataAsPlaintext + $"\n($yamlData)" | save -f _data/reblogs.yml
+    $dataAsPlaintext + $"\n($yamlData)" | save -f data/reblogs.yml
 
-    git add _data/reblogs.yml
+    git add data/reblogs.yml
     git commit -m $"Reblog '($title)'"
     git push
 
