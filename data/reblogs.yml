@@ -451,3 +451,8 @@
   title: What is centrism
   comment: A skeptical report of Welcomefest, the convention for Centrist Democrats
   date: 2025-06-13
+
+- url: https://www.anthropic.com/research/project-vend-1
+  title: 'Project Vend: Can Claude run a small shop'
+  comment: In the longer term, fine-tuning models for managing businesses might be possible, potentially through an approach like reinforcement learning where sound business decisions would be rewarded—and selling heavy metals at a loss would be discouraged
+  date: 2025-07-02
