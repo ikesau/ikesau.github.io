@@ -1,0 +1,27 @@
+{{/* Get video data from data file */}}
+{{ $clips := .Site.Data.clips }}
+
+{{/* Create a page for each video */}}
+{{ range $clips }}
+  {{ $content := dict
+    "mediaType" "text/markdown"
+    "value" (printf "# %s\n\n%s" .title (.description | default ""))
+  }}
+
+  {{ $params := dict
+    "name" .name
+    "width" .width
+    "height" .height
+    "description" (.description | default "")
+  }}
+
+  {{ $page := dict
+    "content" $content
+    "kind" "page"
+    "params" $params
+    "path" .name
+    "title" .title
+  }}
+
+  {{ $.AddPage $page }}
+{{ end }}

@@ -1,0 +1,28 @@
+{{ define "extra-css" }}
+<link rel="stylesheet" href="/css/clips.css" />
+{{ end }}
+
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+{{ .Content }}
+
+<div class="video-gallery">
+  {{ range .Pages }}
+  <div class="video-item">
+    <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+    <video
+      width="{{ .Params.width }}"
+      height="{{ .Params.height }}"
+      controls
+      preload="none"
+      poster="/clips/{{ .Params.name}}_poster.webp"
+    >
+      <source src="/clips/{{ .Params.name }}.mp4" type="video/mp4" />
+    </video>
+    {{ with .Params.description }}
+    <p>{{ . }}</p>
+    {{ end }}
+  </div>
+  {{ end }}
+</div>
+{{ end }}

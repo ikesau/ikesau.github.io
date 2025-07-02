@@ -1,0 +1,28 @@
+{{ define "extra-css" }}
+<link rel="stylesheet" href="/css/clips.css" />
+{{ end }}
+
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+
+<div class="video-player">
+  <video width="100%" controls>
+    <source
+      src="/clips/{{ .Params.name }}.mp4"
+      type="video/mp4"
+      poster="/clips/{{ .Params.name}}_poster.webp"
+      width="{{ .Params.width }}"
+      height="{{ .Params.height }}"
+    />
+    Your browser does not support the video tag.
+  </video>
+</div>
+
+{{ with .Params.description }}
+<div class="description">
+  <p>{{ . }}</p>
+</div>
+{{ end }}
+
+<p><a href="/clips/">more clips</a></p>
+{{ end }}
