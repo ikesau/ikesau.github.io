@@ -1,9 +1,15 @@
 #!/usr/bin/env nu
 
+def "get-repo-root" [] {
+    const script_path = path self
+    $script_path | path split | drop 2 | path join
+}
+
 def "create-post" [slug: string, templatePath: string, outputPath: string] {
     let todays_date = date now | format date "%Y-%m-%d"
-    let template = open $templatePath
-    $template | str replace --all "{{create_post_placeholder}}" $slug | save $"($outputPath)/($todays_date)-($slug).html"
+    let root = get-repo-root
+    let template = open ($root | path join $templatePath)
+    $template | str replace --all "{{create_post_placeholder}}" $slug | save $"($root)/($outputPath)/($todays_date)-($slug).html"
 }
 
 def "main create blog" [slug: string] {
@@ -16,27 +22,26 @@ def "main create til" [slug: string] {
 
 def "main reblog" [url: string, title: string, comment?: string] {
     let todays_date = date now | format date "%Y-%m-%d"
-    mut dataAsPlaintext = open --raw data/reblogs.yml
-
+    let root = get-repo-root
+    let data_path = $root | path join "data/reblogs.yml"
+    
+    mut dataAsPlaintext = open --raw $data_path
     mut record = {
         url: $url
         title: $title
     }
-
     if ($comment != null) {
         $record = $record | merge { comment: $comment }
     }
-
     $record = $record | merge { date: $todays_date }
-
     let yamlData = [$record] | to yaml
-
-    $dataAsPlaintext + $"\n($yamlData)" | save -f data/reblogs.yml
-
+    
+    $dataAsPlaintext + $"\n($yamlData)" | save -f $data_path
+    
+    cd $root
     git add data/reblogs.yml
     git commit -m $"Reblog '($title)'"
     git push
-
 }
 
 def main [] {
