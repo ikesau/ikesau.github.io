@@ -9,3 +9,9 @@
   description: "a sound effects masterclass from the evil dead"
   width: 777
   height: 576
+
+- name: "CLICK"
+  title: "CLICK goes your seatbelt"
+  description: "evil dead foley guy has had a diverse career"
+  width: 1162
+  height: 786
