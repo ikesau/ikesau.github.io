@@ -76,13 +76,3 @@ blockquote.chat-from-gpt {
   text-align: center;
   font-size: 0.875rem;
 }
-
-span.spoilers {
-  background-color: black;
-  color: transparent;
-  &:hover,
-  &:focus {
-    background-color: transparent;
-    color: black;
-  }
-}
