@@ -1,0 +1,103 @@
+---
+title: talking heads - drugs
+---
+
+<section>
+  <style>
+    #talking-heads-drugs {
+      background-color: black;
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      position: relative;
+      .dot {
+        border-radius: 50%;
+        &.flashing {
+          animation: flashing infinite;
+        }
+        &.blurring {
+          animation: blurring infinite;
+        }
+      }
+    }
+    @keyframes flashing {
+      0% {
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+    @keyframes blurring {
+      0% {
+        filter: blur(0);
+      }
+      50% {
+        filter: blur(5px);
+      }
+      100% {
+        filter: blur(0);
+      }
+    }
+  </style>
+  <a
+    href="https://www.youtube.com/watch?v=vlc0_GUdfIQ"
+    target="_blank"
+    rel="noopener noreferer"
+    style="color: red"
+  >
+    <h2>talking heads - drugs</h2>
+  </a>
+  <p>And all I see is little dots</p>
+  <p>Some are smeared and some are spots</p>
+  <p>Feel like murder but that's alright</p>
+  <p>Somebody said there's too much light</p>
+  <p>Pull down the shade and it's alright</p>
+  <p>It'll be over in a minute or two</p>
+  <p>I'm charged up, don't put me down</p>
+  <p>Don't feel like talking, don't mess around</p>
+  <p>I feel mean, I feel okay</p>
+  <p>I'm charged up, electricity</p>
+  <p>The boys are making a big mess</p>
+  <p>This makes the girls start to laugh</p>
+  <p>I don't know what they're talking about</p>
+  <p>The boys are worried, the girls are shocked</p>
+  <p>They pick the sound and let it drop</p>
+  <p>Nobody knows what they're talking about</p>
+  <p>I'm charged up, I'm kinda wooden</p>
+  <p>I'm barely moving, I study motion</p>
+  <p>I steady myself, I fooled myself</p>
+  <p>I'm charged up, it's pretty intense</p>
+  <p>I'm charged up, don't put me down</p>
+  <p>Don't feel like talking, don't mess around</p>
+  <p>I feel mean, but I feel okay</p>
+  <p>I'm charged up, electricity</p>
+  <p>That's what I call it</p>
+  <p>Ah-hah</p>
+  <script>
+    const container = document.querySelector("#talking-heads-drugs");
+    const containerWidth = container.offsetWidth;
+    const containerHeight = container.offsetHeight;
+    for (let i = 0; i <= 200; i++) {
+      const dot = document.createElement("div");
+      dot.classList.add("dot");
+      const animationType = Math.random() < 0.5 ? "flashing" : "blurring";
+      const animationDuration = Math.random() * 5 + 1;
+      const backgroundColor = ["#ff008a", "#fff300", "#00ff73", "#000bff"][
+        Math.floor(Math.random() * 4)
+      ];
+      dot.style.backgroundColor = backgroundColor;
+      dot.classList.add(animationType);
+      dot.style.animationDuration = `${animationDuration}s`;
+      dot.style.width = `${Math.random() * 10}px`;
+      dot.style.height = dot.style.width;
+      dot.style.position = "absolute";
+      dot.style.left = `${Math.random() * containerWidth}px`;
+      dot.style.top = `${Math.random() * containerHeight}px`;
+      container.appendChild(dot);
+    }
+  </script>
+</section>
