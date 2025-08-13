@@ -1,0 +1,783 @@
+---
+title: "Availability Scheduler"
+layout: "tools"
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Availability Scheduler</title>
+    <link rel="stylesheet" href="/css/scheduler.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1 id="mainTitle">Group Activity Scheduler</h1>
+        <details>
+          <summary>What is this?</summary>
+          <p>
+            This is a tool to schedule things between groups of people. It runs
+            completely in your browser: all the information is stored in the
+            URL.
+          </p>
+          <p>
+            To create an event, set your name then select your available times.
+          </p>
+          <p>
+            Click "Copy link" and send the link to the next person whose times
+            you want to know about. They set their name and availability and on
+            it goes.
+          </p>
+          <p>
+            This means that everyone can contribute their availability without
+            needing an account.
+          </p>
+          <p>
+            It also means that you have to keep sending a link to-and-fro
+            whenever you need to make updates, which might be annoying depending
+            on your needs.
+          </p>
+          <p>
+            If "Alice" already has times set, typing "Alice" into the name field
+            and clicking off the input will make those fields editable.
+          </p>
+          <p>
+            For cases where you need to make frequent updates, consider using a
+            dedicated scheduling tool or something like Google Sheets.
+          </p>
+        </details>
+      </div>
+
+      <div id="setupSection" class="setup-form">
+        <div class="form-group">
+          <label for="nameInput">Your Name</label>
+          <input
+            type="text"
+            id="nameInput"
+            placeholder="Enter your name"
+            onblur="handleNameChange()"
+          />
+        </div>
+      </div>
+
+      <div id="messageArea"></div>
+
+      <div
+        id="participantsSection"
+        class="participants-list"
+        style="display: none"
+      >
+        <h3>Participants:</h3>
+        <div id="participantsList"></div>
+      </div>
+
+      <div class="actions">
+        <button
+          id="shareLinkBtn"
+          class="btn btn-success"
+          onclick="shareLink()"
+          disabled
+        >
+          📋 Copy Link
+        </button>
+        <button
+          id="clearBtn"
+          class="btn btn-secondary"
+          onclick="clearMyAvailability()"
+          style="display: none"
+        >
+          Clear My Selection
+        </button>
+      </div>
+
+      <div class="calendar-container">
+        <div class="calendar-header">
+          <h2>Select Your Available Times</h2>
+          <div class="week-navigation">
+            <button
+              class="btn btn-secondary change-week-button"
+              onclick="previousWeek()"
+            >
+              ← <span>Previous Week</span>
+            </button>
+            <span id="currentWeekDisplay"></span>
+            <button
+              class="btn btn-secondary change-week-button"
+              onclick="nextWeek()"
+            >
+              <span>Next Week</span> →
+            </button>
+          </div>
+        </div>
+        <div id="calendar" class="calendar"></div>
+      </div>
+      <footer>
+        <button id="resetBtn" class="btn btn-secondary" onclick="resetApp()">
+          Reset
+        </button>
+      </footer>
+    </div>
+
+    <script>
+      const dayNames = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+      const hours = [];
+      for (let i = 0; i < 24; i++) {
+        const hour =
+          i === 0
+            ? "12 AM"
+            : i < 12
+            ? `${i} AM`
+            : i === 12
+            ? "12 PM"
+            : `${i - 12} PM`;
+        hours.push(hour);
+      }
+
+      let isSelecting = false;
+      let selectionStart = null;
+      let currentSelection = new Set();
+      let participants = {};
+      let currentUser = "";
+      let currentWeekStart = getWeekStart(new Date());
+
+      const participantColors = [
+        "#e6194B",
+        "#ffe119",
+        "#42d4f4",
+        "#f032e6",
+        "#fabed4",
+        "#4363d8",
+        "#f58231",
+        "#469990",
+        "#3cb44b",
+        "#dcbeff",
+        "#9A6324",
+        "#fffac8",
+        "#800000",
+        "#aaffc3",
+        "#000075",
+      ];
+
+      function getParticipantColor(name, index) {
+        return participantColors[index % participantColors.length];
+      }
+
+      function getContrastClass(hexColor) {
+        // Convert hex to RGB
+        const r = parseInt(hexColor.substr(1, 2), 16);
+        const g = parseInt(hexColor.substr(3, 2), 16);
+        const b = parseInt(hexColor.substr(5, 2), 16);
+
+        // Calculate relative luminance
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+        // Return appropriate class based on luminance
+        return luminance > 0.5 ? "light-bg" : "dark-bg";
+      }
+
+      // Range utility functions
+      function slotsToRanges(slots) {
+        if (slots.length === 0) return [];
+
+        // Sort slots by date and hour
+        const sortedSlots = [...slots].sort();
+        const ranges = [];
+        let rangeStart = null;
+        let rangeEnd = null;
+
+        for (let i = 0; i < sortedSlots.length; i++) {
+          const slot = sortedSlots[i];
+          const [date, hour] = slot.split("-").slice(-2);
+          const currentDate = slot.split("-").slice(0, 3).join("-");
+          const currentHour = parseInt(hour);
+
+          if (!rangeStart) {
+            rangeStart = { date: currentDate, hour: currentHour };
+            rangeEnd = { date: currentDate, hour: currentHour };
+          } else {
+            const prevSlot = sortedSlots[i - 1];
+            const [prevDate, prevHour] = prevSlot.split("-").slice(-2);
+            const previousDate = prevSlot.split("-").slice(0, 3).join("-");
+            const previousHour = parseInt(prevHour);
+
+            // Check if this slot continues the current range
+            if (
+              currentDate === previousDate &&
+              currentHour === previousHour + 1
+            ) {
+              rangeEnd = { date: currentDate, hour: currentHour };
+            } else {
+              // End current range and start new one
+              ranges.push({
+                date: rangeStart.date,
+                startHour: rangeStart.hour,
+                endHour: rangeEnd.hour + 1,
+              });
+              rangeStart = { date: currentDate, hour: currentHour };
+              rangeEnd = { date: currentDate, hour: currentHour };
+            }
+          }
+        }
+
+        // Don't forget the last range
+        if (rangeStart) {
+          ranges.push({
+            date: rangeStart.date,
+            startHour: rangeStart.hour,
+            endHour: rangeEnd.hour + 1,
+          });
+        }
+
+        return ranges;
+      }
+
+      function rangesToSlots(ranges) {
+        const slots = [];
+        ranges.forEach((range) => {
+          for (let hour = range.startHour; hour < range.endHour; hour++) {
+            slots.push(`${range.date}-${hour}`);
+          }
+        });
+        return slots;
+      }
+
+      function isSlotInRanges(slotId, ranges) {
+        const [date, hour] = slotId.split("-").slice(-2);
+        const slotDate = slotId.split("-").slice(0, 3).join("-");
+        const slotHour = parseInt(hour);
+
+        return ranges.some(
+          (range) =>
+            range.date === slotDate &&
+            slotHour >= range.startHour &&
+            slotHour < range.endHour
+        );
+      }
+
+      function updateShareLinkButton() {
+        const shareBtn = document.getElementById("shareLinkBtn");
+        const hasSlots = Object.keys(participants).length > 0;
+        shareBtn.disabled = !hasSlots;
+      }
+
+      function updateClearButton() {
+        const clearBtn = document.getElementById("clearBtn");
+        const currentUserHasSlots =
+          currentUser &&
+          participants[currentUser] &&
+          participants[currentUser].length > 0;
+        clearBtn.style.display = currentUserHasSlots ? "inline-block" : "none";
+      }
+
+      function handleNameChange() {
+        const newName = document.getElementById("nameInput").value.trim();
+
+        if (!newName || newName === currentUser) {
+          return;
+        }
+
+        saveCurrentSelections();
+        currentUser = newName;
+        initCalendar();
+        updateParticipantsList();
+        updateClearButton();
+      }
+
+      function getWeekStart(date) {
+        const d = new Date(date);
+        const day = d.getDay();
+        const diff = d.getDate() - day;
+        d.setDate(diff);
+        d.setHours(0, 0, 0, 0);
+        return d;
+      }
+
+      function getWeekDates(weekStart) {
+        const dates = [];
+        for (let i = 0; i < 7; i++) {
+          const date = new Date(weekStart);
+          date.setDate(weekStart.getDate() + i);
+          dates.push(date);
+        }
+        return dates;
+      }
+
+      function formatDate(date) {
+        return date.toISOString().split("T")[0]; // YYYY-MM-DD format
+      }
+
+      function formatDateDisplay(date) {
+        return date.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        });
+      }
+
+      function updateWeekDisplay() {
+        const weekDates = getWeekDates(currentWeekStart);
+        const startDate = weekDates[0];
+        const endDate = weekDates[6];
+        const display = `${startDate.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        })} - ${endDate.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        })}`;
+        document.getElementById("currentWeekDisplay").textContent = display;
+      }
+
+      function changeWeek(dayDifference) {
+        saveCurrentSelections();
+        currentWeekStart.setDate(currentWeekStart.getDate() + dayDifference);
+        updateWeekDisplay();
+        initCalendar();
+      }
+
+      function previousWeek() {
+        changeWeek(-7);
+      }
+
+      function nextWeek() {
+        changeWeek(7);
+      }
+
+      function saveCurrentSelections() {
+        if (!currentUser) return;
+
+        const currentlyVisibleSlots = [];
+        document.querySelectorAll(".time-slot.selected").forEach((slot) => {
+          currentlyVisibleSlots.push(slot.dataset.id);
+        });
+
+        const existingSlots = participants[currentUser] || [];
+
+        const weekDates = getWeekDates(currentWeekStart);
+        const currentWeekDateStrings = weekDates.map((date) =>
+          formatDate(date)
+        );
+
+        const slotsFromOtherWeeks = existingSlots.filter((slotId) => {
+          const slotDate = slotId.split("-").slice(0, 3).join("-");
+          return !currentWeekDateStrings.includes(slotDate);
+        });
+
+        const allUpdatedSlots = [
+          ...new Set([...slotsFromOtherWeeks, ...currentlyVisibleSlots]),
+        ];
+
+        if (allUpdatedSlots.length > 0) {
+          participants[currentUser] = allUpdatedSlots;
+          document.getElementById("nameInput").disabled = true;
+        } else {
+          delete participants[currentUser];
+          document.getElementById("nameInput").disabled = false;
+        }
+
+        updateURL();
+        updateParticipantsList();
+        updateShareLinkButton();
+        updateClearButton();
+      }
+
+      function initCalendar() {
+        const calendar = document.getElementById("calendar");
+        calendar.innerHTML = "";
+        const weekDates = getWeekDates(currentWeekStart);
+
+        // Add corner cell
+        const corner = document.createElement("div");
+        corner.className = "time-label";
+        corner.textContent = "Time";
+        calendar.appendChild(corner);
+
+        // Add day headers with dates
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        weekDates.forEach((date, dayIndex) => {
+          const header = document.createElement("div");
+          header.className = "day-header";
+
+          // Check if this date is today
+          const dateOnly = new Date(date);
+          dateOnly.setHours(0, 0, 0, 0);
+          if (dateOnly.getTime() === today.getTime()) {
+            header.classList.add("today");
+          }
+
+          header.innerHTML = `${
+            dayNames[date.getDay()]
+          }<br><small>${formatDateDisplay(date)}</small>`;
+          calendar.appendChild(header);
+        });
+
+        // Add time slots
+        hours.forEach((hour, hourIndex) => {
+          const timeLabel = document.createElement("div");
+          timeLabel.className = "time-label";
+          timeLabel.textContent = hour;
+          calendar.appendChild(timeLabel);
+
+          weekDates.forEach((date, dayIndex) => {
+            const slot = document.createElement("div");
+            slot.className = "time-slot";
+            const dateStr = formatDate(date);
+            slot.dataset.date = dateStr;
+            slot.dataset.hour = hourIndex;
+            slot.dataset.id = `${dateStr}-${hourIndex}`;
+
+            // Check if this slot is selected for current user
+            if (currentUser) {
+              // Always check the authoritative participants data first
+              const userSlots = participants[currentUser] || [];
+              const isSelected = userSlots.includes(slot.dataset.id);
+
+              if (isSelected) {
+                slot.classList.add("selected");
+                // Disable name input if user has selections
+                document.getElementById("nameInput").disabled = true;
+              }
+            }
+
+            const otherParticipants = [];
+            const participantNames = Object.keys(participants);
+            participantNames.forEach((name) => {
+              if (
+                name !== currentUser &&
+                participants[name].includes(slot.dataset.id)
+              ) {
+                const index = participantNames.indexOf(name);
+                otherParticipants.push({ name, index });
+              }
+            });
+
+            if (otherParticipants.length > 0) {
+              const container = document.createElement("div");
+              container.className = "participants-container";
+
+              otherParticipants.forEach((participant) => {
+                const segment = document.createElement("div");
+                const color = getParticipantColor(
+                  participant.name,
+                  participant.index
+                );
+                const contrastClass = getContrastClass(color);
+                segment.className = `participant-segment adaptive-text ${contrastClass}`;
+                segment.style.background = color;
+                segment.textContent = participant.name.charAt(0).toUpperCase();
+                segment.title = participant.name;
+                container.appendChild(segment);
+              });
+
+              slot.appendChild(container);
+
+              const interactionZone = document.createElement("div");
+              interactionZone.className = "interaction-zone";
+              interactionZone.innerHTML = "+";
+              slot.appendChild(interactionZone);
+            }
+
+            slot.addEventListener("mousedown", startSelection);
+            slot.addEventListener("mouseenter", updateSelection);
+            slot.addEventListener("mouseup", endSelection);
+
+            calendar.appendChild(slot);
+          });
+        });
+      }
+
+      function startSelection(e) {
+        const name = document.getElementById("nameInput").value.trim();
+        if (!name) {
+          showMessage(
+            "Please enter your name before selecting time slots",
+            "info"
+          );
+          return;
+        }
+
+        if (currentUser !== name) {
+          currentUser = name;
+        }
+
+        e.preventDefault();
+        isSelecting = true;
+        selectionStart = e.target.dataset.id;
+        currentSelection.clear();
+        clearSelectionVisual();
+
+        if (e.target.classList.contains("selected")) {
+          e.target.classList.remove("selected");
+        } else {
+          currentSelection.add(e.target.dataset.id);
+          e.target.classList.add("selecting");
+        }
+      }
+
+      function updateSelection(e) {
+        if (!isSelecting || !e.target.dataset.id) return;
+
+        const slotId = e.target.dataset.id;
+        if (currentSelection.has(slotId)) {
+          currentSelection.delete(slotId);
+          e.target.classList.remove("selecting");
+        } else {
+          currentSelection.add(slotId);
+          e.target.classList.add("selecting");
+        }
+      }
+
+      function endSelection() {
+        if (!isSelecting) return;
+        isSelecting = false;
+
+        currentSelection.forEach((slotId) => {
+          const slot = document.querySelector(`[data-id="${slotId}"]`);
+          if (slot) {
+            slot.classList.remove("selecting");
+            slot.classList.toggle("selected");
+          }
+        });
+
+        currentSelection.clear();
+        saveCurrentSelections();
+        updateClearButton();
+      }
+
+      function clearSelectionVisual() {
+        document.querySelectorAll(".time-slot.selecting").forEach((slot) => {
+          slot.classList.remove("selecting");
+        });
+      }
+
+      function clearMyAvailability() {
+        if (currentUser) {
+          delete participants[currentUser];
+          document.getElementById("nameInput").disabled = false;
+          updateURL();
+          updateParticipantsList();
+          updateShareLinkButton();
+          updateClearButton();
+          initCalendar();
+        }
+      }
+
+      function getSelectedSlots() {
+        const selected = [];
+        document.querySelectorAll(".time-slot.selected").forEach((slot) => {
+          selected.push(slot.dataset.id);
+        });
+        return selected;
+      }
+
+      function updateURL() {
+        const hashParts = [];
+
+        if (Object.keys(participants).length > 0) {
+          const participantStr = Object.entries(participants)
+            .map(([name, slots]) => {
+              const ranges = slotsToRanges(slots);
+              const rangeStr = ranges
+                .map(
+                  (range) => `${range.date}-${range.startHour}-${range.endHour}`
+                )
+                .join(".");
+              return `${name}~${rangeStr}`;
+            })
+            .join("+");
+          hashParts.push(`p=${participantStr}`);
+        }
+
+        hashParts.push(`w=${formatDate(currentWeekStart)}`);
+
+        window.location.hash = hashParts.join("&");
+      }
+
+      function getEarliestAvailabilityDate() {
+        let earliestDate = null;
+
+        Object.values(participants).forEach((slots) => {
+          slots.forEach((slotId) => {
+            const dateStr = slotId.split("-").slice(0, 3).join("-"); // Extract YYYY-MM-DD
+            // Use date constructor with explicit parsing to avoid timezone issues
+            const dateParts = dateStr.split("-");
+            const date = new Date(
+              parseInt(dateParts[0]),
+              parseInt(dateParts[1]) - 1,
+              parseInt(dateParts[2])
+            );
+            if (!earliestDate || date < earliestDate) {
+              earliestDate = date;
+            }
+          });
+        });
+
+        return earliestDate;
+      }
+
+      function loadFromURL() {
+        if (!window.location.hash) return;
+
+        try {
+          const hashStr = window.location.hash.substring(1);
+          const params = {};
+          hashStr.split("&").forEach((part) => {
+            const [key, value] = part.split("=");
+            params[key] = decodeURIComponent(value || "");
+          });
+
+          const participantStr = params.p;
+          if (participantStr) {
+            participants = {};
+            participantStr.split("+").forEach((p) => {
+              const [name, rangesStr] = p.split("~");
+              if (rangesStr && rangesStr.includes("-")) {
+                // New range format: 2024-08-13-9-12.2024-08-14-15-18
+                const ranges = rangesStr
+                  .split(".")
+                  .map((rangeStr) => {
+                    const parts = rangeStr.split("-");
+                    if (parts.length === 5) {
+                      // YYYY-MM-DD-start-end
+                      return {
+                        date: parts.slice(0, 3).join("-"),
+                        startHour: parseInt(parts[3]),
+                        endHour: parseInt(parts[4]),
+                      };
+                    }
+                    return null;
+                  })
+                  .filter((range) => range !== null);
+
+                participants[name] = rangesToSlots(ranges);
+              }
+            });
+
+            // Set calendar to show week containing earliest availability
+            const earliestDate = getEarliestAvailabilityDate();
+            if (earliestDate) {
+              currentWeekStart = getWeekStart(earliestDate);
+            }
+
+            updateParticipantsList();
+          }
+
+          const weekStart = params.w;
+          if (weekStart && Object.keys(participants).length === 0) {
+            currentWeekStart = getWeekStart(new Date(weekStart));
+          }
+
+          updateWeekDisplay();
+          initCalendar();
+          updateShareLinkButton();
+          updateClearButton();
+        } catch (e) {}
+      }
+
+      function updateParticipantsList() {
+        const list = document.getElementById("participantsList");
+        const section = document.getElementById("participantsSection");
+
+        if (Object.keys(participants).length === 0) {
+          section.style.display = "none";
+          return;
+        }
+
+        section.style.display = "block";
+        list.innerHTML = "";
+
+        const participantNames = Object.keys(participants);
+        participantNames.forEach((name, index) => {
+          const item = document.createElement("div");
+          item.className = "participant-item";
+          if (name === currentUser) {
+            item.className += " current";
+          } else {
+            // Apply the same color as their time slots
+            const color = getParticipantColor(name, index);
+            const contrastClass = getContrastClass(color);
+            item.className += ` adaptive-text ${contrastClass}`;
+            item.style.background = color;
+            item.style.borderColor = color;
+          }
+
+          item.textContent = name;
+          list.appendChild(item);
+        });
+      }
+
+      function shareLink() {
+        const url = window.location.href;
+
+        if (navigator.clipboard) {
+          navigator.clipboard
+            .writeText(url)
+            .then(() => {
+              showMessage(
+                "Schedule URL copied to clipboard! Share it with others.",
+                "success"
+              );
+            })
+            .catch(() => {
+              prompt("Copy this link:", url);
+            });
+        } else {
+          prompt("Copy this link:", url);
+        }
+      }
+
+      function showMessage(text, type) {
+        const messageArea = document.getElementById("messageArea");
+        messageArea.innerHTML = `<div class="message ${type}">${text}</div>`;
+        setTimeout(() => {
+          messageArea.innerHTML = "";
+        }, 5000);
+      }
+
+      function resetApp() {
+        // Reset all global variables
+        participants = {};
+        currentUser = "";
+        currentWeekStart = getWeekStart(new Date());
+
+        // Reset form inputs
+        document.getElementById("nameInput").value = "";
+        document.getElementById("nameInput").disabled = false;
+
+        // Clear URL hash
+        window.location.hash = "";
+
+        // Update all UI elements
+        updateWeekDisplay();
+        initCalendar();
+        updateParticipantsList();
+        updateShareLinkButton();
+        updateClearButton();
+
+        // Clear any messages
+        document.getElementById("messageArea").innerHTML = "";
+      }
+
+      // Initialize
+      updateWeekDisplay();
+      initCalendar();
+      loadFromURL();
+      updateShareLinkButton();
+      updateClearButton();
+      document.addEventListener("mouseup", endSelection);
+    </script>
+  </body>
+</html>
