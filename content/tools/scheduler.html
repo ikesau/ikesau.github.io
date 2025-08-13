@@ -8,7 +8,11 @@ layout: "tools"
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Availability Scheduler</title>
+    <title>Group Activity Scheduler</title>
+    <meta
+      name="description"
+      content="An open-source, free clientside tool for scheduling group activities by finding common availability."
+    />
     <link rel="stylesheet" href="/css/scheduler.css" />
   </head>
   <body>
@@ -50,16 +54,14 @@ layout: "tools"
         </details>
       </div>
 
-      <div id="setupSection" class="setup-form">
-        <div class="form-group">
-          <label for="nameInput">Your Name</label>
-          <input
-            type="text"
-            id="nameInput"
-            placeholder="Enter your name"
-            onblur="handleNameChange()"
-          />
-        </div>
+      <div>
+        <label for="nameInput">Your Name</label>
+        <input
+          type="text"
+          id="nameInput"
+          placeholder="Enter your name"
+          onblur="handleNameChange()"
+        />
       </div>
 
       <div id="messageArea"></div>
@@ -80,7 +82,7 @@ layout: "tools"
           onclick="shareLink()"
           disabled
         >
-          📋 Copy Link
+          Copy Link
         </button>
         <button
           id="clearBtn"
