@@ -3,7 +3,7 @@ languageCode = 'en-ca'
 title = 'ikesau.co'
 theme = 'ikesau'
 [params]
-    description = 'website happy'
+    description = 'The website of Ike Saunders'
 
 permalinks.blog = "/:section/:title/"
 
