@@ -1,11 +1,17 @@
 ---
-title: "yt-recut"
-layout: "blank"
+title: "YouTube Section Skipper"
+description: "Paste a YouTube video and set regions to skip during playback (for efficient group-watch meetings)"
 ---
 
 <style>
   body {
     margin-top: 24px;
+    margin: auto;
+    padding: 0 10px;
+    font: 18px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    color: #2c2c2c;
+    max-width: 650px;
   }
   #video-url-form {
     margin-bottom: 24px;
@@ -264,19 +270,19 @@ layout: "blank"
 
     setFromCurrent() {
       document.getElementById("skipFrom").value = TimeUtil.secondsToTimestamp(
-        Math.round(VideoManager.player.getCurrentTime()),
+        Math.round(VideoManager.player.getCurrentTime())
       );
     },
 
     setToCurrent() {
       document.getElementById("skipTo").value = TimeUtil.secondsToTimestamp(
-        Math.round(VideoManager.player.getCurrentTime()),
+        Math.round(VideoManager.player.getCurrentTime())
       );
     },
 
     getSkipDestination(currentTime) {
       return this.skips.find(
-        (skip) => currentTime >= skip.from && currentTime < skip.to,
+        (skip) => currentTime >= skip.from && currentTime < skip.to
       )?.to;
     },
 
@@ -310,7 +316,7 @@ layout: "blank"
           </button>
           <button onclick="SkipManager.removeSkip(${index})">Remove</button>
         </li>
-      `,
+      `
         )
         .join("");
     },

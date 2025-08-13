@@ -1,0 +1,22 @@
+{{ define "main" }}
+
+<h1 style="font-size: 2rem; margin: 0">{{ .Title }}</h1>
+<p
+  style="margin: 2px 0 0 0; padding-bottom: 8px; border-bottom: 1px solid #ccc"
+>
+  A list of client-side tools that I've made to solve simple problems
+</p>
+
+{{ .Content }}
+
+<div class="tools-gallery">
+  {{ range .Pages }}
+  <div class="tool-item">
+    <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+    {{ with .Params.description }}
+    <p>{{ . }}</p>
+    {{ end }}
+  </div>
+  {{ end }}
+</div>
+{{ end }}
