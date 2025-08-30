@@ -21,7 +21,7 @@
 
 
 {{ define "main" }} 
-<article id="{{ .Title | urlize }}">
+<article id="{{ .Title | urlize }}" class="blog-post">
   <h1>{{ .Title }}</h1>
   {{ .Content }}
 </article>
