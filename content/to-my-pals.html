@@ -1,0 +1,193 @@
+---
+layout: blank
+---
+
+<!-- https://www.youtube.com/results?search_query=haijokoidan+romance -->
+<div
+  id="the-gutter"
+  style="font-size: 24px; height: 100vh; display: flex; align-items: center"
+>
+  you
+</div>
+
+<script>
+  const AWWWWW = [
+    ["beautiful", 1],
+    ["lovely", 1],
+    ["charming", 1],
+    ["inspirational", 1],
+    ["legend!", 1],
+    ["charismatic", 1],
+    ["beloved", 1],
+    ["funny", 1],
+    ["smart", 1],
+    ["beast!", 1],
+    ["gifted", 1],
+    ["active", 1],
+    ["adaptable", 1],
+    ["adventurourous", 1],
+    ["affectionate", 1],
+    ["alert", 1],
+    ["artistic", 1],
+    ["assertive", 1],
+    ["boundless", 1],
+    ["brave", 1],
+    ["broad-minded", 1],
+    ["calm", 1],
+    ["capable", 1],
+    ["careful", 1],
+    ["caring", 1],
+    ["cheerful", 1],
+    ["clever", 1],
+    ["comfortable", 1],
+    ["communicative", 1],
+    ["compassionate", 1],
+    ["conscientious", 1],
+    ["considerate", 1],
+    ["courageous", 1],
+    ["creative", 1],
+    ["curious", 1],
+    ["decisive", 1],
+    ["determined", 1],
+    ["diligent", 1],
+    ["dynamic", 1],
+    ["eager", 1],
+    ["energetic", 1],
+    ["entertaining", 1],
+    ["enthusiastic", 1],
+    ["exuberant", 1],
+    ["expressive", 1],
+    ["fabulous", 1],
+    ["fair-minded", 1],
+    ["fantastic", 1],
+    ["fearless", 1],
+    ["flexible thinker!", 1],
+    ["frank", 1],
+    ["friendly", 1],
+    ["funny", 1],
+    ["generous", 1],
+    ["gentle", 1],
+    ["gregarious", 1],
+    ["happy", 1],
+    ["hard working", 1],
+    ["helpful", 1],
+    ["hilarious", 1],
+    ["honest", 1],
+    ["imaginative", 1],
+    ["independent", 1],
+    ["intellectual", 1],
+    ["intelligent", 1],
+    ["intuitive", 1],
+    ["inventive", 1],
+    ["joyous", 1],
+    ["kind", 1],
+    ["kind-hearted", 1],
+    ["knowledgable", 1],
+    ["level-headed", 1],
+    ["lively", 1],
+    ["loving", 1],
+    ["loyal", 1],
+    ["mature", 1],
+    ["modest", 1],
+    ["optimistic", 1],
+    ["outgoing", 1],
+    ["passionate", 1],
+    ["patient", 1],
+    ["persistent", 1],
+    ["philosophical", 1],
+    ["polite", 1],
+    ["practical", 1],
+    ["proactive", 1],
+    ["productive", 1],
+    ["quick-witted", 1],
+    ["quiet", 1],
+    ["rational", 1],
+    ["receptive", 1],
+    ["reflective", 1],
+    ["reliable", 1],
+    ["resourceful", 1],
+    ["responsible", 1],
+    ["sophisticated", 1],
+    ["self-confident", 1],
+    ["sensible", 1],
+    ["sensitive", 1],
+    ["skillful", 1],
+    ["straightforward", 1],
+    ["successful", 1],
+    ["thoughtful", 1],
+    ["trustworthy", 1],
+    ["understanding", 1],
+    ["versatile", 1],
+    ["vivacious", 1],
+    ["warm-hearted", 1],
+    ["willing", 1],
+    ["witty", 1],
+    ["wonderful", 1],
+    ["ace-in-the-hole!", 1],
+    ["ally!", 1],
+    ["wingman!", 1],
+    ["big wheel!", 1],
+    ["big enchilada!", 1],
+    ["bees knees", 1],
+    ["boss!", 1],
+    ["genius!", 1],
+    ["gangster!", 1],
+    ["friend!", 1],
+    ["chum!", 1],
+    ["dreamboat!", 1],
+    ["wizard!", 1],
+    ["good egg!", 1],
+    ["heavy hitter!", 1],
+    ["homie!", 1],
+    ["hotshot!", 1],
+    ["hot stuff!", 1],
+    ["jewel!", 1],
+    ["life-of-the-party", 1],
+    ["king!", 1],
+    ["gem!", 1],
+    ["youth!", 1],
+    ["winner!", 1],
+    ["whiz!", 1],
+    ["veteran!", 1],
+    ["up-and-comer!", 1],
+    ["trailblazer!", 1],
+    ["top dog!", 1],
+    ["sweetheart!", 1],
+    ["sport!", 1],
+    ["salt-of-the-earth", 1],
+    ["problem solver!", 1],
+    ["prodigy!", 1],
+    ["whippersnapper!", 1],
+    ["old bean!", 1],
+    ["hot shot!", 1],
+    ["pardner!", 1],
+    ["asset!", 1],
+    ["sexy", 1],
+  ];
+
+  const DISS = AWWWWW.reduce((acc, [word, weight]) => {
+    return [...acc, ...new Array(weight).fill().map(() => word)];
+  }, []);
+
+  const FINISH_HIM = ["motherfucker", "son of a gun", "beautiful bastard"];
+
+  const TEEHEE = ["breedable", "submissive", "jazzhanded"];
+  let levitied = false;
+  let thusFar = 0;
+
+  const gutter = document.querySelector("#the-gutter");
+  function giveEmHell() {
+    thusFar++;
+    if (!levitied && Math.random() < 0.2 && thusFar > 5) {
+      levitied = true;
+      return TEEHEE[Math.floor(Math.random() * TEEHEE.length)];
+    }
+    return DISS[Math.floor(Math.random() * DISS.length)];
+  }
+  while (thusFar < 30) {
+    gutter.innerText += ` ${giveEmHell()} `;
+  }
+  gutter.innerText += ` ${
+    FINISH_HIM[Math.floor(Math.random() * FINISH_HIM.length)]
+  }!`;
+</script>

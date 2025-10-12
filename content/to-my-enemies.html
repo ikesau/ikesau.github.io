@@ -2,46 +2,86 @@
 layout: blank
 ---
 
-<!-- https://www.youtube.com/results?search_query=hijokoidan+romance -->
-<div id="the-gutter" style="margin: 32px 0; font-size: 24px">you little</div>
+<!-- https://www.youtube.com/results?search_query=haijokoidan+romance -->
+<div
+  id="the-gutter"
+  style="font-size: 24px; height: 100vh; display: flex; align-items: center"
+>
+  you
+</div>
 
 <script>
   const NAUGHTY_NAUGHTY = [
-    "ass",
-    "asshole",
-    "big",
-    "bitch",
-    "bloody",
-    "cock",
-    "cunt",
-    "dickhead",
-    "dumbass",
-    "fuck",
-    "fuckass",
-    "fucking",
-    "god damn",
-    "little",
-    "motherfucker",
-    "motherfucking",
-    "piece of shit",
-    "piss",
-    "shit",
+    ["ass", 1],
+    ["asshole", 1],
+    ["big", 1],
+    ["bitch", 1],
+    ["bloody", 1],
+    ["cock!", 1],
+    ["cunt!", 1],
+    ["dickhead!", 1],
+    ["dumbass", 1],
+    ["fuck", 1],
+    ["fuckass", 1],
+    ["fucking", 1],
+    ["god damn", 1],
+    ["little", 1],
+    ["garbage", 1],
+    ["awful", 1],
+    ["motherfucker!", 1],
+    ["motherfucking", 1],
+    ["fricking", 1],
+    ["piece of shit!", 1],
+    ["pissbrained", 1],
+    ["pissbrain!", 1],
+    ["shitstain!", 1],
+    ["shit", 1],
+    ["trash", 1],
+    ["vile", 1],
   ];
 
-  const PLURAL = [
-    "motherfuckers",
-    "pieces of shit",
-    "cunts",
-    "dickheads",
-    "bitches",
-    "weakies",
+  const DISS = NAUGHTY_NAUGHTY.reduce((acc, [word, weight]) => {
+    return [...acc, ...new Array(weight).fill().map(() => word)];
+  }, []);
+
+  const FINISH_HIM = [
+    "motherfucker",
+    "piece of shit",
+    "cunt",
+    "dickhead",
+    "bitch",
+    "weaky",
+    "skank",
   ];
+
+  const TEEHEE = [
+    "big nose",
+    "clumsy",
+    "long-winded",
+    "foolhardy",
+    "nuisance!",
+    "unbelievable",
+    "gormless",
+    "feebleminded",
+    "egghead!",
+    "dirty dealing",
+  ];
+  let levitied = false;
+  let thusFar = 0;
+
   const gutter = document.querySelector("#the-gutter");
   function giveEmHell() {
-    return NAUGHTY_NAUGHTY[Math.floor(Math.random() * NAUGHTY_NAUGHTY.length)];
+    thusFar++;
+    if (!levitied && Math.random() < 0.2 && thusFar > 5) {
+      levitied = true;
+      return TEEHEE[Math.floor(Math.random() * TEEHEE.length)];
+    }
+    return DISS[Math.floor(Math.random() * DISS.length)];
   }
-  while (gutter.clientHeight < window.innerHeight - 70) {
+  while (thusFar < 30) {
     gutter.innerText += ` ${giveEmHell()} `;
   }
-  gutter.innerText += ` ${PLURAL[Math.floor(Math.random() * PLURAL.length)]}!`;
+  gutter.innerText += ` ${
+    FINISH_HIM[Math.floor(Math.random() * FINISH_HIM.length)]
+  }!`;
 </script>
