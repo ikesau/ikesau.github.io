@@ -82,6 +82,10 @@ img {
   }
 }
 
+.blog-index sup {
+  display: none;
+}
+
 .blog-pagination {
   display: flex;
   justify-content: space-between;
