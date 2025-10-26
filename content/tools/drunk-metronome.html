@@ -1,0 +1,483 @@
+---
+title: "Drunk Metronome"
+description: "An intentionally unstable metronome that wobbles around a target tempo."
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drunk Metronome</title>
+    <meta
+      name="description"
+      content="Play along with a metronome that drifts around a target tempo to create a loose, tipsy feel."
+    />
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--page-background, #fafafa);
+        color: var(--page-foreground, #212121);
+      }
+
+      .container {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 24px 16px 48px;
+      }
+
+      h1 {
+        margin-bottom: 0.2em;
+        font-size: clamp(2rem, 4vw, 2.8rem);
+      }
+
+      p.description {
+        margin-top: 0;
+        margin-bottom: 1.5em;
+        line-height: 1.5;
+        color: #555;
+      }
+
+      .controls {
+        display: grid;
+        gap: 18px;
+        margin-bottom: 24px;
+      }
+
+      .control {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      label {
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      input[type="number"],
+      input[type="range"] {
+        width: 100%;
+      }
+
+      input[type="number"] {
+        padding: 10px 12px;
+        border-radius: 6px;
+        border: 1px solid rgba(0, 0, 0, 0.18);
+        font-size: 1rem;
+      }
+
+      input[type="range"] {
+        cursor: pointer;
+      }
+
+      .value-badge {
+        font-size: 0.85rem;
+        background: rgba(0, 0, 0, 0.08);
+        color: inherit;
+        padding: 4px 10px;
+        min-width: 44px;
+        text-align: center;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        appearance: none;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        background: #222;
+        color: #fff;
+        transition: transform 120ms ease, filter 120ms ease,
+          background-color 120ms ease;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.05);
+      }
+
+      button:active {
+        transform: translateY(0);
+        filter: brightness(0.92);
+      }
+
+      button.secondary {
+        background: rgba(0, 0, 0, 0.08);
+        color: inherit;
+      }
+
+      .status {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-top: 28px;
+        padding: 16px 20px;
+        background: rgba(0, 0, 0, 0.05);
+      }
+
+      .status-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 140px;
+      }
+
+      .status-label {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: rgba(0, 0, 0, 0.55);
+      }
+
+      .status-value {
+        font-size: 1.3rem;
+        font-weight: 700;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          --page-background: #111;
+          --page-foreground: #f5f5f5;
+        }
+
+        input[type="number"] {
+          background: rgba(255, 255, 255, 0.02);
+          border-color: rgba(255, 255, 255, 0.15);
+          color: inherit;
+        }
+
+        .value-badge {
+          background: rgba(255, 255, 255, 0.12);
+        }
+
+        button.secondary {
+          background: rgba(255, 255, 255, 0.08);
+        }
+
+        .status {
+          background: rgba(255, 255, 255, 0.08);
+        }
+
+        .status-label {
+          color: rgba(255, 255, 255, 0.6);
+        }
+
+        .tips {
+          color: rgba(255, 255, 255, 0.7);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <h1>Drunk Metronome</h1>
+
+      <section class="controls">
+        <div class="control">
+          <label for="beatsPerBarInput">
+            Beats per bar
+            <span class="value-badge" id="beatsPerBarDisplay">4</span>
+          </label>
+          <input
+            type="range"
+            id="beatsPerBarInput"
+            value="4"
+            min="1"
+            max="16"
+          />
+        </div>
+
+        <div class="control">
+          <label for="tempoSlider">
+            Target tempo (BPM)
+            <span class="value-badge" id="tempoDisplay">100</span>
+          </label>
+          <input
+            type="range"
+            id="tempoSlider"
+            min="40"
+            max="240"
+            step="1"
+            value="100"
+          />
+        </div>
+
+        <div class="control">
+          <label for="varianceSlider">
+            Variance range (± BPM)
+            <span class="value-badge" id="varianceDisplay">10</span>
+          </label>
+          <input
+            type="range"
+            id="varianceSlider"
+            min="0"
+            max="60"
+            step="1"
+            value="10"
+          />
+        </div>
+
+        <div class="control">
+          <label for="erraticSlider">
+            Erraticness
+            <span class="value-badge" id="erraticDisplay">Steady-ish</span>
+          </label>
+          <input
+            type="range"
+            id="erraticSlider"
+            min="1"
+            max="3"
+            step="1"
+            value="2"
+          />
+        </div>
+      </section>
+
+      <div class="buttons">
+        <button id="startStopBtn">Start</button>
+        <button class="secondary" id="resetBtn">Reset feel</button>
+      </div>
+
+      <section class="status">
+        <div class="status-item">
+          <span class="status-label">Current bpm</span>
+          <span class="status-value" id="currentBpmReadout">—</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Beat in bar</span>
+          <span class="status-value" id="beatPositionReadout">—</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Target wobble</span>
+          <span class="status-value" id="targetBpmReadout">—</span>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const beatsPerBarInput = document.getElementById("beatsPerBarInput");
+      const tempoSlider = document.getElementById("tempoSlider");
+      const varianceSlider = document.getElementById("varianceSlider");
+      const erraticSlider = document.getElementById("erraticSlider");
+      const startStopBtn = document.getElementById("startStopBtn");
+      const resetBtn = document.getElementById("resetBtn");
+
+      const beatsPerBarDisplay = document.getElementById("beatsPerBarDisplay");
+      const tempoDisplay = document.getElementById("tempoDisplay");
+      const varianceDisplay = document.getElementById("varianceDisplay");
+      const erraticDisplay = document.getElementById("erraticDisplay");
+
+      const currentBpmReadout = document.getElementById("currentBpmReadout");
+      const beatPositionReadout = document.getElementById(
+        "beatPositionReadout"
+      );
+      const targetBpmReadout = document.getElementById("targetBpmReadout");
+
+      const erraticLabels = {
+        1: "Chill",
+        2: "Steady-ish",
+        3: "Unhinged",
+      };
+
+      let audioContext;
+      let metronomeTimer = null;
+      let isRunning = false;
+      let beatIndex = 0;
+      let currentBpm = Number(tempoSlider.value);
+      let targetBpm = currentBpm;
+
+      const erraticProfiles = {
+        1: { changeChance: 0.14, rangeScale: 0.35, smoothing: 0.2 },
+        2: { changeChance: 0.32, rangeScale: 0.7, smoothing: 0.32 },
+        3: { changeChance: 0.6, rangeScale: 1, smoothing: 0.52 },
+      };
+
+      beatsPerBarInput.addEventListener("input", () => {
+        beatsPerBarDisplay.textContent = beatsPerBarInput.value;
+        enforceBeatBounds();
+      });
+
+      tempoSlider.addEventListener("input", () => {
+        tempoDisplay.textContent = tempoSlider.value;
+        if (!isRunning) {
+          currentBpm = Number(tempoSlider.value);
+          targetBpm = currentBpm;
+          currentBpmReadout.textContent = tempoSlider.value;
+          targetBpmReadout.textContent = tempoSlider.value;
+        }
+      });
+
+      varianceSlider.addEventListener("input", () => {
+        varianceDisplay.textContent = varianceSlider.value;
+      });
+
+      erraticSlider.addEventListener("input", () => {
+        erraticDisplay.textContent = erraticLabels[erraticSlider.value];
+      });
+
+      startStopBtn.addEventListener("click", () => {
+        if (isRunning) {
+          stopMetronome();
+        } else {
+          startMetronome();
+        }
+      });
+
+      resetBtn.addEventListener("click", () => {
+        targetBpm = Number(tempoSlider.value);
+        currentBpm = targetBpm;
+        if (isRunning) {
+          beatIndex = 0;
+        }
+        updateStatusDisplays();
+      });
+
+      function enforceBeatBounds() {
+        const parsed = Math.max(
+          1,
+          Math.min(16, Number(beatsPerBarInput.value) || 4)
+        );
+        beatsPerBarInput.value = parsed;
+        beatsPerBarDisplay.textContent = parsed;
+      }
+
+      function startMetronome() {
+        enforceBeatBounds();
+        if (!audioContext) {
+          audioContext = new (window.AudioContext ||
+            window.webkitAudioContext)();
+        }
+        audioContext.resume();
+
+        isRunning = true;
+        beatIndex = 0;
+        currentBpm = Number(tempoSlider.value);
+        targetBpm = currentBpm;
+        scheduleNextBeat();
+        startStopBtn.textContent = "Stop";
+        updateStatusDisplays();
+      }
+
+      function stopMetronome() {
+        isRunning = false;
+        if (metronomeTimer) {
+          clearTimeout(metronomeTimer);
+          metronomeTimer = null;
+        }
+        beatIndex = 0;
+        startStopBtn.textContent = "Start";
+        currentBpmReadout.textContent = "—";
+        beatPositionReadout.textContent = "—";
+        targetBpmReadout.textContent = "—";
+      }
+
+      function scheduleNextBeat() {
+        if (!isRunning) return;
+
+        const beatsPerBar = Number(beatsPerBarInput.value);
+        const baseTempo = Number(tempoSlider.value);
+        const variance = Number(varianceSlider.value);
+        const erraticness = Number(erraticSlider.value);
+        const profile = erraticProfiles[erraticness];
+
+        const isDownbeat = beatIndex % beatsPerBar === 0;
+        playClick(isDownbeat);
+
+        maybeUpdateTargetBpm(baseTempo, variance, profile);
+        adjustCurrentBpm(profile);
+
+        updateStatusDisplays(beatsPerBar);
+
+        const beatIntervalMs = Math.max(60_000 / currentBpm, 60);
+
+        beatIndex += 1;
+        metronomeTimer = setTimeout(scheduleNextBeat, beatIntervalMs);
+      }
+
+      function maybeUpdateTargetBpm(baseTempo, variance, profile) {
+        if (variance === 0) {
+          targetBpm = baseTempo;
+          return;
+        }
+
+        if (Math.random() < profile.changeChance) {
+          const range = variance * profile.rangeScale;
+          const rawOffset = (Math.random() * 2 - 1) * range;
+          const rawTarget = baseTempo + rawOffset;
+          targetBpm = clamp(
+            rawTarget,
+            baseTempo - variance,
+            baseTempo + variance
+          );
+        } else {
+          // Slowly draw the target back toward the base tempo.
+          targetBpm += (baseTempo - targetBpm) * 0.08;
+        }
+      }
+
+      function adjustCurrentBpm(profile) {
+        currentBpm += (targetBpm - currentBpm) * profile.smoothing;
+        currentBpm = clamp(currentBpm, 20, 400);
+      }
+
+      function playClick(isDownbeat) {
+        if (!audioContext) return;
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        const now = audioContext.currentTime;
+
+        osc.type = "square";
+        osc.frequency.setValueAtTime(isDownbeat ? 1100 : 750, now);
+
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(0.8, now + 0.002);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.12);
+      }
+
+      function updateStatusDisplays(
+        beatsPerBar = Number(beatsPerBarInput.value)
+      ) {
+        const beatWithinBar = (beatIndex % beatsPerBar) + 1;
+        currentBpmReadout.textContent = Math.round(currentBpm);
+        beatPositionReadout.textContent = isRunning ? beatWithinBar : "—";
+        targetBpmReadout.textContent = targetBpm.toFixed(1);
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+      }
+
+      // Initialize displays with defaults.
+      beatsPerBarDisplay.textContent = beatsPerBarInput.value;
+      tempoDisplay.textContent = tempoSlider.value;
+      varianceDisplay.textContent = varianceSlider.value;
+      erraticDisplay.textContent = erraticLabels[erraticSlider.value];
+      currentBpmReadout.textContent = tempoSlider.value;
+      targetBpmReadout.textContent = tempoSlider.value;
+      beatPositionReadout.textContent = "—";
+    </script>
+  </body>
+</html>
