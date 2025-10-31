@@ -1,0 +1,155 @@
+---
+title: peter middleton & james spinney - notes on blindness
+---
+
+<style>
+  #hercules-and-the-love-affair {
+    position: relative;
+    background-color: #000;
+    color: #000;
+    padding: 40px 20px;
+    min-height: 100vh;
+    font-family: serif;
+    *::selection {
+      color: #000;
+    }
+    p,
+    a {
+      color: #000;
+      position: relative;
+      z-index: 2;
+    }
+  }
+
+  #rain {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+</style>
+<section id="hercules-and-the-love-affair">
+  <canvas id="rain"></canvas>
+  <a
+    href="https://www.youtube.com/watch?v=0LoOWpWHMQw"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <h2>peter middleton & james spinney - notes on blindness</h2>
+  </a>
+  <p>
+    <strong
+      >john hull, blind at fourty-five, crests through the dark waves of grief
+      to a love of rain. his notes on denial are very resonant to me in this
+      moment.</strong
+    >
+  </p>
+  <p>I somehow feel that if I were to accept</p>
+  <p>this thing</p>
+  <p>if I were to enter into acquiescence</p>
+  <p>then I would die</p>
+  <p>
+    because it would be as if my ability to resist, my will to resist, were
+    broken
+  </p>
+  <p>on the other hand, not to accept seems futile</p>
+  <p>because what one is refusing to</p>
+  <p>acquiesce <em>in</em> is a fact.</p>
+  <p>and now what I have to face is the</p>
+  <p>thought that there is no escape</p>
+  <p>the thought that I shall now just go on</p>
+  <p>with another 20, 30, or even more years</p>
+  <p>of</p>
+  <p>this</p>
+</section>
+
+<script>
+  const canvas = document.getElementById("rain");
+  const ctx = canvas.getContext("2d");
+  const section = document.getElementById("hercules-and-the-love-affair");
+
+  function resizeCanvas() {
+    canvas.width = section.offsetWidth;
+    canvas.height = section.offsetHeight;
+  }
+
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas);
+
+  const raindrops = [];
+  const numberOfDrops = 100;
+  let isAnimating = false;
+  let animationId = null;
+
+  for (let i = 0; i < numberOfDrops; i++) {
+    raindrops.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      speed: Math.random() * 3 + 4,
+      length: Math.random() * 60 + 100,
+    });
+  }
+
+  function drawRain() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    raindrops.forEach((drop) => {
+      const gradient = ctx.createLinearGradient(
+        drop.x,
+        drop.y,
+        drop.x,
+        drop.y + drop.length
+      );
+      gradient.addColorStop(0, "rgba(255, 255, 255, 0)");
+      gradient.addColorStop(1, "rgba(255, 255, 255, 1)");
+
+      ctx.strokeStyle = gradient;
+      ctx.lineWidth = 20;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(drop.x, drop.y);
+      ctx.lineTo(drop.x, drop.y + drop.length);
+      ctx.stroke();
+
+      drop.y += drop.speed;
+
+      if (drop.y > canvas.height) {
+        drop.y = -drop.length;
+        drop.x = Math.random() * canvas.width;
+      }
+    });
+
+    if (isAnimating) {
+      animationId = requestAnimationFrame(drawRain);
+    }
+  }
+
+  drawRain();
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          isAnimating = true;
+          drawRain();
+        } else {
+          isAnimating = false;
+          if (animationId) {
+            cancelAnimationFrame(animationId);
+          }
+        }
+      });
+    },
+    { threshold: 0 }
+  );
+
+  observer.observe(section);
+
+  if (section.getBoundingClientRect().top < window.innerHeight) {
+    isAnimating = true;
+    drawRain();
+  }
+</script>
