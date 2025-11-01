@@ -255,6 +255,27 @@ description: "An intentionally unstable metronome that wobbles around a target t
         <button class="secondary" id="resetBtn">Reset feel</button>
       </div>
 
+      <div class="control" style="margin-top: 24px">
+        <label for="exportDuration">
+          Export duration (mm:ss)
+          <input
+            type="text"
+            id="exportDuration"
+            value="2:00"
+            style="width: 80px; padding: 6px 8px; font-size: 0.95rem"
+            pattern="\d{1,2}:\d{2}"
+          />
+        </label>
+      </div>
+
+      <div class="buttons">
+        <button id="exportBtn" class="secondary">Export WAV</button>
+        <span
+          id="exportStatus"
+          style="margin-left: 12px; line-height: 40px; color: #666"
+        ></span>
+      </div>
+
       <section class="status">
         <div class="status-item">
           <span class="status-label">Current bpm</span>
@@ -297,11 +318,16 @@ description: "An intentionally unstable metronome that wobbles around a target t
       };
 
       let audioContext;
-      let metronomeTimer = null;
       let isRunning = false;
       let beatIndex = 0;
       let currentBpm = Number(tempoSlider.value);
       let targetBpm = currentBpm;
+
+      // Timing variables for precise scheduling
+      let nextBeatTime = 0; // When the next beat should play (in audio context time)
+      let schedulerTimer = null;
+      const SCHEDULER_INTERVAL = 25; // How often to run the scheduler (ms)
+      const LOOKAHEAD_TIME = 0.1; // How far ahead to schedule beats (seconds)
 
       const erraticProfiles = {
         1: { changeChance: 0.14, rangeScale: 0.35, smoothing: 0.2 },
@@ -370,16 +396,23 @@ description: "An intentionally unstable metronome that wobbles around a target t
         beatIndex = 0;
         currentBpm = Number(tempoSlider.value);
         targetBpm = currentBpm;
-        scheduleNextBeat();
+
+        // Start the first beat immediately
+        nextBeatTime = audioContext.currentTime;
+
+        // Start the scheduler loop
+        scheduler();
+        schedulerTimer = setInterval(scheduler, SCHEDULER_INTERVAL);
+
         startStopBtn.textContent = "Stop";
         updateStatusDisplays();
       }
 
       function stopMetronome() {
         isRunning = false;
-        if (metronomeTimer) {
-          clearTimeout(metronomeTimer);
-          metronomeTimer = null;
+        if (schedulerTimer) {
+          clearInterval(schedulerTimer);
+          schedulerTimer = null;
         }
         beatIndex = 0;
         startStopBtn.textContent = "Start";
@@ -388,27 +421,53 @@ description: "An intentionally unstable metronome that wobbles around a target t
         targetBpmReadout.textContent = "—";
       }
 
-      function scheduleNextBeat() {
-        if (!isRunning) return;
+      function scheduler() {
+        if (!isRunning || !audioContext) return;
 
+        // Schedule all beats that fall within our lookahead window
+        while (nextBeatTime < audioContext.currentTime + LOOKAHEAD_TIME) {
+          scheduleNote(nextBeatTime);
+          advanceToNextBeat();
+        }
+      }
+
+      function scheduleNote(time) {
         const beatsPerBar = Number(beatsPerBarInput.value);
+        const isDownbeat = beatIndex % beatsPerBar === 0;
+
+        // Play the click at the precise time
+        playClick(isDownbeat, time);
+
+        // Update display when this beat actually plays
+        // We use a timeout synchronized to when the beat will actually sound
+        const displayDelay = Math.max(
+          0,
+          (time - audioContext.currentTime) * 1000
+        );
+        setTimeout(() => {
+          if (isRunning) {
+            const beatWithinBar = (beatIndex % beatsPerBar) + 1;
+            beatPositionReadout.textContent = beatWithinBar;
+          }
+        }, displayDelay);
+      }
+
+      function advanceToNextBeat() {
         const baseTempo = Number(tempoSlider.value);
         const variance = Number(varianceSlider.value);
         const erraticness = Number(erraticSlider.value);
         const profile = erraticProfiles[erraticness];
 
-        const isDownbeat = beatIndex % beatsPerBar === 0;
-        playClick(isDownbeat);
-
+        // Update BPM variations for each beat
         maybeUpdateTargetBpm(baseTempo, variance, profile);
         adjustCurrentBpm(profile);
+        updateStatusDisplays();
 
-        updateStatusDisplays(beatsPerBar);
-
-        const beatIntervalMs = Math.max(60_000 / currentBpm, 60);
+        // Calculate when the next beat should occur using the current (possibly drunk) BPM
+        const beatInterval = 60.0 / currentBpm;
+        nextBeatTime += beatInterval;
 
         beatIndex += 1;
-        metronomeTimer = setTimeout(scheduleNextBeat, beatIntervalMs);
       }
 
       function maybeUpdateTargetBpm(baseTempo, variance, profile) {
@@ -437,33 +496,34 @@ description: "An intentionally unstable metronome that wobbles around a target t
         currentBpm = clamp(currentBpm, 20, 400);
       }
 
-      function playClick(isDownbeat) {
+      function playClick(isDownbeat, time) {
         if (!audioContext) return;
         const osc = audioContext.createOscillator();
         const gain = audioContext.createGain();
-        const now = audioContext.currentTime;
+        const volume = 0.6;
 
         osc.type = "square";
-        osc.frequency.setValueAtTime(isDownbeat ? 1100 : 750, now);
+        osc.frequency.setValueAtTime(isDownbeat ? 1100 : 750, time);
 
-        gain.gain.setValueAtTime(0.0001, now);
-        gain.gain.exponentialRampToValueAtTime(0.8, now + 0.002);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+        // Use a deterministic envelope so perceived loudness stays consistent.
+        gain.gain.setValueAtTime(0, time);
+        gain.gain.linearRampToValueAtTime(volume, time + 0.005);
+        gain.gain.setValueAtTime(volume, time + 0.015);
+        gain.gain.linearRampToValueAtTime(0, time + 0.09);
 
         osc.connect(gain);
         gain.connect(audioContext.destination);
 
-        osc.start(now);
-        osc.stop(now + 0.12);
+        osc.start(time);
+        osc.stop(time + 0.12);
       }
 
       function updateStatusDisplays(
         beatsPerBar = Number(beatsPerBarInput.value)
       ) {
-        const beatWithinBar = (beatIndex % beatsPerBar) + 1;
         currentBpmReadout.textContent = Math.round(currentBpm);
-        beatPositionReadout.textContent = isRunning ? beatWithinBar : "—";
         targetBpmReadout.textContent = targetBpm.toFixed(1);
+        // Beat position is updated in scheduleNote() for better timing sync
       }
 
       function clamp(value, min, max) {
@@ -478,6 +538,216 @@ description: "An intentionally unstable metronome that wobbles around a target t
       currentBpmReadout.textContent = tempoSlider.value;
       targetBpmReadout.textContent = tempoSlider.value;
       beatPositionReadout.textContent = "—";
+
+      // Export functionality
+      const exportBtn = document.getElementById("exportBtn");
+      const exportDuration = document.getElementById("exportDuration");
+      const exportStatus = document.getElementById("exportStatus");
+
+      exportBtn.addEventListener("click", async () => {
+        await exportToWav();
+      });
+
+      async function exportToWav() {
+        // Parse duration
+        const durationStr = exportDuration.value;
+        const match = durationStr.match(/^(\d{1,2}):(\d{2})$/);
+        if (!match) {
+          exportStatus.textContent = "Invalid duration format. Use mm:ss";
+          setTimeout(() => {
+            exportStatus.textContent = "";
+          }, 3000);
+          return;
+        }
+
+        const minutes = parseInt(match[1]);
+        const seconds = parseInt(match[2]);
+        const totalSeconds = minutes * 60 + seconds;
+
+        if (totalSeconds <= 0 || totalSeconds > 600) {
+          exportStatus.textContent = "Duration must be between 0:01 and 10:00";
+          setTimeout(() => {
+            exportStatus.textContent = "";
+          }, 3000);
+          return;
+        }
+
+        exportStatus.textContent = "Generating...";
+        exportBtn.disabled = true;
+
+        try {
+          // Create offline context
+          const sampleRate = 44100;
+          const offlineContext = new OfflineAudioContext(
+            2,
+            sampleRate * totalSeconds,
+            sampleRate
+          );
+
+          // Pre-calculate all beats
+          const beats = calculateAllBeats(totalSeconds);
+
+          // Schedule all beats in the offline context
+          beats.forEach((beat) => {
+            renderClick(offlineContext, beat.isDownbeat, beat.time);
+          });
+
+          // Render the audio
+          const buffer = await offlineContext.startRendering();
+
+          // Convert to WAV and download
+          const wav = audioBufferToWav(buffer);
+          const blob = new Blob([wav], { type: "audio/wav" });
+          const url = URL.createObjectURL(blob);
+
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `drunk_metronome_${
+            tempoSlider.value
+          }bpm_${durationStr.replace(":", "m")}s.wav`;
+          a.click();
+
+          URL.revokeObjectURL(url);
+          exportStatus.textContent = "Export complete!";
+          setTimeout(() => {
+            exportStatus.textContent = "";
+          }, 3000);
+        } catch (error) {
+          console.error("Export failed:", error);
+          exportStatus.textContent = "Export failed";
+          setTimeout(() => {
+            exportStatus.textContent = "";
+          }, 3000);
+        } finally {
+          exportBtn.disabled = false;
+        }
+      }
+
+      function calculateAllBeats(durationSeconds) {
+        const beats = [];
+        const beatsPerBar = Number(beatsPerBarInput.value);
+        const baseTempo = Number(tempoSlider.value);
+        const variance = Number(varianceSlider.value);
+        const erraticness = Number(erraticSlider.value);
+        const profile = erraticProfiles[erraticness];
+
+        let currentTime = 0;
+        let beatIdx = 0;
+        let bpm = baseTempo;
+        let target = baseTempo;
+
+        while (currentTime < durationSeconds) {
+          const isDownbeat = beatIdx % beatsPerBar === 0;
+          beats.push({
+            time: currentTime,
+            isDownbeat: isDownbeat,
+          });
+
+          // Calculate next BPM (same logic as the live metronome)
+          if (variance === 0) {
+            target = baseTempo;
+          } else {
+            if (Math.random() < profile.changeChance) {
+              const range = variance * profile.rangeScale;
+              const rawOffset = (Math.random() * 2 - 1) * range;
+              const rawTarget = baseTempo + rawOffset;
+              target = clamp(
+                rawTarget,
+                baseTempo - variance,
+                baseTempo + variance
+              );
+            } else {
+              target += (baseTempo - target) * 0.08;
+            }
+          }
+
+          bpm += (target - bpm) * profile.smoothing;
+          bpm = clamp(bpm, 20, 400);
+
+          const beatInterval = 60.0 / bpm;
+          currentTime += beatInterval;
+          beatIdx += 1;
+        }
+
+        return beats;
+      }
+
+      function renderClick(context, isDownbeat, time) {
+        const osc = context.createOscillator();
+        const gain = context.createGain();
+        const volume = 0.6;
+
+        osc.type = "square";
+        osc.frequency.setValueAtTime(isDownbeat ? 1100 : 750, time);
+
+        gain.gain.setValueAtTime(0, time);
+        gain.gain.linearRampToValueAtTime(volume, time + 0.005);
+        gain.gain.setValueAtTime(volume, time + 0.015);
+        gain.gain.linearRampToValueAtTime(0, time + 0.09);
+
+        osc.connect(gain);
+        gain.connect(context.destination);
+
+        osc.start(time);
+        osc.stop(time + 0.12);
+      }
+
+      function audioBufferToWav(buffer) {
+        const length = buffer.length * buffer.numberOfChannels * 2 + 44;
+        const arrayBuffer = new ArrayBuffer(length);
+        const view = new DataView(arrayBuffer);
+        const channels = [];
+        let offset = 0;
+        let pos = 0;
+
+        // Write WAV header
+        const setUint16 = (data) => {
+          view.setUint16(pos, data, true);
+          pos += 2;
+        };
+        const setUint32 = (data) => {
+          view.setUint32(pos, data, true);
+          pos += 4;
+        };
+
+        // RIFF identifier
+        setUint32(0x46464952); // "RIFF"
+        setUint32(length - 8); // file length minus RIFF header
+        setUint32(0x45564157); // "WAVE"
+
+        // fmt sub-chunk
+        setUint32(0x20746d66); // "fmt "
+        setUint32(16); // size
+        setUint16(1); // PCM
+        setUint16(buffer.numberOfChannels);
+        setUint32(buffer.sampleRate);
+        setUint32(buffer.sampleRate * 2 * buffer.numberOfChannels); // avg bytes/sec
+        setUint16(buffer.numberOfChannels * 2); // block align
+        setUint16(16); // bits per sample
+
+        // data sub-chunk
+        setUint32(0x61746164); // "data"
+        setUint32(length - pos - 4);
+
+        // write interleaved data
+        const numberOfChannels = buffer.numberOfChannels;
+        for (let i = 0; i < numberOfChannels; i++) {
+          channels.push(buffer.getChannelData(i));
+        }
+
+        while (pos < length) {
+          for (let i = 0; i < numberOfChannels; i++) {
+            // interleave channels
+            let sample = Math.max(-1, Math.min(1, channels[i][offset])); // clamp
+            sample = sample < 0 ? sample * 0x8000 : sample * 0x7fff; // scale to 16-bit
+            view.setInt16(pos, sample, true);
+            pos += 2;
+          }
+          offset++;
+        }
+
+        return arrayBuffer;
+      }
     </script>
   </body>
 </html>
