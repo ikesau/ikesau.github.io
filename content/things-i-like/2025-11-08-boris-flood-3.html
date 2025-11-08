@@ -1,0 +1,80 @@
+---
+title: boris - flood 3
+---
+
+<section id="flooded">
+  <style>
+    #flooded {
+      outline: 4px solid blue;
+      outline-offset: -4px;
+      --time: 16s;
+
+      svg {
+        display: block;
+        width: calc(100% + 8px);
+        position: relative;
+        left: -4px;
+      }
+
+      .wave1 {
+        animation: move var(--time) linear infinite;
+      }
+      .wave2 {
+        animation: move calc(var(--time) * 0.875) linear infinite;
+      }
+
+      svg + p {
+        margin-top: 0;
+      }
+
+      a,
+      p {
+        color: blue;
+      }
+      h2 {
+        margin-bottom: 0;
+      }
+    }
+
+    @keyframes move {
+      to {
+        transform: translateX(-100px);
+      }
+    }
+  </style>
+
+  <a
+    href="https://www.youtube.com/watch?v=8XpmjXxs6dc"
+    target="_blank"
+    rel="noopener noreferer"
+  >
+    <h2>boris - flood 3</h2>
+  </a>
+  <svg viewBox="0 0 400 100">
+    <path
+      class="wave1"
+      d="M0,50 Q25,25 50,50 T100,50 T150,50 T200,50 T250,50 T300,50 T350,50 T400,50 T450,50 T500,50"
+      stroke="blue"
+      fill="none"
+      stroke-width="2"
+    />
+    <path
+      class="wave2"
+      d="M0,50 Q25,25 50,50 T100,50 T150,50 T200,50 T250,50 T300,50 T350,50 T400,50 T450,50 T500,50"
+      stroke="blue"
+      fill="none"
+      stroke-width="2"
+    />
+  </svg>
+  <p>i love boris.</p>
+  <p>
+    when this track descends into sludgey perdition, they play a cool rhythmic
+    trick. the guitar phrase is 14 beats long, but the drums play a 16 beat
+    phrase and they cycle around, out of phase, until they unite again in
+    unison.
+  </p>
+  <p>
+    if you listen to the studio version with headphones, there's also a full
+    stereo pan of the squealing lead guitar. ugggh i love it.
+  </p>
+</section>
