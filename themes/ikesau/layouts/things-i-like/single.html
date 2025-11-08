@@ -1,3 +1,6 @@
+{{ define "extra-css" }}
+<link rel="stylesheet" href="/css/thing-i-like.css">
+{{ end }}
 {{ define "main" }}
 <article id="{{ .Title | urlize }}">{{ .Content }}</article>
 {{ end }}
