@@ -1,5 +1,8 @@
 {{ define "extra-css" }}
 <link rel="stylesheet" href="/css/blog.css">
+{{ if .Params.extra_css }}
+<link rel="stylesheet" href="/css/{{.Params.extra_css}}.css">
+{{ end }}
 {{ end }}
 
 {{ define "extra-js" }}

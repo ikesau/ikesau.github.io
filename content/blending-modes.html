@@ -1,0 +1,384 @@
+---
+layout: blank
+---
+
+<section id="blending-modes-tool">
+  <style>
+    #blending-modes-tool {
+      --blend-mode: screen;
+      .blend-mode-heading {
+        margin: 24px 0;
+      }
+
+      #inline-horizontal-gradient-square {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background-image: linear-gradient(90deg, black, white);
+        margin-bottom: -2px;
+        outline: 1px solid black;
+      }
+      #inline-vertical-gradient-square {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background-image: linear-gradient(0deg, black, white);
+        margin-bottom: -2px;
+        outline: 1px solid black;
+      }
+      .punnet {
+        display: grid;
+        grid-gap: 16px;
+        grid-template-columns: 64px 256px;
+        grid-template-rows: auto auto 50px;
+        grid-template-areas: "range-a square" "range-a square" ". range-b";
+
+        .strip-container--a {
+          grid-area: range-a;
+          writing-mode: vertical-lr;
+          .strip {
+            background-image: linear-gradient(0deg, black, white);
+            width: 32px;
+            height: 100%;
+          }
+          .value-slider {
+            height: 100%;
+          }
+        }
+        .square-container {
+          grid-area: square;
+          height: 256px;
+          width: 256px;
+        }
+        .strip-container--b {
+          grid-area: range-b;
+          .strip {
+            background-image: linear-gradient(90deg, black, white);
+            height: 32px;
+            width: 100%;
+          }
+          .value-slider {
+            width: 100%;
+          }
+        }
+      }
+
+      .strip {
+        outline: 1px solid black;
+      }
+
+      .square {
+        position: absolute;
+        width: 256px;
+        height: 256px;
+        outline: 1px solid black;
+      }
+      #square-a {
+        --a: 0.5;
+        --content: "";
+        background-image: linear-gradient(0deg, black, white);
+      }
+      /* Horizontal line */
+      #square-a::after {
+        content: var(--content);
+        width: 100%;
+        height: 1px;
+        background: tomato;
+        position: absolute;
+        left: 0;
+        top: calc(100% * (1 - var(--a)));
+        z-index: 2;
+      }
+      #square-b {
+        background-image: linear-gradient(90deg, black, white);
+        transition: 200ms;
+        mix-blend-mode: var(--blend-mode);
+      }
+      #square-b-reticle {
+        --b: 0.5;
+        transition: 200ms;
+      }
+      /* Vertical line, on separate div so that it doesn't blend */
+      #square-b-reticle::after {
+        content: "";
+        height: 100%;
+        width: 1px;
+        background: tomato;
+        position: absolute;
+        left: calc(100% * var(--b));
+        top: 0;
+        z-index: 2;
+      }
+      .pixel-equation {
+        display: flex;
+        align-items: center;
+        margin-top: 32px;
+        math {
+          margin: 0 16px;
+        }
+      }
+      .equation-square {
+        width: 100px;
+        height: 100px;
+        outline: 1px solid black;
+      }
+      .equation-square-a {
+        background-color: hsl(0 0% 50%);
+      }
+      .equation-square-b {
+        background-color: hsl(0 0% 50%);
+      }
+      .equation-squares {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        .equation-square {
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
+        .equation-square-b {
+          mix-blend-mode: var(--blend-mode);
+        }
+      }
+    }
+  </style>
+  <p>Here, two black-to-white gradients are being blended with one another.</p>
+  <p>
+    The bottom gradient goes vertically
+    <span id="inline-vertical-gradient-square"></span> and the top goes
+    horizontally
+    <span id="inline-horizontal-gradient-square"></span>
+  </p>
+  <p>You can click "Separated" to see them side-by-side instead of overlaid.</p>
+  <p>
+    Click "Solid colour background" to replace the background gradient with a
+    single value. This is useful to get a sense for how more complicated
+    blending modes work.
+  </p>
+  <div class="blend-mode-heading">
+    <label for="blend-mode-select">Blending mode</label>
+    <select id="blend-mode-select">
+      <option>normal</option>
+      <option>multiply</option>
+      <option selected>screen</option>
+      <option>overlay</option>
+      <option>darken</option>
+      <option>lighten</option>
+      <option>color-dodge</option>
+      <option>color-burn</option>
+      <option>hard-light</option>
+      <option>soft-light</option>
+      <option>difference</option>
+      <option>exclusion</option>
+      <option>hue</option>
+      <option>saturation</option>
+      <option>color</option>
+      <option>luminosity</option>
+      <option>plus-lighter</option>
+    </select>
+    <div>
+      <label for="toggle-transform">Separated</label>
+      <input
+        id="toggle-transform"
+        type="checkbox"
+        onclick="toggleTransform()"
+      />
+    </div>
+    <div>
+      <label for="set-a-background">Solid colour background</label>
+      <input id="set-a-background" type="checkbox" onclick="setABackground()" />
+    </div>
+  </div>
+
+  <div class="punnet">
+    <div class="strip-container strip-container--a">
+      <input
+        class="value-slider"
+        aria-label="A"
+        type="range"
+        min="0"
+        max="1"
+        step="0.00390625"
+        value="0.5"
+        id="range-a"
+      />
+      <div class="strip"></div>
+    </div>
+
+    <div class="square-container">
+      <div class="square" id="square-a"></div>
+      <div class="square" id="square-b"></div>
+      <div class="square" id="square-b-reticle"></div>
+    </div>
+
+    <div class="strip-container strip-container--b">
+      <div class="strip"></div>
+
+      <input
+        class="value-slider"
+        aria-label="B"
+        type="range"
+        min="0"
+        max="1"
+        step="0.00390625"
+        value="0.5"
+        id="range-b"
+      />
+    </div>
+  </div>
+  <div class="pixel-equation">
+    <div class="equation-square equation-square-a"></div>
+    <math>
+      <mrow><mo>&times;</mo></mrow>
+    </math>
+    <div class="equation-square equation-square-b"></div>
+    <math>
+      <mrow><mo>&equals;</mo></mrow>
+    </math>
+    <div class="equation-squares">
+      <div class="equation-square equation-square-a"></div>
+      <div class="equation-square equation-square-b"></div>
+    </div>
+  </div>
+  <script>
+    const blendModeSelect = document.getElementById("blend-mode-select");
+    const rangeA = document.getElementById("range-a");
+    const rangeB = document.getElementById("range-b");
+    const squareA = document.getElementById("square-a");
+    const squareB = document.getElementById("square-b");
+    const reticle = document.getElementById("square-b-reticle");
+    const equationASquares = document.querySelectorAll(".equation-square-a");
+    const equationBSquares = document.querySelectorAll(".equation-square-b");
+    const equationSquareContainer = document.querySelector(".equation-squares");
+    const lockCheckbox = document.getElementById("set-a-background");
+    const toggleTransformCheckbox = document.getElementById("toggle-transform");
+
+    function updateSquare() {
+      // A is inverted due to range input shenanigans
+      const aValue = 1 - rangeA.value;
+      squareB.style.mixBlendMode = blendModeSelect.value;
+      squareA.style.setProperty("--a", aValue);
+      reticle.style.setProperty("--b", rangeB.value);
+      equationSquareContainer.style.setProperty(
+        "--blend-mode",
+        blendModeSelect.value
+      );
+      setABackground();
+      equationASquares.forEach((square) => {
+        square.style.backgroundColor = `hsl(0 0% ${aValue * 100}%)`;
+      });
+      equationBSquares.forEach((square) => {
+        square.style.backgroundColor = `hsl(0 0% ${rangeB.value * 100}%)`;
+      });
+    }
+
+    // Set square A to a solid colour instead of a gradient
+    function setABackground() {
+      // A is inverted due to range input shenanigans
+      const aValue = 1 - rangeA.value;
+
+      if (lockCheckbox.checked) {
+        squareA.style.backgroundImage = "none";
+        squareA.style.backgroundColor = `hsl(0 0% ${aValue * 100}%)`;
+        squareA.style.setProperty("--content", "none");
+      } else {
+        squareA.style.backgroundImage = "linear-gradient(0deg, black, white)";
+        squareA.style.setProperty("--content", "");
+      }
+    }
+
+    function toggleTransform() {
+      if (toggleTransformCheckbox.checked) {
+        squareB.style.transform = "translateX(100%)";
+        reticle.style.transform = "translateX(100%)";
+      } else {
+        squareB.style.transform = "translateX(0)";
+        reticle.style.transform = "translateY(0)";
+      }
+    }
+
+    blendModeSelect.addEventListener("change", updateSquare);
+    rangeA.addEventListener("input", updateSquare);
+    rangeB.addEventListener("input", updateSquare);
+  </script>
+</section>
+
+<!-- <script>
+        const DESCRIPTIONS = {
+      normal: "",
+      multiply: "",
+      screen: "",
+      overlay: "",
+      darken: "",
+      lighten: "",
+      "color-dodge": "",
+      "color-burn": "",
+      "hard-light": "",
+      "soft-light": "",
+      difference: "",
+      exclusion: "",
+      hue: "",
+      saturation: "",
+      "color-burn": "",
+      luminosity: "",
+    };
+    function makeMathjaxRepresentation(a, b) {
+      const shortA = String(a).slice(0, 5);
+      const shortB = String(b).slice(0, 5);
+      const shortAInverse = String(1 - a).slice(0, 5);
+      const shortBInverse = String(1 - b).slice(0, 5);
+      const shortABProduct = String((1 - a) * (1 - b)).slice(0, 5);
+      const shortC = String(1 - (1 - a) * (1 - b)).slice(0, 5);
+
+      return `<math>
+          <mtable columnalign="right center left">
+            <mtr>
+              <mtd>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>-</mo>
+                  <mo>(</mo>
+                  <mn>1</mn>
+                  <mo>-</mo>
+                  <mi>${shortA}</mi>
+                  <mo>)</mo>
+                  <mo>&times;</mo>
+                  <mo>(</mo>
+                  <mn>1</mn>
+                  <mo>-</mo>
+                  <mi>${shortB}</mi>
+                  <mo>)</mo>
+                </mrow>
+              </mtd>
+              <mtd><mo>=</mo></mtd>
+              <mtd><mi>${shortC}</mi></mtd>
+            </mtr>
+            <mtr>
+              <mtd>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>-</mo>
+                  <mi>${shortAInverse}</mi>
+                  <mo>&times;</mo>
+                  <mi>${shortBInverse}</mi>
+                </mrow>
+              </mtd>
+              <mtd><mo>=</mo></mtd>
+              <mtd><mi>${shortC}</mi></mtd>
+            </mtr>
+            <mtr>
+              <mtd>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>-</mo>
+                  <mi>${shortABProduct}</mi>
+                </mrow>
+              </mtd>
+              <mtd><mo>=</mo></mtd>
+              <mtd><mi>${shortC}</mi></mtd>
+          </mtable>
+        </math>`;
+    }
+    
+  </script> -->

@@ -19,13 +19,14 @@ layout: "blank"
       margin: 0;
     }
     .darkness {
-      background-image: url(/images/svg_noise/300_3.svg);
+      background-image: url(/images/300_3.svg);
       width: 100svw;
       height: 100svh;
       mix-blend-mode: darken;
       background-color: #000;
       background-blend-mode: exclusion;
       filter: grayscale(100%);
+      overflow: hidden;
     }
     .spotlight {
       position: absolute;
@@ -75,11 +76,11 @@ layout: "blank"
     const height = h2.offsetHeight;
     const x = Math.min(
       window.innerWidth - width,
-      Math.random() * window.innerWidth,
+      Math.random() * window.innerWidth
     );
     const y = Math.min(
       window.innerHeight - height,
-      Math.random() * window.innerHeight,
+      Math.random() * window.innerHeight
     );
     h2.style.left = `${x}px`;
     h2.style.top = `${y}px`;

@@ -1,0 +1,42 @@
+---
+layout: blank
+---
+
+<style>
+  body,
+  #stage {
+    width: 100svw;
+    height: 100svh;
+    max-width: unset;
+    padding: 0;
+    overflow: hidden;
+  }
+  #hello {
+    font-size: 3rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  #darkness {
+    width: 100svw;
+    height: 100svh;
+    background-image: url(/images/300_3.svg);
+  }
+  #spotlight {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    background-image: radial-gradient(circle, #fff 20%, #000 50%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+</style>
+<div id="stage">
+  <span id="hello"><3</span>
+  <div id="darkness">
+    <div id="spotlight"></div>
+  </div>
+</div>

@@ -1,0 +1,142 @@
+#grainy-spotlight {
+  --square-size: 100px;
+
+  details {
+    margin: 0 -24px;
+    border: 1px solid #222;
+    padding: 16px;
+  }
+
+  details summary {
+    font-style: italic;
+  }
+
+  iframe {
+    width: 100%;
+    height: 500px;
+    border: 1px solid #000;
+  }
+
+  ul {
+    list-style: square;
+  }
+
+  li {
+    margin-bottom: 0.5em;
+  }
+
+  .pre {
+    display: inline;
+    text-wrap: nowrap;
+    font-family: monospace;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 0.2em 0.4em;
+    border-radius: 0.5em;
+  }
+
+  .inline-button {
+    background: none;
+    border: 1px solid #e10000;
+    color: #e10000;
+    font-size: 1rem;
+  }
+
+  .inline-button:hover {
+    cursor: pointer;
+    filter: brightness(0.7);
+  }
+
+  .pixel-example {
+    display: grid;
+    grid-template-columns: repeat(6, auto);
+    align-items: center;
+    justify-content: center;
+    gap: 12px 16px;
+    margin-bottom: 16px;
+  }
+
+  .pixel-example .square {
+    width: var(--square-size);
+    height: var(--square-size);
+  }
+
+  .pixel-example .square-slider-container {
+    width: var(--square-size);
+    height: var(--square-size);
+    position: relative;
+  }
+
+  .pixel-example input {
+    width: var(--square-size);
+    margin: 0;
+  }
+
+  #all-blend-modes-example math {
+    font-size: 60px;
+    position: relative;
+    top: -10px;
+  }
+
+  #blendMode {
+    border: 1px solid black;
+    border-radius: 0;
+    background-color: transparent;
+    margin-top: 16px;
+    font-size: 1.5rem;
+  }
+
+  #blendMode:hover {
+    background-color: #f5f5f5;
+  }
+
+  #blendMode option {
+    font-size: 1rem;
+  }
+
+  #math-ml {
+    display: block;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .blend-formula-block {
+    display: block;
+    font-size: 1.5rem;
+    margin: 16px 0;
+  }
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(var(--square-size));
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+@media (max-width: 560px) {
+  #grainy-spotlight {
+    --square-size: 64px;
+
+    .pixel-example {
+      gap: 8px 10px;
+    }
+
+    .pixel-example math {
+      font-size: 28px;
+    }
+
+    #blendMode {
+      font-size: 1.1rem;
+    }
+
+    #all-blend-modes-example math {
+      font-size: 40px;
+    }
+  }
+}

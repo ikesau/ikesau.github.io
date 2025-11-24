@@ -1,0 +1,604 @@
+---
+title: making a grainy spotlight effect with CSS
+extra_css: "grainy-spotlight"
+---
+
+<section id="grainy-spotlight">
+  <script>
+    const $$ = document.querySelector.bind(document);
+    const $ = document.querySelectorAll.bind(document);
+  </script>
+  <iframe src="/spotlight"></iframe>
+  <p>
+    I first saw this on
+    <a
+      href="https://hakushihasegawa.com/"
+      target="_blank"
+      rel="noreferrer noopener"
+      >Hakushi Hasegawa's website</a
+    ><sup aria-labelledby="hakushi-hasegawa-video">1</sup> and after a little
+    digging around in the source, saw that it was implemented with a shader and
+    three.js
+  </p>
+  <p>
+    But I had a hunch that it might be possible with CSS blending modes. Not
+    because I fully understood them, but just because it
+    <em>seemed</em> like the sort of thing they're made for.
+  </p>
+  <p>
+    And as you can see, my hunch was correct, but as I write this sentence I
+    still don't completely understand why.
+  </p>
+  <p>
+    They've been
+    <a
+      href="https://css-tricks.com/almanac/properties/m/mix-blend-mode/"
+      target="_blank"
+      rel="noreferrer noopener"
+      >explained</a
+    >
+    <a
+      href="https://helpx.adobe.com/photoshop/using/blending-modes.html"
+      target="_blank"
+      rel="noreferrer noopener"
+      >a</a
+    >
+    <a
+      href="https://www.youtube.com/watch?v=F7_kaTP7_W4"
+      target="_blank"
+      rel="noreferrer noopener"
+      >million</a
+    >
+    <a
+      href="https://css-tricks.com/basics-css-blend-modes/"
+      target="_blank"
+      rel="noreferrer noopener"
+      >times</a
+    >
+    by other people, but it's an open secret that blog posts like this are for
+    me, not you, so here we go again:
+  </p>
+  <h3>What actually <em>are</em> blending modes?</h3>
+  <p>
+    In a black and white image, every pixel can be represented as a value
+    between 0 and 1.
+  </p>
+  <p>0 is fully black. 1 is fully white.</p>
+  <p>
+    Blending modes are rules for what should happen when you combine two of
+    these numbers. For instance, the <span class="pre">darken</span> mode takes
+    the lower of the two.
+  </p>
+  <p>
+    Or the <span class="pre">multiply</span> blending mode, which can be written
+    as:
+  </p>
+  <math>
+    <mrow>
+      <mi>A</mi>
+      <mo>&times;</mo>
+      <mi>B</mi>
+      <mo>=</mo>
+      <mi>C</mi>
+    </mrow>
+  </math>
+  <p>where</p>
+  <ul>
+    <li>
+      <math><mo>A</mo></math> is the base pixel value
+    </li>
+    <li>
+      <math>
+        <mo>B</mo>
+      </math>
+      is the blend pixel value (the one on top with the blending mode set)
+    </li>
+    <li>
+      <math>
+        <mo>C</mo>
+      </math>
+      is the output
+    </li>
+  </ul>
+  <p>
+    If you have one pixel that is 0.5 (medium gray) and another that is 0.7
+    (light gray) and you blend them together with the
+    <span class="pre">multiply</span> mode, you'll get a pixel that is 0.35.
+  </p>
+  <div id="simple-multiply-example" class="pixel-example">
+    <div style="background-color: hsl(0 0% 50%)" class="square"></div>
+    <math>
+      <mrow>
+        <mo>&times;</mo>
+      </mrow>
+    </math>
+    <div style="background-color: hsl(0 0% 70%)" class="square"></div>
+    <math>
+      <mrow>
+        <mo>&equals;</mo>
+      </mrow>
+    </math>
+    <div class="square-slider-container">
+      <div
+        style="background-color: hsl(0 0% 50%); position: absolute"
+        class="square"
+      ></div>
+      <div
+        style="
+          background-color: hsl(0 0% 70%);
+          position: absolute;
+          animation: slide 4s linear paused infinite;
+          mix-blend-mode: multiply;
+        "
+        class="square"
+      ></div>
+    </div>
+    <script>
+      const topSquare = $$(
+        "#simple-multiply-example .square-slider-container .square:last-child"
+      );
+      function toggleMultiplyAnimation() {
+        topSquare.style.animationPlayState =
+          topSquare.style.animationPlayState === "running"
+            ? "paused"
+            : "running";
+        $$("#toggleBlendModeButton").style.display = "inline-block";
+      }
+      function toggleBlendMode() {
+        topSquare.style.mixBlendMode =
+          topSquare.style.mixBlendMode === "multiply" ? "normal" : "multiply";
+      }
+    </script>
+  </div>
+  <p>
+    And to be clear, this isn't just 3 divs with 3 different hexcodes. The third
+    square you see is two divs stacked on top of one another with
+    <span class="pre">mix-blend-mode: multiply</span>
+    set on the top one.
+  </p>
+  <p>
+    need proof?
+    <button
+      class="inline-button"
+      id="toggleMultiplyAnimationButton"
+      onclick="toggleMultiplyAnimation()"
+    >
+      Toggle animation
+    </button>
+    <button
+      class="inline-button"
+      id="toggleBlendModeButton"
+      onclick="toggleBlendMode()"
+      style="display: none"
+    >
+      Toggle blend mode
+    </button>
+  </p>
+  <p>
+    One thing you might take away from <span class="pre">multiply</span> is that
+    it's not possible to get a lighter value than the values going into it. A
+    fraction of a fraction is always smaller than the fraction itself.
+  </p>
+  <details>
+    <summary>
+      How about the other blending modes? Expand for more details than the
+      average person wants to know
+    </summary>
+    <label for="blendMode">Blend mode:</label>
+    <select id="blendMode">
+      <option>multiply</option>
+      <option selected>screen</option>
+      <option>overlay</option>
+      <option>darken</option>
+      <option>lighten</option>
+      <option>color-dodge</option>
+      <option>color-burn</option>
+      <option>hard-light</option>
+      <option>soft-light</option>
+      <option>difference</option>
+      <option>exclusion</option>
+    </select>
+    <math id="formula" class="blend-formula-block"></math>
+    <p id="description"></p>
+    <div id="all-blend-modes-example" class="pixel-example">
+      <math style="margin-right: -16px">
+        <mi>f</mi>
+        <mo>(</mo>
+      </math>
+      <div>
+        <div
+          class="square"
+          id="square-a"
+          style="background-color: hsl(0 0% 50%)"
+        ></div>
+        <label for="slider-a" class="visually-hidden"
+          >Base layer brightness (A)</label
+        >
+        <input
+          type="range"
+          id="slider-a"
+          min="0"
+          max="255"
+          value="128"
+          aria-label="Base layer brightness (A)"
+        />
+      </div>
+      <math style="top: 10px">
+        <mo>,</mo>
+      </math>
+      <div>
+        <div
+          class="square"
+          id="square-b"
+          style="background-color: hsl(0 0% 50%)"
+        ></div>
+        <label for="slider-b" class="visually-hidden"
+          >Blend layer brightness (B)</label
+        >
+        <input
+          type="range"
+          id="slider-b"
+          min="0"
+          max="255"
+          value="128"
+          aria-label="Blend layer brightness (B)"
+        />
+      </div>
+      <math>
+        <mo>)</mo>
+        <mo>=</mo>
+      </math>
+      <div
+        class="square-slider-container"
+        style="margin-left: -32px; align-self: start"
+      >
+        <div
+          id="square-a-blend"
+          style="background-color: hsl(0 0% 50%); position: absolute"
+          class="square"
+        ></div>
+        <div
+          id="square-b-blend"
+          style="background-color: hsl(0 0% 50%); mix-blend-mode: multiply"
+          class="square"
+        ></div>
+      </div>
+    </div>
+
+    <script>
+      // prettier-ignore
+      const blendModes = {
+      "multiply": {
+        formula: "<math><mi>A</mi><mo>×</mo><mi>B</mi></math>",
+        description: "Multiplies the values of both layers together. Commonly used for creating natural-looking shadows and darkening effects."
+      },
+      "darken": {
+        formula: "<math><mi>min</mi><mo>(</mo><mi>A</mi><mo>,</mo><mi>B</mi><mo>)</mo></math>",
+        description: "Retains the darkest pixels of both layers by comparing values and keeping the minimum. Useful for preserving shadows or selectively darkening an image without affecting areas that are already dark."
+      },
+      "color-burn": {
+        formula: "<math><mn>1</mn><mo>−</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>A</mi></mrow><mi>B</mi></mfrac></math>",
+        description: "Divides the inverted bottom layer by the top layer, then inverts the result. Creates dramatic, high-contrast darkening with intensified shadows and can result in pure black more easily than multiply. Useful for creating intense, moody effects."
+      },
+      "linear-burn": {
+        formula: "<math><mi>A</mi><mo>+</mo><mi>B</mi><mo>−</mo><mn>1</mn></math>",
+        description: "Adds the values of both layers and subtracts 1. Results in darker tones than multiply — produces black whenever the sum of both layers is less than or equal to 1. Creates very aggressive darkening with deep shadows."
+      },
+      "lighten": {
+        formula: "<math><mi>max</mi><mo>(</mo><mi>A</mi><mo>,</mo><mi>B</mi><mo>)</mo></math>",
+        description: "Retains the lightest pixels of both layers by comparing values and keeping the maximum. Useful for preserving highlights or selectively lightening an image without affecting areas that are already light."
+      },
+      "screen": {
+        formula: "<math><mn>1</mn><mo>−</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>A</mi><mo>)</mo><mo>×</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>B</mi><mo>)</mo></math>",
+        description: "The pixels are inverted, multiplied, and inverted again. The result is always lighter than both inputs (opposite of multiply.) Screening with black (0) leaves the value unchanged, while screening with anything lighter brightens it."
+      },
+      "color-dodge": {
+        formula: "<math><mfrac><mi>A</mi><mrow><mn>1</mn><mo>−</mo><mi>B</mi></mrow></mfrac></math>",
+        description: "Divides the bottom layer by the inverted top layer. Creates dramatic brightening with blown-out highlights. Lighter blend values have stronger effects. Useful for creating intense light effects, glows, and highlights, though it can easily produce pure white."
+      },
+      "overlay": {
+        formula: "<math><mrow><mo>{</mo><mtable><mtr><mtd><mn>1</mn><mo>−</mo><mo>(</mo><mn>1</mn><mo>−</mo><mn>2</mn><mo>(</mo><mi>A</mi><mo>−</mo><mn>0.5</mn><mo>)</mo><mo>)</mo><mo>×</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>B</mi><mo>)</mo></mtd><mtd><mtext>if</mtext><mi>A</mi><mo>&gt;</mo><mn>0.5</mn></mtd></mtr><mtr><mtd><mn>2</mn><mo>×</mo><mi>A</mi><mo>×</mo><mi>B</mi></mtd><mtd><mtext>if</mtext><mi>A</mi><mo>≤</mo><mn>0.5</mn></mtd></mtr></mtable></mrow></math>",
+        description: "Combines multiply and screen based on the base layer's brightness. Dark areas become darker and light areas become lighter, increasing overall contrast. Preserves the base layer's tonal range while adding the blend layer's contrast."
+      },
+      "soft-light": {
+        formula: "<math><mrow><mo>{</mo><mtable><mtr><mtd><mn>1</mn><mo>−</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>A</mi><mo>)</mo><mo>×</mo><mo>(</mo><mn>1</mn><mo>−</mo><mo>(</mo><mi>B</mi><mo>−</mo><mn>0.5</mn><mo>)</mo><mo>)</mo></mtd><mtd><mtext>if</mtext><mi>B</mi><mo>&gt;</mo><mn>0.5</mn></mtd></mtr><mtr><mtd><mi>A</mi><mo>×</mo><mo>(</mo><mi>B</mi><mo>+</mo><mn>0.5</mn><mo>)</mo></mtd><mtd><mtext>if</mtext><mi>B</mi><mo>≤</mo><mn>0.5</mn></mtd></mtr></mtable></mrow></math>",
+        description: "Applies a subtle lighting effect based on the blend layer's brightness. Values above 0.5 gently lighten, while values below 0.5 gently darken."
+      },
+      "hard-light": {
+        formula: "<math><mrow><mo>{</mo><mtable><mtr><mtd><mn>1</mn><mo>−</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>A</mi><mo>)</mo><mo>×</mo><mo>(</mo><mn>1</mn><mo>−</mo><mn>2</mn><mo>×</mo><mo>(</mo><mi>B</mi><mo>−</mo><mn>0.5</mn><mo>)</mo><mo>)</mo></mtd><mtd><mtext>if</mtext><mi>B</mi><mo>&gt;</mo><mn>0.5</mn></mtd></mtr><mtr><mtd><mi>A</mi><mo>×</mo><mn>2</mn><mo>×</mo><mi>B</mi></mtd><mtd><mtext>if</mtext><mi>B</mi><mo>≤</mo><mn>0.5</mn></mtd></mtr></mtable></mrow></math>",
+        description: "Similar to overlay but with the roles reversed. It combines multiply and screen based on the blend layer's brightness instead of the base layer's. Creates strong lighting effects with more intense contrast than overlay."
+      },
+      "difference": {
+        formula: "<math><mo>|</mo><mi>A</mi><mo>−</mo><mi>B</mi><mo>|</mo></math>",
+        description: "Subtracts one layer from the other and takes the absolute value, always producing a positive result. Identical pixels become black (0), while maximum difference produces white (1)."
+      },
+      "exclusion": {
+        formula: "<math><mn>0.5</mn><mo>−</mo><mn>2</mn><mo>×</mo><mo>(</mo><mi>A</mi><mo>−</mo><mn>0.5</mn><mo>)</mo><mo>×</mo><mo>(</mo><mi>B</mi><mo>−</mo><mn>0.5</mn><mo>)</mo></math>",
+        description: "Creates an effect similar to difference but with reduced contrast and a softer appearance. The formula is centered around 0.5, so identical mid-gray values (0.5) remain unchanged, while differences produce lighter or darker results without the harsh extremes of difference mode."
+      }
+    }
+
+      const blendModeSelect = $$("#blendMode");
+      const description = $$("#description");
+      const formula = $$("#formula");
+      const allBlendModeExample = $$("#all-blend-modes-example");
+      const inputs = allBlendModeExample.querySelectorAll("input");
+      const squareA = $$("#square-a");
+      const squareB = $$("#square-b");
+      const squareABlend = $$("#square-a-blend");
+      const squareBBlend = $$("#square-b-blend");
+
+      function setFormulaAndDescription() {
+        const mode = blendModeSelect.value;
+        description.innerHTML = blendModes[mode].description;
+        formula.innerHTML = blendModes[mode].formula;
+      }
+
+      function updateBlendMode() {
+        const mode = blendModeSelect.value;
+        squareBBlend.style.mixBlendMode = mode;
+      }
+
+      blendModeSelect.addEventListener("change", () => {
+        updateBlendMode();
+        setFormulaAndDescription();
+      });
+
+      function updateColors() {
+        const aValue = parseInt(inputs[0].value, 10);
+        const bValue = parseInt(inputs[1].value, 10);
+        const aPercent = (aValue / 255) * 100;
+        const bPercent = (bValue / 255) * 100;
+        squareA.style.backgroundColor = `hsl(0 0% ${aPercent}%)`;
+        squareB.style.backgroundColor = `hsl(0 0% ${bPercent}%)`;
+        squareABlend.style.backgroundColor = `hsl(0 0% ${aPercent}%)`;
+        squareBBlend.style.backgroundColor = `hsl(0 0% ${bPercent}%)`;
+      }
+
+      inputs.forEach((input) => {
+        input.addEventListener("input", () => {
+          updateColors();
+        });
+      });
+
+      // Initialize
+      updateBlendMode();
+      updateColors();
+      setFormulaAndDescription();
+    </script>
+    <p>
+      I also plotted
+      <a
+        href="https://www.desmos.com/calculator/8zb9ovwsoc"
+        target="_blank"
+        rel="noreferrer noopener"
+      >
+        each of the non-conditional modes in desmos.</a
+      >
+      It looks a bit like a modernist painting, but might also help you if you
+      take the time to understand it.
+    </p>
+  </details>
+
+  <h3>Using blending modes as masks</h3>
+  <p>
+    So how do we use these tools to make the spotlight? The key is understanding
+    that the abrupt edges of the
+    <span class="pre">color-dodge</span> mode can turn a gradient into a mask.
+  </p>
+  <math style="font-size: 2rem">
+    <mo>C</mo>
+    <mo>=</mo>
+    <mfrac>
+      <mi>A</mi><mrow><mn>1</mn><mo>−</mo><mi>B</mi></mrow>
+    </mfrac>
+  </math>
+  <p>
+    With <span class="pre">color-dodge</span>, as the blend pixel approaches 1,
+    the denominator approaches zero and the output value increases abruptly.
+  </p>
+  <p>
+    Here's a medium gray base layer and a black-to-white gradient blended over
+    it using
+    <span class="pre">color-dodge</span>
+  </p>
+  <img
+    src="/images/solid-color-dodge-example.webp"
+    width="1724"
+    height="390"
+    alt="Three squares side-by-side. The left square is gray. The middle square is a black-to-white gradient. The right square is the result of color-dodge blending the two: a square that is lighter gray on its left half and rapidly shifts to white at the midpoint."
+  />
+  <p>Think about what's happening here.</p>
+  <p>A is 0.5</p>
+  <p>B ranges from 0 to 1.</p>
+  <p>
+    On the left, B is 0, so we're dividing 0.5 by 1, which equals 0.5
+    <sup aria-labelledby="color-dodge-noteworthiness">2</sup>
+  </p>
+  <p>
+    As B gets lighter, we start to divide A by a smaller and smaller number.
+    Once B is 0.5, we're dividing 0.5 by 0.5, which equals 1: pure white. Any
+    higher value of B makes no difference because 1 is the lightest value
+    possible.
+  </p>
+  <p>
+    The key here is that as soon as the blend pixel becomes lighter than the
+    base pixel, the output flips to white. This is different from other blending
+    modes like
+    <span class="pre">lighten</span> or <span class="pre">screen</span>, which
+    would produce a range of lighter values.
+  </p>
+  <p>What if we blended a gradient over a noise texture?</p>
+  <img
+    src="/images/noise-color-dodge-example.webp"
+    width="1724"
+    height="390"
+    alt="Three squares side-by-side. The left square is a grid of pixels, each a different shade of gray. The middle square is a black-to-white gradient. The right square is the result of color-dodge blending the two: a square where the left side is mostly dark gray pixels, and as you move to the right, more and more pixels become white, until the right side is almost entirely white."
+  />
+  <p>
+    Some of the noise pixels have slightly lightened, and many of them have
+    turned fully white.
+  </p>
+  <p>
+    Effectively, what's happening is the computer is sampling each pixel and
+    comparing it to the gradient. If the gradient is lighter, it hides the
+    pixel. So the further along the gradient you go, the more pixels get hidden.
+  </p>
+  <p>
+    Now all we need to do is make the remaining pixels black. Fortunately,
+    <span class="pre">color-burn</span> can do that for us.
+  </p>
+  <math style="font-size: 2rem">
+    <mo>C</mo>
+    <mo>=</mo>
+    <mn>1</mn><mo>−</mo>
+    <mfrac
+      ><mrow><mn>1</mn><mo>−</mo><mi>A</mi></mrow
+      ><mi>B</mi></mfrac
+    >
+  </math>
+  <p>
+    <span class="pre">color-burn</span> takes the inverse of your base layer,
+    divides it by the blend layer, and then takes the inverse of that.
+  </p>
+  <p>
+    Let's <span class="pre">color-burn</span> a black layer over the
+    <span class="pre">color-dodge</span> layer.
+  </p>
+  <img
+    src="/images/noise-color-burn-example.webp"
+    width="1724"
+    height="390"
+    alt="Three squares side-by-side. The left square is the result of the previous color-dodge example: gray pixels randomly scattered on the left. The middle square is black. The right square is the result of color-burn blending the two: a square where all the non-white pixels have turned black."
+  />
+
+  <p>
+    We start by picking one of the remaining visible pixels. Say we pick one
+    that's dark gray (0.3)
+  </p>
+  <p>The inverse of dark gray is a light gray (0.7)</p>
+  <p>The blend layer is black (0)</p>
+  <p>0.7 / 0 = Infinity</p>
+  <p>1 - Infinity = -Infinity</p>
+  <p>
+    Since CSS can't display negative infinity, it clamps the value to 0. This is
+    why all the gray pixels disappear: any pixel that isn't white becomes black,
+    because we're always going to be dividing by zero.
+  </p>
+  <p>But what if the pixel we sample is white?</p>
+  <p>The inverse of white is black (0)</p>
+  <p>The blend layer is black (0)</p>
+  <p>0 / 0 = NaN</p>
+  <p>1 - NaN = NaN</p>
+  <p>
+    NaN means "Not a Number", which is a special value used to represent
+    undefined or unrepresentable numerical results. Fortunately for us, CSS
+    renders these specific errors as white.<sup aria-labelledby="lucky-mode"
+      >3</sup
+    >
+  </p>
+  <p>
+    And so there you have it. There's some artifacting going on due to tolerance
+    for near-white values, but to recap:
+  </p>
+  <ol>
+    <li>
+      <span class="pre">color-dodge</span> "hides" pixels that are darker than
+      the gradient.
+    </li>
+    <li><span class="pre">color-burn</span> blackens the remaining pixels</li>
+  </ol>
+  <p>
+    This gives us a pixelated falloff based on the lightness of a gradient that
+    we can overlay atop a noise layer.
+  </p>
+  <h3>Building the effect</h3>
+  <p>Now that we understand the principle, let's build it step by step.</p>
+  <p>First, we create a div and center some text in it:</p>
+  <iframe src="/spotlight-steps/1"></iframe>
+  <p>
+    Then we overlay a new div across the whole stage, with a noisy background
+    image.<sup aria-labelledby="position-absolute">4</sup>
+  </p>
+  <iframe src="/spotlight-steps/2"></iframe>
+  <p>
+    Then we place a div inside the noise layer, called spotlight, and give it a
+    radial-gradient from white to black:
+  </p>
+  <iframe src="/spotlight-steps/3"></iframe>
+  <p>
+    Now we prepare the noise layer for blending. I added
+    <span class="pre">filter: grayscale(100%)</span> to remove any color from
+    the noise that the <span class="pre">feTurbulence</span> SVG element
+    generates<sup aria-labelledby="css-nicks">5</sup>. I also added
+    <span class="pre">mix-blend-mode: darken</span> and
+    <span class="pre">background: #000</span> to make the noise layer darken
+    everything beneath it:
+  </p>
+  <iframe src="/spotlight-steps/4"></iframe>
+  <p>
+    Now for the crucial part: we add
+    <span class="pre">mix-blend-mode: color-dodge</span> to the spotlight div.
+    This is where our gradient becomes a mask, revealing the text through the
+    noise:
+  </p>
+  <iframe src="/spotlight-steps/5"></iframe>
+  <p>
+    And finally, we add a new div inside the noise layer, with
+    <span class="pre">mix-blend-mode: color-burn</span> and
+    <span class="pre">background: #000</span> to turn all the remaining
+    non-white pixels black:
+  </p>
+  <iframe src="/spotlight-steps/6"></iframe>
+  <p>
+    A little JavaScript to make the spotlight follow the mouse and you've got a
+    spotlight!
+  </p>
+  <p>
+    You could implement all of this with canvas and it would likely perform
+    better, but it's cool to learn what's possible with regular CSS nowadays 🙂
+  </p>
+  <hr />
+  <footer>
+    <p>
+      <span>1</span>
+      <span id="hakushi-hasegawa-video"
+        >If the website's down / changed, I recorded
+        <a href="/assets/vidsdo/hakushi_hasegawa_website_spotlight_effect.mp4"
+          >a video</a
+        ></span
+      >
+    </p>
+    <p>
+      <span>2</span>
+      <span id="color-dodge-noteworthiness">
+        So <span class="pre">color-dodge</span> can't make a value darker than
+        the base pixel. That's good to know.</span
+      >
+    </p>
+    <p>
+      <span>3</span>
+      <span id="lucky-mode"
+        >This is a happy coincidence and different graphical softwares handle
+        this case differently. color-burning black over white in Affinity Photo
+        turned everything black (though #010101 worked fine.)
+      </span>
+    </p>
+    <p>
+      <span>4</span>
+      <span id="position-absolute">
+        The text would be visible here even if it didn't have
+        <span class="pre">position: absolute</span> because backgrounds paint
+        first when in the same stacking context.</span
+      >
+    </p>
+    <p>
+      <span>5</span>
+      <span id="css-nicks"
+        >I learned about this technique from the excellent CSS Tricks article,
+        <a href="https://css-tricks.com/grainy-gradients/">Grainy Gradients</a>.
+        Rest in peace.</span
+      >
+    </p>
+  </footer>
+</section>
