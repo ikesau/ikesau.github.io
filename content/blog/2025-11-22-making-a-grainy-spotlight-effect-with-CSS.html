@@ -278,11 +278,11 @@ extra_css: "grainy-spotlight"
       },
       "color-burn": {
         formula: "<math><mn>1</mn><mo>−</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>A</mi></mrow><mi>B</mi></mfrac></math>",
-        description: "Divides the inverted bottom layer by the top layer, then inverts the result. Creates dramatic, high-contrast darkening with intensified shadows and can result in pure black more easily than multiply. Useful for creating intense, moody effects."
+        description: "Divides the inverted bottom layer by the top layer, then inverts the result. Creates dramatic, high-contrast darkening with intensified shadows and can result in pure black more easily than multiply."
       },
       "linear-burn": {
         formula: "<math><mi>A</mi><mo>+</mo><mi>B</mi><mo>−</mo><mn>1</mn></math>",
-        description: "Adds the values of both layers and subtracts 1. Results in darker tones than multiply — produces black whenever the sum of both layers is less than or equal to 1. Creates very aggressive darkening with deep shadows."
+        description: "Adds the values of both layers and subtracts 1. Results in darker tones than multiply — produces black whenever the sum of both layers is less than or equal to 1."
       },
       "lighten": {
         formula: "<math><mi>max</mi><mo>(</mo><mi>A</mi><mo>,</mo><mi>B</mi><mo>)</mo></math>",
@@ -294,7 +294,7 @@ extra_css: "grainy-spotlight"
       },
       "color-dodge": {
         formula: "<math><mfrac><mi>A</mi><mrow><mn>1</mn><mo>−</mo><mi>B</mi></mrow></mfrac></math>",
-        description: "Divides the bottom layer by the inverted top layer. Creates dramatic brightening with blown-out highlights. Lighter blend values have stronger effects. Useful for creating intense light effects, glows, and highlights, though it can easily produce pure white."
+        description: "Divides the bottom layer by the inverted top layer. Creates dramatic brightening with blown-out highlights."
       },
       "overlay": {
         formula: "<math><mrow><mo>{</mo><mtable><mtr><mtd><mn>1</mn><mo>−</mo><mo>(</mo><mn>1</mn><mo>−</mo><mn>2</mn><mo>(</mo><mi>A</mi><mo>−</mo><mn>0.5</mn><mo>)</mo><mo>)</mo><mo>×</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>B</mi><mo>)</mo></mtd><mtd><mtext>if</mtext><mi>A</mi><mo>&gt;</mo><mn>0.5</mn></mtd></mtr><mtr><mtd><mn>2</mn><mo>×</mo><mi>A</mi><mo>×</mo><mi>B</mi></mtd><mtd><mtext>if</mtext><mi>A</mi><mo>≤</mo><mn>0.5</mn></mtd></mtr></mtable></mrow></math>",
@@ -416,17 +416,13 @@ extra_css: "grainy-spotlight"
     <sup aria-labelledby="color-dodge-noteworthiness">2</sup>
   </p>
   <p>
-    As B gets lighter, we start to divide A by a smaller and smaller number.
-    Once B is 0.5, we're dividing 0.5 by 0.5, which equals 1: pure white. Any
-    higher value of B makes no difference because 1 is the lightest value
-    possible.
+    As B approaches 1, we start to divide A by a smaller and smaller number.
+    When B is 0.5, we divide 0.5 by 0.5, which equals 1: pure white. Any higher
+    value of B makes no difference because 1 is the lightest value possible.
   </p>
   <p>
-    The key here is that as soon as the blend pixel becomes lighter than the
-    base pixel, the output flips to white. This is different from other blending
-    modes like
-    <span class="pre">lighten</span> or <span class="pre">screen</span>, which
-    would produce a range of lighter values.
+    As soon as the blend pixel becomes lighter than the base pixel, the output
+    flips to white.
   </p>
   <p>What if we blended a gradient over a noise texture?</p>
   <img
@@ -442,11 +438,12 @@ extra_css: "grainy-spotlight"
   <p>
     Effectively, what's happening is the computer is sampling each pixel and
     comparing it to the gradient. If the gradient is lighter, it hides the
-    pixel. So the further along the gradient you go, the more pixels get hidden.
+    pixel. The further along the gradient you go, the more pixels get hidden.
   </p>
   <p>
     Now all we need to do is make the remaining pixels black. Fortunately,
-    <span class="pre">color-burn</span> can do that for us.
+    there's another blend mode for that:
+    <span class="pre">color-burn</span>
   </p>
   <math style="font-size: 2rem">
     <mo>C</mo>
@@ -476,20 +473,24 @@ extra_css: "grainy-spotlight"
     We start by picking one of the remaining visible pixels. Say we pick one
     that's dark gray (0.3)
   </p>
-  <p>The inverse of dark gray is a light gray (0.7)</p>
-  <p>The blend layer is black (0)</p>
-  <p>0.7 / 0 = Infinity</p>
-  <p>1 - Infinity = -Infinity</p>
+  <ol>
+    <li>The inverse of dark gray is a light gray (0.7)</li>
+    <li>The blend layer is black (0)</li>
+    <li>0.7 / 0 = Infinity</li>
+    <li>1 - Infinity = -Infinity</li>
+  </ol>
   <p>
-    Since CSS can't display negative infinity, it clamps the value to 0. This is
-    why all the gray pixels disappear: any pixel that isn't white becomes black,
-    because we're always going to be dividing by zero.
+    CSS can't display negative infinity: it clamps the value to 0. This is why
+    all the gray pixels turn black: we're always going to be dividing them by
+    zero, which results in infinity.
   </p>
-  <p>But what if the pixel we sample is white?</p>
-  <p>The inverse of white is black (0)</p>
-  <p>The blend layer is black (0)</p>
-  <p>0 / 0 = NaN</p>
-  <p>1 - NaN = NaN</p>
+  <p>But what if the pixel we sample is white? (1)</p>
+  <ol>
+    <li>The inverse of white is black (0)</li>
+    <li>The blend layer is black (0)</li>
+    <li>0 / 0 = NaN</li>
+    <li>1 - NaN = NaN</li>
+  </ol>
   <p>
     NaN means "Not a Number", which is a special value used to represent
     undefined or unrepresentable numerical results. Fortunately for us, CSS
