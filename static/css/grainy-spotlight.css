@@ -140,3 +140,25 @@
     }
   }
 }
+
+@media (max-width: 360px) {
+  #grainy-spotlight {
+    --square-size: 48px;
+
+    .pixel-example {
+      gap: 6px 8px;
+    }
+
+    .pixel-example math {
+      font-size: 24px;
+    }
+
+    #blendMode {
+      font-size: 1rem;
+    }
+
+    #all-blend-modes-example math {
+      font-size: 24px;
+    }
+  }
+}

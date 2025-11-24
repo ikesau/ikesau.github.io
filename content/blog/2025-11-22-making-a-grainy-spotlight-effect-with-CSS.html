@@ -482,9 +482,9 @@ extra_css: "grainy-spotlight"
   <p>
     CSS can't display negative infinity: it clamps the value to 0. This is why
     all the gray pixels turn black: we're always going to be dividing them by
-    zero, which results in infinity.
+    zero.
   </p>
-  <p>But what if the pixel we sample is white? (1)</p>
+  <p>But there's a special case! What if the pixel we sample is white? (1)</p>
   <ol>
     <li>The inverse of white is black (0)</li>
     <li>The blend layer is black (0)</li>
@@ -518,46 +518,81 @@ extra_css: "grainy-spotlight"
   <p>First, we create a div and center some text in it:</p>
   <iframe src="/spotlight-steps/1"></iframe>
   <p>
-    Then we overlay a new div across the whole stage, with a noisy background
-    image.<sup aria-labelledby="position-absolute">4</sup>
+    Then we place a new div above the text, with a noisy background image.
+    Statically positioned elements' backgrounds paint first, which is why the
+    absolutely positioned text is shown above it.
   </p>
   <iframe src="/spotlight-steps/2"></iframe>
   <p>
-    Then we place a div inside the noise layer, called spotlight, and give it a
-    radial-gradient from white to black:
+    Then we place a div inside the noise layer and give it a radial-gradient
+    from white to black.
   </p>
   <iframe src="/spotlight-steps/3"></iframe>
   <p>
-    Now we prepare the noise layer for blending. I added
-    <span class="pre">filter: grayscale(100%)</span> to remove any color from
-    the noise that the <span class="pre">feTurbulence</span> SVG element
-    generates<sup aria-labelledby="css-nicks">5</sup>. I also added
-    <span class="pre">mix-blend-mode: darken</span> and
-    <span class="pre">background: #000</span> to make the noise layer darken
-    everything beneath it:
+    Because the div is absolutely positioned, it's now painted above the text.
+    We can set a <span class="pre">darken</span> blend on the darkness layer so
+    that the darker black of the text shows through.
   </p>
   <iframe src="/spotlight-steps/4"></iframe>
   <p>
-    Now for the crucial part: we add
-    <span class="pre">mix-blend-mode: color-dodge</span> to the spotlight div.
-    This is where our gradient becomes a mask, revealing the text through the
-    noise:
+    Now we can add <span class="pre">mix-blend-mode: color-dodge</span> to the
+    spotlight div.
   </p>
   <iframe src="/spotlight-steps/5"></iframe>
   <p>
-    And finally, we add a new div inside the noise layer, with
+    But wait, why doesn't the spotlight hide the text? Isn't white lighter than
+    black?
+  </p>
+  <p>Here's our layer structure:</p>
+  <pre style="background: #f5f5f5; border-radius: 4px; padding: 16px">
+&lt;div class="container"&gt;
+  &lt;div class="text"&gt; &lt;3 &lt;/div&gt;
+  &lt;div class="darkness"&gt;
+    &lt;div class="spotlight"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre
+  >
+  <p>
+    Nesting spotlight inside the noise layer puts it in a new stacking context.
+  </p>
+  <p>
+    When you set a blend mode on an element, it only blends with elements that
+    are behind it in the same stacking context. To use a metaphor, the spotlight
+    is inside a box (the noise layer). It can blend with the walls of its box,
+    but it can't reach outside the box to blend with things sitting next to the
+    box.
+  </p>
+  <p>
+    This changes how the box looks, but the box (the noise layer) is still
+    blending with the text in <em>its</em> stacking context using
+    <span class="pre">darken</span>.<sup aria-labelledby="non-sense">4</sup>
+  </p>
+  <p>
+    Finally, we add a new div over everything, with
     <span class="pre">mix-blend-mode: color-burn</span> and
-    <span class="pre">background: #000</span> to turn all the remaining
-    non-white pixels black:
+    <span class="pre">background: #414141</span> to turn all the remaining
+    non-white pixels black.<sup aria-labelledby="in-the-end">5</sup>
   </p>
   <iframe src="/spotlight-steps/6"></iframe>
   <p>
-    A little JavaScript to make the spotlight follow the mouse and you've got a
+    A little JavaScript to make the circle follow the mouse and you've got a
     spotlight!
   </p>
   <p>
-    You could implement all of this with canvas and it would likely perform
-    better, but it's cool to learn what's possible with regular CSS nowadays 🙂
+    If you'd asked me how blending modes worked before writing this, I would
+    have said "by iterating through them until you find one that looks right."
+  </p>
+  <p>
+    I think that's still kind of the case. Experienced photographers probably
+    have a stronger intuition about when to use a particular mode for adjusting
+    one of their photos, but I'd be surprised if most of them don't also just
+    tap the down arrow on the selector to preview what each of the modes would
+    do.
+  </p>
+  <p>
+    And I could have implemented all of this with canvas and it would likely
+    perform better, but I'd need to have learned the theory regardless, and it's
+    cool to learn what's possible with regular CSS nowadays 🙂
   </p>
   <hr />
   <footer>
@@ -587,19 +622,17 @@ extra_css: "grainy-spotlight"
     </p>
     <p>
       <span>4</span>
-      <span id="position-absolute">
-        The text would be visible here even if it didn't have
-        <span class="pre">position: absolute</span> because backgrounds paint
-        first when in the same stacking context.</span
-      >
+      <span id="non-sense"
+        >I hope this makes sense. At a certain point you just need to try and
+        make something yourself so that it clicks.
+      </span>
     </p>
     <p>
       <span>5</span>
-      <span id="css-nicks"
-        >I learned about this technique from the excellent CSS Tricks article,
-        <a href="https://css-tricks.com/grainy-gradients/">Grainy Gradients</a>.
-        Rest in peace.</span
-      >
+      <span id="in-the-end"
+        >For this particular noise texture, I found that a dark gray looked
+        better than pure black.
+      </span>
     </p>
   </footer>
 </section>
