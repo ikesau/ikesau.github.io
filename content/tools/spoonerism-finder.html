@@ -1,0 +1,504 @@
+---
+title: "Spoonerism Finder"
+description: "Enter a word and see ways to spoonerize it"
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spoonerism Finder</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      h1 {
+        color: #2c9283;
+        background: #f4ffd4;
+        padding: 16px;
+        margin: 0 -16px;
+        margin-bottom: 8px;
+      }
+
+      .status {
+        text-align: center;
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      .section {
+        background: white;
+        margin-bottom: 16px;
+      }
+
+      .section.hidden {
+        display: none;
+      }
+
+      label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #333;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border: 2px solid #ddd;
+        outline: none;
+      }
+
+      input[type="text"]:focus {
+        border-color: #007bff;
+      }
+
+      .error {
+        color: #dc3545;
+        margin-top: 8px;
+      }
+
+      .rhyme-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .rhyme-details {
+        border: 1px solid #c6e8f5;
+        overflow: hidden;
+      }
+
+      .rhyme-details summary {
+        padding: 12px 16px;
+        background: #f4ffd4;
+        cursor: pointer;
+        font-weight: 500;
+        list-style: none;
+      }
+
+      .rhyme-details summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .rhyme-details summary::before {
+        content: "▶ ";
+        font-size: 12px;
+      }
+
+      .rhyme-details[open] summary::before {
+        content: "▼ ";
+      }
+
+      .rhyme-details[open] summary {
+        border-bottom: 1px solid #ddd;
+      }
+
+      .rhyme-details summary:hover {
+        background: #dee2e6;
+      }
+
+      .pair-list {
+        padding: 8px 0;
+      }
+
+      .pair-item {
+        padding: 8px 16px;
+      }
+
+      .back-btn {
+        background: none;
+        border: none;
+        color: #007bff;
+        cursor: pointer;
+        padding: 0;
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+
+      .back-btn:hover {
+        text-decoration: underline;
+      }
+
+      .count {
+        color: #666;
+        font-size: 14px;
+        margin-top: 8px;
+      }
+
+      .how-it-works {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 16px;
+      }
+
+      .how-it-works summary {
+        cursor: pointer;
+        color: #007bff;
+      }
+
+      .how-it-works summary:hover {
+        text-decoration: underline;
+      }
+
+      .how-it-works p {
+        margin: 8px 0;
+        line-height: 1.5;
+      }
+
+      .how-it-works code {
+        background: #e9ecef;
+        padding: 2px 6px;
+      }
+
+      .how-it-works a {
+        color: #007bff;
+      }
+
+      .input-wrapper {
+        position: relative;
+      }
+
+      .suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 2px solid #007bff;
+        border-top: none;
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 10;
+      }
+
+      .suggestions.hidden {
+        display: none;
+      }
+
+      .suggestion-item {
+        padding: 10px 12px;
+        cursor: pointer;
+        border-bottom: 1px solid #eee;
+      }
+
+      .suggestion-item:last-child {
+        border-bottom: none;
+      }
+
+      .suggestion-item:hover,
+      .suggestion-item.active {
+        background: #007bff;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Spoonerism Finder</h1>
+    <details class="how-it-works">
+      <summary>How does this work?</summary>
+      <p>
+        This tool uses the
+        <a href="http://www.speech.cs.cmu.edu/cgi-bin/cmudict" target="_blank"
+          >CMU Pronouncing Dictionary</a
+        >
+        (filtered down to common English words) to find candidates for
+        <a
+          href="https://en.wikipedia.org/wiki/Spoonerism"
+          target="_blank"
+          rel="noopener noreferer"
+          >spoonerism</a
+        >.
+      </p>
+      <p>
+        Each word is split into its <strong>onset</strong> (consonants before
+        the first vowel) and <strong>tail</strong> (the rest).
+      </p>
+      <p>
+        For example, "stone" → onset <code>ST</code>, tail <code>OWN</code>.
+      </p>
+      <p>
+        Words that share a tail are rhymes. When you pick two rhyming words with
+        different onsets (e.g. "stone" and "grown"), we search for other rhyming
+        pairs that have those same two onsets.
+      </p>
+      <p>
+        This gives us word pairs where swapping the onsets creates valid words -
+        spoonerisms
+      </p>
+    </details>
+
+    <div class="section" id="word-input-section">
+      <label for="word-input">Enter a word:</label>
+      <div class="input-wrapper">
+        <input
+          type="text"
+          id="word-input"
+          placeholder="e.g. cat, store, light..."
+          autocomplete="off"
+          disabled
+        />
+        <div class="suggestions hidden" id="suggestions"></div>
+      </div>
+      <p class="error hidden" id="word-error"></p>
+    </div>
+
+    <div class="section hidden" id="rhyme-section">
+      <button class="back-btn" id="back-to-input">
+        &larr; Try another word
+      </button>
+      <label>Rhymes with "<span id="rhyme-word"></span>":</label>
+      <div class="rhyme-list" id="rhyme-list"></div>
+    </div>
+
+    <script>
+      let tailMap = {};
+      let wordInfo = {};
+      let allWords = [];
+      let currentWord = null;
+      let activeIndex = -1;
+
+      async function init() {
+        const [tailMapData, wordInfoData] = await Promise.all([
+          fetch("/json/spoonerisms/tailMap.json").then((r) => r.json()),
+          fetch("/json/spoonerisms/wordInfo.json").then((r) => r.json()),
+        ]);
+
+        tailMap = tailMapData;
+        wordInfo = wordInfoData;
+        allWords = Object.keys(wordInfo).sort();
+
+        const wordCount = allWords.length;
+        const groupCount = Object.keys(tailMap).length;
+
+        // Set random placeholder examples
+        const examples = [];
+        for (let i = 0; i < 3; i++) {
+          const randomWord =
+            allWords[Math.floor(Math.random() * allWords.length)];
+          examples.push(randomWord);
+        }
+        document.getElementById(
+          "word-input"
+        ).placeholder = `e.g. ${examples.join(", ")}`;
+        document.getElementById("word-input").disabled = false;
+        document.getElementById("word-input").focus();
+      }
+
+      function showSuggestions(query) {
+        const container = document.getElementById("suggestions");
+
+        if (!query) {
+          container.classList.add("hidden");
+          activeIndex = -1;
+          return;
+        }
+
+        const matches = allWords
+          .filter((w) => w.startsWith(query))
+          .slice(0, 20);
+
+        if (matches.length === 0) {
+          container.classList.add("hidden");
+          activeIndex = -1;
+          return;
+        }
+
+        container.innerHTML = matches
+          .map(
+            (w, i) =>
+              `<div class="suggestion-item${
+                i === activeIndex ? " active" : ""
+              }" data-word="${w}">${w}</div>`
+          )
+          .join("");
+        container.classList.remove("hidden");
+      }
+
+      function selectSuggestion(word) {
+        document.getElementById("word-input").value = word;
+        document.getElementById("suggestions").classList.add("hidden");
+        activeIndex = -1;
+        showRhymes(word);
+      }
+
+      function showSection(id) {
+        document
+          .querySelectorAll(".section")
+          .forEach((s) => s.classList.add("hidden"));
+        document.getElementById(id).classList.remove("hidden");
+      }
+
+      function hasSpoonerismPairs(onset1, onset2, excludeTail) {
+        for (const tail of Object.keys(tailMap)) {
+          if (tail === excludeTail) continue;
+          const entries = tailMap[tail];
+          const hasOnset1 = entries.some((e) => e.onset.join(" ") === onset1);
+          const hasOnset2 = entries.some((e) => e.onset.join(" ") === onset2);
+          if (hasOnset1 && hasOnset2) return true;
+        }
+        return false;
+      }
+
+      function showRhymes(word) {
+        const info = wordInfo[word];
+        if (!info) {
+          document.getElementById(
+            "word-error"
+          ).textContent = `"${word}" not found in dictionary.`;
+          document.getElementById("word-error").classList.remove("hidden");
+          return;
+        }
+
+        document.getElementById("word-error").classList.add("hidden");
+        currentWord = { word, info };
+
+        const onset1 = info.onset.join(" ");
+        const rhymingEntries = tailMap[info.tail];
+        const rhymingWords = rhymingEntries
+          .map((e) => e.word)
+          .filter((w) => w !== word)
+          .filter((w) => {
+            const onset2 = wordInfo[w].onset.join(" ");
+            return (
+              onset1 !== onset2 && hasSpoonerismPairs(onset1, onset2, info.tail)
+            );
+          });
+
+        if (rhymingWords.length === 0) {
+          document.getElementById(
+            "word-error"
+          ).textContent = `No rhyming words found for "${word}".`;
+          document.getElementById("word-error").classList.remove("hidden");
+          return;
+        }
+
+        document.getElementById("rhyme-word").textContent = word;
+
+        const list = document.getElementById("rhyme-list");
+        list.innerHTML = rhymingWords
+          .map((w) => {
+            const onset2 = wordInfo[w].onset.join(" ");
+            const pairs = getPairs(onset1, onset2, info.tail);
+            return `
+          <details class="rhyme-details">
+            <summary>${w} (${pairs.length})</summary>
+            <div class="pair-list">
+              ${pairs
+                .map(
+                  (p) =>
+                    `<div class="pair-item">${word} ${p.wordB} / ${w} ${p.wordA}</div>`
+                )
+                .join("")}
+            </div>
+          </details>
+        `;
+          })
+          .join("");
+
+        showSection("rhyme-section");
+      }
+
+      function getPairs(onset1, onset2, excludeTail) {
+        const pairs = [];
+        for (const tail of Object.keys(tailMap)) {
+          if (tail === excludeTail) continue;
+          const entries = tailMap[tail];
+          const withOnset1 = entries.filter(
+            (e) => e.onset.join(" ") === onset1
+          );
+          const withOnset2 = entries.filter(
+            (e) => e.onset.join(" ") === onset2
+          );
+          for (const a of withOnset1) {
+            for (const b of withOnset2) {
+              pairs.push({ wordA: a.word, wordB: b.word });
+            }
+          }
+        }
+        return pairs;
+      }
+
+      // Event listeners
+      const wordInput = document.getElementById("word-input");
+      const suggestionsEl = document.getElementById("suggestions");
+
+      wordInput.addEventListener("input", (e) => {
+        const query = e.target.value.trim().toLowerCase();
+        activeIndex = -1;
+        showSuggestions(query);
+      });
+
+      wordInput.addEventListener("keydown", (e) => {
+        const items = suggestionsEl.querySelectorAll(".suggestion-item");
+
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          if (items.length > 0) {
+            activeIndex = Math.min(activeIndex + 1, items.length - 1);
+            items.forEach((el, i) =>
+              el.classList.toggle("active", i === activeIndex)
+            );
+          }
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          if (items.length > 0) {
+            activeIndex = Math.max(activeIndex - 1, 0);
+            items.forEach((el, i) =>
+              el.classList.toggle("active", i === activeIndex)
+            );
+          }
+        } else if (e.key === "Enter") {
+          e.preventDefault();
+          if (activeIndex >= 0 && items[activeIndex]) {
+            selectSuggestion(items[activeIndex].dataset.word);
+          } else {
+            const word = e.target.value.trim().toLowerCase();
+            if (word) {
+              suggestionsEl.classList.add("hidden");
+              showRhymes(word);
+            }
+          }
+        } else if (e.key === "Escape") {
+          suggestionsEl.classList.add("hidden");
+          activeIndex = -1;
+        }
+      });
+
+      suggestionsEl.addEventListener("click", (e) => {
+        if (e.target.classList.contains("suggestion-item")) {
+          selectSuggestion(e.target.dataset.word);
+        }
+      });
+
+      document.getElementById("back-to-input").addEventListener("click", () => {
+        showSection("word-input-section");
+        wordInput.value = "";
+        suggestionsEl.classList.add("hidden");
+        activeIndex = -1;
+        wordInput.focus();
+      });
+
+      // Hide suggestions when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest(".input-wrapper")) {
+          suggestionsEl.classList.add("hidden");
+          activeIndex = -1;
+        }
+      });
+
+      init();
+    </script>
+  </body>
+</html>
