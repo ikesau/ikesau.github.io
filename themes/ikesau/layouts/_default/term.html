@@ -2,8 +2,10 @@
 <link rel="stylesheet" href="/css/blog.css" />
 {{ end }} {{ define "main" }}
 <div class="tag-page">
-  <h1>
-    my {{ len .Pages }} "{{ .Title }}" post{{ if gt (len .Pages) 1 }}s{{ end }}
+  <h1 style="font-weight: normal">
+    my {{ len .Pages }}
+    <span style="font-family: serif; font-weight: bold">“{{ .Title }}”</span>
+    post{{ if gt (len .Pages) 1 }}s{{ end }}
   </h1>
 
   {{ range .Pages }}

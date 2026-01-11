@@ -1,0 +1,26 @@
+{{- $pages := slice -}}
+{{- $pages = $pages | append (where .Site.RegularPages "Section" "blog") -}}
+{{- $pages = $pages | append (where .Site.RegularPages "Section" "things-i-like") -}}
+{{- $pages = sort $pages ".Date" "desc" -}}
+{{- $pages = first 50 $pages -}}
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{{ .Site.Title }}</title>
+  <link href="{{ .Site.BaseURL }}" rel="alternate" type="text/html"/>
+  <link href="{{ .Permalink }}feed.xml" rel="self" type="application/atom+xml"/>
+  <id>{{ .Site.BaseURL }}</id>
+  <updated>{{ now.Format "2006-01-02T15:04:05Z07:00" }}</updated>
+  <author>
+    <name>Ike Saunders</name>
+  </author>
+  {{- range $pages }}
+  <entry>
+    <title>{{ .Title | htmlEscape }}</title>
+    <link href="{{ .Permalink }}" rel="alternate" type="text/html"/>
+    <id>{{ .Permalink }}</id>
+    <published>{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}</published>
+    <updated>{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}</updated>
+    <content type="html"><![CDATA[{{ .Content }}]]></content>
+  </entry>
+  {{- end }}
+</feed>
