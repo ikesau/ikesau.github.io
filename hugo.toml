@@ -2,6 +2,9 @@ baseURL = 'https://ikesau.co'
 languageCode = 'en-ca'
 title = 'ikesau.co'
 theme = 'ikesau'
+
+[taxonomies]
+  tag = "tags"
 [params]
     description = 'The website of Ike Saunders'
 

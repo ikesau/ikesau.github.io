@@ -1,0 +1,19 @@
+{{ define "extra-css" }}
+<link rel="stylesheet" href="/css/blog.css">
+{{ end }}
+
+{{ define "main" }}
+<div class="tags-index">
+  <h1>Tags</h1>
+  <ul class="tag-list">
+    {{ range .Data.Terms.Alphabetical }}
+    <li class="tag-item">
+      <a href="{{ .Page.RelPermalink }}" class="tag-link">
+        {{ .Page.Title }}
+        <span class="tag-count">({{ .Count }})</span>
+      </a>
+    </li>
+    {{ end }}
+  </ul>
+</div>
+{{ end }}

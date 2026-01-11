@@ -1,0 +1,21 @@
+{{ define "extra-css" }}
+<link rel="stylesheet" href="/css/blog.css" />
+{{ end }} {{ define "main" }}
+<div class="tag-page">
+  <h1>
+    my {{ len .Pages }} "{{ .Title }}" post{{ if gt (len .Pages) 1 }}s{{ end }}
+  </h1>
+
+  {{ range .Pages }}
+  <article class="blog-preview">
+    <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+    <div class="summary">{{ .Summary }}</div>
+    {{ if .Truncated }}
+    <a href="{{ .RelPermalink }}" class="just-keep-reading">Keep reading →</a>
+    {{ end }}
+  </article>
+  {{ end }}
+
+  <p class="back-to-tags"><a href="/tags/">← All tags</a></p>
+</div>
+{{ end }}

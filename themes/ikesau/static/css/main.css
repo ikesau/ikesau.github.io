@@ -50,10 +50,11 @@ img {
 .blog-preview {
   padding: 18px;
   margin: 32px 0;
-  outline: 10px solid #111;
+  background: color-mix(in oklch, var(--theme-colour), white 95%);
+  outline: 1px solid var(--theme-colour);
 
   &:first-child {
-    margin-top: 0;
+    margin-top: 0x;
   }
 
   h2 {
@@ -68,6 +69,10 @@ img {
         background-color: #111;
       }
     }
+  }
+
+  .summary {
+    margin-top: 16px;
   }
 
   .just-keep-reading {
@@ -131,4 +136,79 @@ span.spoilers {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+/* Tag styling */
+.post-tags {
+  margin: 16px 0 16px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  font-size: 0.825rem;
+  color: var(--theme-colour);
+  text-decoration: none;
+  border: 1px solid var(--theme-colour);
+  padding: 2px 8px;
+}
+
+.tag:hover {
+  background-color: var(--theme-colour);
+  color: #fff;
+}
+
+/* Tags index page */
+.tags-index {
+  padding: 18px;
+}
+
+.tag-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tag-item {
+  margin: 0;
+}
+
+.tag-link {
+  font-size: 1rem;
+  color: #111;
+  text-decoration: none;
+  border: 1px solid #111;
+  padding: 8px 16px;
+  display: inline-block;
+}
+
+.tag-link:hover {
+  background-color: #111;
+  color: #fff;
+}
+
+.tag-count {
+  color: #666;
+  font-size: 0.875rem;
+}
+
+/* Individual tag page */
+.tag-page h1 {
+  margin-bottom: 8px;
+}
+
+.tag-description {
+  color: #666;
+  margin-bottom: 32px;
+}
+
+.back-to-tags {
+  margin-top: 32px;
+}
+
+.back-to-tags a {
+  color: var(--theme-colour);
 }

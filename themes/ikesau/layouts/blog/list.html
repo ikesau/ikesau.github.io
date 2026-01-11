@@ -3,7 +3,11 @@
   {{ range .Paginator.Pages }}
   <article class="blog-preview" id="{{.Title | urlize}}">
     <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-    <!-- <div class="meta">{{ .Date.Format "January 2, 2006" }}</div> -->
+    {{ with .Params.tags }}
+    <div class="post-tags">
+      {{ range . }}<a href="/tags/{{ . | urlize }}/" class="tag">{{ . }}</a>{{ end }}
+    </div>
+    {{ end }}
     <div class="summary">{{ .Summary }}</div>
     {{ if .Truncated }}
     <a href="{{ .RelPermalink }}" class="just-keep-reading">Keep reading →</a>

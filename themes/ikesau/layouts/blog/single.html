@@ -3,11 +3,21 @@
 {{ if .Params.extra_css }}
 <link rel="stylesheet" href="/css/{{.Params.extra_css}}.css">
 {{ end }}
+{{ if .Params.code_highlighting }}
+<link rel="stylesheet" href="/vendor/highlightjs-shades-of-purple.css">
+{{ end }}
 {{ end }}
 
 {{ define "extra-js" }}
 <script src="/vendor/popper.min.js"></script>
 <script src="/vendor/tippy.min.js"></script>
+{{ if .Params.code_highlighting }}
+<script src="/vendor/highlight.min.js"></script>
+<script>
+hljs.configure({cssSelector: "code", languages: ["javascript"]});
+hljs.highlightAll();
+</script>
+{{ end }}
 <script>
     tippy("sup", {
       content(e) {
@@ -23,9 +33,14 @@
 {{ end }}
 
 
-{{ define "main" }} 
+{{ define "main" }}
 <article id="{{ .Title | urlize }}" class="blog-post">
   <h1>{{ .Title }}</h1>
+  {{ with .Params.tags }}
+  <div class="post-tags">
+    {{ range . }}<a href="/tags/{{ . | urlize }}/" class="tag">{{ . }}</a>{{ end }}
+  </div>
+  {{ end }}
   {{ .Content }}
 </article>
 {{ end }}
