@@ -564,3 +564,8 @@
   title: Maybe the Default Settings Are Too High
   comment: It seems that my default consumption speeds for reading and eating (and maybe everything else) reduce the rewards of those things significantly, undermining the point of doing either.
   date: 2025-12-27
+
+- url: https://arachnemag.substack.com/p/the-metr-graph-is-hot-garbage
+  title: Against the 'METR Graph'
+  comment: METR is in no way measuring the “length of tasks AI agents can complete.” It is measuring whether A.I. can occasionally complete 97 highly contrived software engineering tasks whose “lengths” are spuriously determined. Nor does “extrapolating this trend” predict anything that can be understood in terms of what “humans,” as such, can do. You do not get to generalize to the entire species from 140 of your LinkedIn connections. You especially do not get to do that if you claim to meaningfully measure the time it takes them to do something while also paying them by the hour.
+  date: 2026-01-12
