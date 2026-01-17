@@ -3,7 +3,7 @@ title: "Spoonerism Finder"
 description: "Enter a word and see ways to spoonerize it"
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -15,7 +15,10 @@ description: "Enter a word and see ways to spoonerize it"
       }
 
       body {
-        font-family: system-ui, -apple-system, sans-serif;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
         max-width: 600px;
         margin: 0 auto;
         padding: 20px;
@@ -237,6 +240,17 @@ description: "Enter a word and see ways to spoonerize it"
         This gives us word pairs where swapping the onsets creates valid words -
         spoonerisms
       </p>
+      <p>
+        I put the pre-processing code in a
+        <a
+          href="https://github.com/ikesau/spoonerisms/"
+          target="_blank"
+          rel="noopener noreferer"
+          >separate repo on GitHub</a
+        >
+        , feel free to improve it or help me remove more proper nouns that
+        managed to sneak through.
+      </p>
     </details>
 
     <div class="section" id="word-input-section">
@@ -289,9 +303,8 @@ description: "Enter a word and see ways to spoonerize it"
             allWords[Math.floor(Math.random() * allWords.length)];
           examples.push(randomWord);
         }
-        document.getElementById(
-          "word-input"
-        ).placeholder = `e.g. ${examples.join(", ")}`;
+        document.getElementById("word-input").placeholder =
+          `e.g. ${examples.join(", ")}`;
         document.getElementById("word-input").disabled = false;
         document.getElementById("word-input").focus();
       }
@@ -320,7 +333,7 @@ description: "Enter a word and see ways to spoonerize it"
             (w, i) =>
               `<div class="suggestion-item${
                 i === activeIndex ? " active" : ""
-              }" data-word="${w}">${w}</div>`
+              }" data-word="${w}">${w}</div>`,
           )
           .join("");
         container.classList.remove("hidden");
@@ -354,9 +367,8 @@ description: "Enter a word and see ways to spoonerize it"
       function showRhymes(word) {
         const info = wordInfo[word];
         if (!info) {
-          document.getElementById(
-            "word-error"
-          ).textContent = `"${word}" not found in dictionary.`;
+          document.getElementById("word-error").textContent =
+            `"${word}" not found in dictionary.`;
           document.getElementById("word-error").classList.remove("hidden");
           return;
         }
@@ -377,9 +389,8 @@ description: "Enter a word and see ways to spoonerize it"
           });
 
         if (rhymingWords.length === 0) {
-          document.getElementById(
-            "word-error"
-          ).textContent = `No rhyming words found for "${word}".`;
+          document.getElementById("word-error").textContent =
+            `No rhyming words found for "${word}".`;
           document.getElementById("word-error").classList.remove("hidden");
           return;
         }
@@ -398,7 +409,7 @@ description: "Enter a word and see ways to spoonerize it"
               ${pairs
                 .map(
                   (p) =>
-                    `<div class="pair-item">${word} ${p.wordB} / ${w} ${p.wordA}</div>`
+                    `<div class="pair-item">${word} ${p.wordB} / ${w} ${p.wordA}</div>`,
                 )
                 .join("")}
             </div>
@@ -416,10 +427,10 @@ description: "Enter a word and see ways to spoonerize it"
           if (tail === excludeTail) continue;
           const entries = tailMap[tail];
           const withOnset1 = entries.filter(
-            (e) => e.onset.join(" ") === onset1
+            (e) => e.onset.join(" ") === onset1,
           );
           const withOnset2 = entries.filter(
-            (e) => e.onset.join(" ") === onset2
+            (e) => e.onset.join(" ") === onset2,
           );
           for (const a of withOnset1) {
             for (const b of withOnset2) {
@@ -448,7 +459,7 @@ description: "Enter a word and see ways to spoonerize it"
           if (items.length > 0) {
             activeIndex = Math.min(activeIndex + 1, items.length - 1);
             items.forEach((el, i) =>
-              el.classList.toggle("active", i === activeIndex)
+              el.classList.toggle("active", i === activeIndex),
             );
           }
         } else if (e.key === "ArrowUp") {
@@ -456,7 +467,7 @@ description: "Enter a word and see ways to spoonerize it"
           if (items.length > 0) {
             activeIndex = Math.max(activeIndex - 1, 0);
             items.forEach((el, i) =>
-              el.classList.toggle("active", i === activeIndex)
+              el.classList.toggle("active", i === activeIndex),
             );
           }
         } else if (e.key === "Enter") {
