@@ -1,0 +1,205 @@
+---
+title: how i made a spoonerism generator
+code_highlighting: true
+tags:
+  - computers
+---
+
+<section id="caking-the-bake">
+  <style>
+    #caking-the-bake {
+      margin-bottom: 32px;
+      span.pre {
+        font-family: monospace;
+        background: #f5f5f5;
+        padding: 2px 4px;
+        border-radius: 2px;
+      }
+    }
+    pre {
+      margin-bottom: 0;
+    }
+    .spoilered {
+      background-color: #000;
+      color: #000;
+      border-radius: 2px;
+      padding: 2px 4px;
+      cursor: pointer;
+      &:hover,
+      &:focus-visible {
+        color: #fff;
+      }
+    }
+    .spoonerism-link {
+      color: #2c9283;
+      background: #f4ffd4;
+      padding: 16px;
+      display: inline-block;
+      margin: 0;
+      font-size: 2rem;
+      font-weight: bold;
+      a {
+        text-decoration: none;
+        &:visited {
+          color: #2c9283;
+        }
+        &:hover,
+        &:focus {
+          text-decoration: underline;
+        }
+      }
+      &:after {
+        content: "→";
+      }
+    }
+  </style>
+  <p>
+    Part of my family’s canon is <em>Spooner or Later</em>, by Paul Jennings,
+    Ted Greenwood, and Terry Denton.
+  </p>
+  <img
+    src="/images/spooner-or-later-cover.webp"
+    width="970"
+    height="970"
+    style="margin: 0; max-width: unset; max-height: unset; width: 100%"
+    alt="The cover for the book Spooner or Later. It has a golden border with the title and authors set prominently. In the center is a cartoonish illustration of a man in a bowler hat."
+  />
+  <p>
+    A spoonerism is a kind of wordplay where you can swap the starting sounds of
+    words in a phrase to make another valid phrase.
+  </p>
+  <p>For example, “shake a tower” becomes “take a shower”.</p>
+  <p>It’s like dyslexia for fun.</p>
+  <p><em>Spooner or Later</em> was that plus <em>I spy</em>.</p>
+  <img
+    src="/images/spooner-or-later-contents.webp"
+    width="1221"
+    height="1221"
+    style="margin: 0; max-width: unset; max-height: unset; width: 100%"
+    alt="An open book. In the center is an illustration of a fat man running. Around the edge of the page are many smaller illustrations, one of which is a rat flexing its muscles."
+  />
+  <p>
+    “Fat Man’s Race” (the captioned & skewed illustration in the center of the
+    left page) becomes “Rat Man’s Face” (the image on the border of a costumed
+    rat flexing his muscles.)
+  </p>
+  <p>
+    This book was a measuring stick of my cerebral function. By the sage of
+    icks, I could only solve pimple suns at the start of the book, but after
+    months of prayerful cactus, I was eventually able to finish the hack’s bard
+    puzzles.
+  </p>
+  <p>
+    Solving them becomes pretty straightforward as your vocabulary expands, but
+    <em>creating</em> them is a whole other skill.
+  </p>
+  <p>
+    The most straightforward way to do it is to think of two words that rhyme,
+    then think of two other words that rhyme that start with the same sound as
+    the first two words.
+  </p>
+  <p>Word and Nerd</p>
+  <p>Whoa and Know</p>
+  <p>Know word? Whoa, nerd!</p>
+  <p>
+    In my experience, it's difficult to think of the second pairing, let alone a
+    pair that make sense together. It's a thing our brains aren't particularly
+    good at, because it requires a kind of exhaustive search through the
+    dictionary, and often you find a pairing that isn't grammatically equivalent
+    like... “lead bike” and “bedlike”.
+  </p>
+  <p>
+    But if we could programmatically generate hundreds of pairings at once, we
+    could scan and pan them quickly.
+  </p>
+  <p>Sounds like a cob for... jomputers?... A mask for tachines?</p>
+  <h2>Whiting rode for a pool that tears curds</h2>
+  <img
+    src="/images/whiting-rode-for-a-pool-that-tears-curds.webp"
+    width="1536"
+    height="1024"
+    style="margin: 0; max-width: unset; max-height: unset; width: 100%"
+    alt="A charcoal illustration of a knight atop a horse. Before him lies a pond of cheese curds, signposted: 'The Magickal Pond of Mozzarella'"
+  />
+  <p>
+    The key is to use the
+    <a href="http://www.speech.cs.cmu.edu/cgi-bin/cmudict" target="_blank"
+      >CMU Pronouncing Dictionary</a
+    >
+    filtered down to common English.
+  </p>
+  <p>That gives us a list like so:</p>
+  <pre><code>BALL  B AO1 L
+TELEPHONE  T EH1 L AH0 F OW2 N
+COLD  K OW1 L D
+TALL  T AO1 L
+</code></pre>
+  <p>
+    We can split each of these words into its onset and tail. The onset is all
+    the sounds before the first noun sound and the tail is everything after.
+  </p>
+  <p>
+    So, the onset of ball is <span class="pre">B</span> and the tail is
+    <span class="pre">AO1 L</span>.
+  </p>
+  <p>
+    What's the onset of cold?
+    <span class="spoilered" tabindex="0"
+      >Runny nose. Ha ha, just joking. It's K.</span
+    >
+  </p>
+
+  <p>Grouping words by their tails gives us a list of words that rhyme.</p>
+  <pre><code>{
+    "AO1 L": [
+        { "word": "ball", "onset": "B" },
+        { "word": "tall", "onset": "T" }
+    ]
+  }</code></pre>
+  <p>
+    Ergo, tall rhymes with ball Q.E.D. Behold the awesome power of programming.
+  </p>
+  <p>
+    Then we just need to find other words that rhyme and begin with B and T.
+  </p>
+  <p>
+    We go through our tail map and filter it down to entries that have the
+    onsets B and T in them.
+  </p>
+  <pre>
+    <code>{
+    "IH1 N": [
+        { "word": "bin", "onset": "B" },
+        { "word": "tin", "onset": "T" }
+    ],
+    "ER1 N IH0 NG": [
+        { "word": "burning", "onset": "B" },
+        { "word": "turning", "onset": "T" }
+    ]    ,
+    // etc...
+}</code></pre>
+  <p>
+    And with this data structure at hand, you have everything you need to make a
+    nice little UI to find spoonerisms. Most of them will be trot hash, but as
+    Napolean said, bots of lad is like a grit of bait.
+  </p>
+  <p>That's what I found, at least:</p>
+  <p class="spoonerism-link">
+    <a href="/tools/spoonerism-finder/">My spoonerism finder</a>
+  </p>
+  <p>
+    I still think the best way to make spoonerisms that are actually delightful
+    is to chisel them out with a
+    <a href="https://carefulwords.com/" target="_blank" rel="noopener noreferer"
+      >thesaurus</a
+    >
+    and
+    <a
+      href="https://www.rhymezone.com/"
+      target="_blank"
+      rel="noopener noreferer"
+      >rhyming dictionary</a
+    >, but for quick and dirty ideation, this generator is good for getting
+    started.
+  </p>
+</section>
