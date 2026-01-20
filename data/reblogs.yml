@@ -574,3 +574,8 @@
   title: Ads don't work that way
   comment: An essential piece on how you can't excape ads, because they don't actually work in a way that can be escaped
   date: 2026-01-14
+
+- url: https://substack.com/home/post/p-184342590
+  title: Pro-social media
+  comment: My provisional theory is that LLMs, as a consumer product, will push people’s senses of reality closer together in a sort of mirror image of the way social media has fractured them. They are not algorithms meant to custom-tailor content (including facts) to you, and what you will find infuriating or motivating. They are centralized systems that, until you prompt them or give them context, behave basically the same way for everyone.
+  date: 2026-01-20
