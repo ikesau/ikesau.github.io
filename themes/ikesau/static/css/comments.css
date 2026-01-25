@@ -1,0 +1,135 @@
+#comments-section {
+  margin: 48px 0;
+  padding-top: 24px;
+  border-top: 1px solid #ddd;
+}
+
+#comments-section h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.comments-links {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.comments-links a {
+  color: var(--theme-colour);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.comments-links a:hover {
+  text-decoration: underline;
+}
+
+#load-comments {
+  background-color: var(--theme-colour);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-bottom: 16px;
+}
+
+#load-comments:hover:not(:disabled) {
+  background-color: var(--theme-colour-light);
+}
+
+#load-comments:disabled {
+  background-color: #c0c0c0;
+  cursor: not-allowed;
+}
+
+#comments {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.no-comments {
+  color: #666;
+  font-style: italic;
+}
+
+.comment {
+  background: color-mix(in oklch, var(--theme-colour), white 95%);
+  border: 1px solid #ddd;
+  padding: 12px;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.comment-platform {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.comment-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin: 0;
+  max-height: none;
+}
+
+.comment-handle {
+  color: #2c2c2c;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.comment-handle:hover {
+  text-decoration: underline;
+}
+
+.comment-content {
+  margin-bottom: 8px;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.comment-content p {
+  margin: 0 0 8px 0;
+}
+
+.comment-content p:last-child {
+  margin-bottom: 0;
+}
+
+.comment-time {
+  font-size: 0.825rem;
+  color: #666;
+}
+
+/* Nested replies */
+.comment-replies {
+  margin-top: 12px;
+  padding-left: 16px;
+  border-left: 2px solid var(--theme-colour-light);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.comment-replies .comment {
+  background: color-mix(in oklch, var(--theme-colour), white 97%);
+}
+
+.comment-depth-1 > .comment-replies {
+  border-left-color: #ddd;
+}
+
+.comment-depth-2 > .comment-replies,
+.comment-depth-3 > .comment-replies {
+  padding-left: 12px;
+  border-left-color: #eee;
+}

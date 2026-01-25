@@ -42,5 +42,27 @@ hljs.highlightAll();
   </div>
   {{ end }}
   {{ .Content }}
+
+  {{ if or .Params.gotosocial_post_id .Params.bluesky_post_url }}
+  <section id="comments-section">
+    <h2>Comments</h2>
+    <div class="comments-links">
+      {{ with .Params.gotosocial_post_id }}
+      <a href="https://micro.ikesau.co/@ikesau/{{ . }}" target="_blank" rel="noopener">View on GotoSocial</a>
+      {{ end }}
+      {{ with .Params.bluesky_post_url }}
+      <a href="{{ . }}" target="_blank" rel="noopener">View on Bluesky</a>
+      {{ end }}
+    </div>
+    <button id="load-comments">Load Comments</button>
+    <div id="comments"
+         data-gotosocial-id="{{ .Params.gotosocial_post_id }}"
+         data-gotosocial-token="{{ .Site.Params.gotosocial_token }}"
+         data-bluesky-url="{{ .Params.bluesky_post_url }}">
+    </div>
+  </section>
+  <link rel="stylesheet" href="/css/comments.css">
+  <script src="/js/comments.js"></script>
+  {{ end }}
 </article>
 {{ end }}

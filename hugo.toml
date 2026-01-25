@@ -7,6 +7,7 @@ theme = 'ikesau'
   tag = "tags"
 [params]
     description = 'The website of Ike Saunders'
+    gotosocial_token = 'MZRINTC0Y2MTNTI4NI0ZY2VMLTKZOGQTNWMZODU0NTUYNZCZ'
 
 permalinks.blog = "/:section/:title/"
 
