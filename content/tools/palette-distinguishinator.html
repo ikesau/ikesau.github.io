@@ -1,0 +1,832 @@
+---
+title: "Categorical Colour Palette Distinguishinator"
+description: Optimize color palettes for perceptual distinctiveness.
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Categorical Colour Palette Distinguishinator</title>
+    <script src="/vendor/chroma-js.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem;
+        color: #333;
+      }
+      h1,
+      h2,
+      h3 {
+        margin-top: 1.5rem;
+      }
+      h1 {
+        border-bottom: 2px solid #333;
+        padding-bottom: 0.5rem;
+      }
+
+      .input-section {
+        background: white;
+        margin-bottom: 2rem;
+      }
+      textarea {
+        width: 100%;
+        height: 120px;
+        font-family: "SF Mono", Monaco, monospace;
+        font-size: 14px;
+        padding: 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 0;
+        resize: vertical;
+      }
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-top: 1rem;
+        align-items: flex-end;
+      }
+      .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+      .control-group label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #555;
+      }
+      select,
+      button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border-radius: 0;
+      }
+      select {
+        border: 1px solid #ccc;
+        background: white;
+      }
+      button {
+        background: #2563eb;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      button:hover {
+        background: #1d4ed8;
+      }
+      input[type="range"] {
+        width: 150px;
+      }
+
+      .palette {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 1rem 0;
+      }
+      .swatch {
+        width: 50px;
+        height: 50px;
+        border-radius: 0;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        font-size: 9px;
+        font-weight: bold;
+        text-shadow:
+          0 0 2px rgba(0, 0, 0, 0.5),
+          0 0 2px rgba(255, 255, 255, 0.5);
+        padding-bottom: 3px;
+      }
+      .swatch-large {
+        width: 70px;
+        height: 70px;
+        font-size: 10px;
+      }
+
+      .stats {
+        border: 1px solid #ddd;
+        padding: 1rem;
+        border-radius: 0;
+        margin: 1rem 0;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+      }
+      .stat-card {
+        padding: 1rem;
+        border-radius: 0;
+        text-align: center;
+      }
+      .stat-value {
+        font-size: 1.75rem;
+        font-weight: bold;
+        color: #2563eb;
+      }
+      .stat-label {
+        color: #666;
+        font-size: 0.85rem;
+      }
+      .improvement {
+        color: #16a34a;
+      }
+      .worse {
+        color: #dc2626;
+      }
+
+      .similar-pairs {
+        display: grid;
+        gap: 0.5rem;
+        border: 1px solid #ddd;
+      }
+      .pair {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        background: white;
+        border-radius: 0;
+      }
+      .pair-swatch {
+        width: 28px;
+        height: 28px;
+        border-radius: 0;
+        flex-shrink: 0;
+      }
+      .pair-distance {
+        margin-left: auto;
+        font-family: monospace;
+        color: #666;
+      }
+
+      .correction-steps {
+        display: grid;
+        gap: 0.75rem;
+      }
+      .step {
+        border: 1px solid #ddd;
+        padding: 0.75rem 1rem;
+        border-radius: 0;
+        cursor: pointer;
+        transition: border-color 0.15s;
+      }
+      .step.selected {
+        border-color: #000;
+      }
+      .step-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+      }
+      .step-label {
+        font-weight: 600;
+        color: #555;
+      }
+      .step-stats {
+        font-size: 0.8rem;
+        color: #888;
+      }
+
+      .comparison {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+      @media (max-width: 700px) {
+        .comparison {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .json-output {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 1rem;
+        border-radius: 0;
+        overflow-x: auto;
+        font-family: "SF Mono", Monaco, monospace;
+        font-size: 0.85rem;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+
+      code {
+        font-family: "SF Mono", Monaco, monospace;
+        font-size: 0.85em;
+      }
+
+      #report {
+        display: none;
+      }
+      #report.visible {
+        display: block;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      h1 .letter {
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Categorical Colour Palette Distinguishinator</h1>
+    <p>
+      Optimize color palettes for perceptual distinctiveness using k-means
+      clustering in L*a*b* color space.
+    </p>
+    <p>
+      Inspired by <a href="https://medialab.github.io/iwanthue/">IWantHue</a>.
+    </p>
+    <p>
+      Distinctiveness isn't everything. High contrast values can sometimes be
+      jarring or hard to look at for long periods.
+    </p>
+
+    <div class="input-section">
+      <label for="colorInput"
+        ><strong>Enter colors</strong> (hex format, e.g. #FF0000,
+        #00FF00)</label
+      >
+      <textarea
+        id="colorInput"
+        placeholder="Paste colors here. Supports JSON arrays, comma-separated, or one per line.
+Example:
+#47658E, #C8693E, #167F79, #6C4982, #629B4C"
+      >
+#47658E, #C8693E, #167F79, #6C4982, #629B4C, #4FB0BF, #BD9773, #A94368</textarea
+      >
+
+      <div class="controls">
+        <div class="control-group">
+          <label for="preset">Color Space Preset</label>
+          <select id="preset">
+            <option value="full">Full spectrum</option>
+            <option value="clear" selected>Clear</option>
+            <option value="pastel">Pastel</option>
+            <option value="fancy">Fancy</option>
+            <option value="pimp">Vibrant</option>
+            <option value="tarnish">Tarnish</option>
+            <option value="intense">Intense</option>
+            <option value="shades">Shades</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="iterations"
+            >Iterations: <span id="iterValue">10</span></label
+          >
+          <input type="range" id="iterations" min="1" max="30" value="10" />
+        </div>
+
+        <button onclick="runCorrection()">Correct Palette</button>
+      </div>
+    </div>
+
+    <div id="report">
+      <h2>Original Palette</h2>
+      <div id="originalPalette" class="palette"></div>
+
+      <div class="stats">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="colorCount">-</div>
+            <div class="stat-label">Colors</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="origMinDist">-</div>
+            <div class="stat-label">Min Distance</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="origAvgDist">-</div>
+            <div class="stat-label">Avg Distance</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Most Similar Pairs</h3>
+      <div id="similarPairs" class="similar-pairs"></div>
+
+      <h2>Correction Levels</h2>
+      <p>Click a level to select it for export:</p>
+      <div id="correctionSteps" class="correction-steps"></div>
+
+      <h2>Selected Correction</h2>
+      <div class="stats">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="newMinDist">-</div>
+            <div class="stat-label">Min Distance</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="newAvgDist">-</div>
+            <div class="stat-label">Avg Distance</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="improvement">-</div>
+            <div class="stat-label">Min Dist Change</div>
+          </div>
+        </div>
+      </div>
+
+      <h2>Export</h2>
+      <pre id="jsonOutput" class="json-output"></pre>
+    </div>
+
+    <script>
+      // Color space presets (HCL ranges)
+      const colorspaces = {
+        clear: { hue: [0, 360], chroma: [0, 100], lightness: [25, 100] },
+        pastel: { hue: [0, 360], chroma: [0, 60], lightness: [70, 100] },
+        fancy: { hue: [0, 360], chroma: [40, 100], lightness: [50, 100] },
+        pimp: { hue: [0, 360], chroma: [60, 130], lightness: [30, 100] },
+        tarnish: { hue: [0, 360], chroma: [0, 40], lightness: [30, 60] },
+        intense: { hue: [0, 360], chroma: [50, 130], lightness: [20, 60] },
+        shades: { hue: [0, 360], chroma: [0, 30], lightness: [0, 100] },
+        full: { hue: [0, 360], chroma: [0, 150], lightness: [0, 100] },
+      };
+
+      let currentResult = null;
+      let selectedLevel = 3;
+
+      function getStateFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+          colors: params.get("colors"),
+          preset: params.get("preset"),
+          iterations: params.get("iterations"),
+          level: params.get("level"),
+        };
+      }
+
+      function updateURL() {
+        const params = new URLSearchParams();
+        const colors = extractColors(
+          document.getElementById("colorInput").value,
+        );
+        if (colors.length > 0) {
+          params.set("colors", colors.join(","));
+        }
+        params.set("preset", document.getElementById("preset").value);
+        params.set("iterations", document.getElementById("iterations").value);
+        params.set("level", selectedLevel);
+
+        const newURL = `${window.location.pathname}?${params.toString()}`;
+        window.history.replaceState({}, "", newURL);
+      }
+
+      function loadStateFromURL() {
+        const state = getStateFromURL();
+
+        if (state.colors) {
+          document.getElementById("colorInput").value = state.colors
+            .split(",")
+            .join(", ");
+        }
+        if (state.preset && colorspaces[state.preset]) {
+          document.getElementById("preset").value = state.preset;
+        }
+        if (state.iterations) {
+          const iter = parseInt(state.iterations);
+          if (iter >= 1 && iter <= 30) {
+            document.getElementById("iterations").value = iter;
+            document.getElementById("iterValue").textContent = iter;
+          }
+        }
+        if (state.level) {
+          const level = parseInt(state.level);
+          if (level >= 0 && level <= 5) {
+            selectedLevel = level;
+          }
+        }
+
+        // Auto-run if colors were provided in URL
+        if (state.colors) {
+          runCorrection();
+        }
+      }
+
+      document.getElementById("iterations").addEventListener("input", (e) => {
+        document.getElementById("iterValue").textContent = e.target.value;
+      });
+
+      function extractColors(input) {
+        const matches = input.match(/#[0-9a-fA-F]{3,6}/g);
+        if (!matches) return [];
+        return [
+          ...new Set(
+            matches
+              .map((c) => {
+                try {
+                  return chroma(c).hex();
+                } catch {
+                  return null;
+                }
+              })
+              .filter(Boolean),
+          ),
+        ];
+      }
+
+      function isColorInSpace(color, hueRange, chromaRange, lightnessRange) {
+        const rgb = color.rgb();
+        if (rgb.some((v) => isNaN(v) || v < 0 || v >= 256)) return false;
+
+        const [h, c, l] = color.hcl();
+        const [hmin, hmax] = hueRange;
+        const [cmin, cmax] = chromaRange;
+        const [lmin, lmax] = lightnessRange;
+
+        const hueOk =
+          hmin < hmax
+            ? (isNaN(h) || h >= hmin) && (isNaN(h) || h <= hmax)
+            : isNaN(h) || h >= hmin || h <= hmax;
+        const chromaOk =
+          (isNaN(c) ? 0 : c) >= cmin && (isNaN(c) ? 0 : c) <= cmax;
+        const lightnessOk =
+          (isNaN(l) ? 0 : l) >= lmin && (isNaN(l) ? 0 : l) <= lmax;
+
+        return hueOk && chromaOk && lightnessOk;
+      }
+
+      function generateColorSamples(hueRange, chromaRange, lightnessRange) {
+        const samples = [];
+        for (let l = 0; l <= 100; l += 5) {
+          for (let a = -100; a <= 100; a += 10) {
+            for (let b = -100; b <= 100; b += 10) {
+              const color = chroma.lab(l, a, b);
+              if (
+                isColorInSpace(color, hueRange, chromaRange, lightnessRange)
+              ) {
+                samples.push(color);
+              }
+            }
+          }
+        }
+        return samples;
+      }
+
+      function kMeans(
+        colors,
+        colorSamples,
+        hueRange,
+        chromaRange,
+        lightnessRange,
+        iterations,
+      ) {
+        let kMeans = colors.map((c) => c.lab());
+        const sampleLabs = colorSamples.map((c) => c.lab());
+        const samplesClosest = colorSamples.map(() => null);
+
+        while (iterations-- > 0) {
+          // Assign samples to closest k-mean
+          for (let i = 0; i < sampleLabs.length; i++) {
+            const lab = sampleLabs[i];
+            let minDistance = Infinity;
+
+            for (let j = 0; j < kMeans.length; j++) {
+              const kMean = kMeans[j];
+              const distance = Math.sqrt(
+                Math.pow(lab[0] - kMean[0], 2) +
+                  Math.pow(lab[1] - kMean[1], 2) +
+                  Math.pow(lab[2] - kMean[2], 2),
+              );
+              if (distance < minDistance) {
+                minDistance = distance;
+                samplesClosest[i] = j;
+              }
+            }
+          }
+
+          // Update k-means
+          let freeColorSamples = sampleLabs.slice();
+
+          for (let j = 0; j < kMeans.length; j++) {
+            let count = 0;
+            const candidateKMean = [0, 0, 0];
+
+            for (let i = 0; i < sampleLabs.length; i++) {
+              if (samplesClosest[i] === j) {
+                count++;
+                candidateKMean[0] += sampleLabs[i][0];
+                candidateKMean[1] += sampleLabs[i][1];
+                candidateKMean[2] += sampleLabs[i][2];
+              }
+            }
+
+            if (count !== 0) {
+              candidateKMean[0] /= count;
+              candidateKMean[1] /= count;
+              candidateKMean[2] /= count;
+            } else {
+              candidateKMean[0] = kMeans[j][0];
+              candidateKMean[1] = kMeans[j][1];
+              candidateKMean[2] = kMeans[j][2];
+            }
+
+            const candidateColor = chroma.lab(...candidateKMean);
+            if (
+              count !== 0 &&
+              isColorInSpace(
+                candidateColor,
+                hueRange,
+                chromaRange,
+                lightnessRange,
+              )
+            ) {
+              kMeans[j] = candidateKMean;
+            } else {
+              let minDist = Infinity;
+              let closest = -1;
+              const searchSpace =
+                freeColorSamples.length > 0 ? freeColorSamples : sampleLabs;
+
+              for (let i = 0; i < searchSpace.length; i++) {
+                const distance = Math.sqrt(
+                  Math.pow(searchSpace[i][0] - candidateKMean[0], 2) +
+                    Math.pow(searchSpace[i][1] - candidateKMean[1], 2) +
+                    Math.pow(searchSpace[i][2] - candidateKMean[2], 2),
+                );
+                if (distance < minDist) {
+                  minDist = distance;
+                  closest = i;
+                }
+              }
+
+              if (closest >= 0) {
+                kMeans[j] = searchSpace[closest];
+              }
+            }
+
+            freeColorSamples = freeColorSamples.filter(
+              (color) =>
+                color[0] !== kMeans[j][0] ||
+                color[1] !== kMeans[j][1] ||
+                color[2] !== kMeans[j][2],
+            );
+          }
+        }
+
+        return kMeans.map((lab) => chroma.lab(...lab));
+      }
+
+      function analyzePalette(hexColors) {
+        const colors = hexColors.map((hex) => ({
+          hex,
+          lab: chroma(hex).lab(),
+        }));
+
+        const distances = [];
+        for (let i = 0; i < colors.length; i++) {
+          for (let j = i + 1; j < colors.length; j++) {
+            const lab1 = colors[i].lab;
+            const lab2 = colors[j].lab;
+            const distance = Math.sqrt(
+              Math.pow(lab1[0] - lab2[0], 2) +
+                Math.pow(lab1[1] - lab2[1], 2) +
+                Math.pow(lab1[2] - lab2[2], 2),
+            );
+            distances.push({
+              color1: colors[i].hex,
+              color2: colors[j].hex,
+              distance,
+            });
+          }
+        }
+
+        distances.sort((a, b) => a.distance - b.distance);
+        const avgDistance =
+          distances.length > 0
+            ? distances.reduce((sum, d) => sum + d.distance, 0) /
+              distances.length
+            : 0;
+
+        return {
+          colors,
+          minDistance: distances[0]?.distance ?? 0,
+          avgDistance,
+          pairwiseDistances: distances,
+        };
+      }
+
+      function correctPalette(hexColors, preset, iterations) {
+        const presetConfig = colorspaces[preset];
+        const hueRange = presetConfig.hue;
+        const chromaRange = presetConfig.chroma;
+        const lightnessRange = presetConfig.lightness;
+
+        const colors = hexColors.map((hex) => chroma(hex));
+        const colorSamples = generateColorSamples(
+          hueRange,
+          chromaRange,
+          lightnessRange,
+        );
+        const correctedColors = kMeans(
+          colors,
+          colorSamples,
+          hueRange,
+          chromaRange,
+          lightnessRange,
+          iterations,
+        );
+
+        const steps = [];
+        for (let i = 0; i <= 5; i++) {
+          steps.push(
+            colors.map((color, idx) =>
+              chroma.mix(color, correctedColors[idx], i * 0.2, "lab").hex(),
+            ),
+          );
+        }
+
+        return {
+          original: hexColors,
+          steps,
+          colorSamplesCount: colorSamples.length,
+        };
+      }
+
+      function renderSwatch(hex, large = false) {
+        const lum = chroma(hex).luminance();
+        const textColor = lum > 0.4 ? "#000" : "#fff";
+        return `<div class="swatch ${large ? "swatch-large" : ""}" style="background:${hex};color:${textColor}">${hex}</div>`;
+      }
+
+      function renderPalette(colors, container, large = false) {
+        container.innerHTML = colors
+          .map((c) => renderSwatch(c, large))
+          .join("");
+      }
+
+      function selectLevel(level) {
+        selectedLevel = level;
+        document.querySelectorAll(".step").forEach((el, i) => {
+          el.classList.toggle("selected", i === level);
+        });
+        updateSelectedStats();
+        updateURL();
+      }
+
+      function updateSelectedStats() {
+        if (!currentResult) return;
+
+        const selected = currentResult.steps[selectedLevel];
+        const analysis = analyzePalette(selected);
+        const origAnalysis = analyzePalette(currentResult.original);
+
+        document.getElementById("newMinDist").textContent =
+          analysis.minDistance.toFixed(1);
+        document.getElementById("newAvgDist").textContent =
+          analysis.avgDistance.toFixed(1);
+
+        const change = analysis.minDistance - origAnalysis.minDistance;
+        const changeEl = document.getElementById("improvement");
+        changeEl.textContent = (change >= 0 ? "+" : "") + change.toFixed(1);
+        changeEl.className =
+          "stat-value " + (change >= 0 ? "improvement" : "worse");
+
+        document.getElementById("jsonOutput").textContent = JSON.stringify(
+          selected,
+          null,
+          2,
+        );
+
+        // Animate title between original and 100% corrected
+        updateTitleAnimation(currentResult.original, currentResult.steps[5]);
+      }
+
+      function initTitle() {
+        const h1 = document.querySelector("h1");
+        console.log("h1", h1);
+        const text = h1.textContent;
+        h1.innerHTML = text
+          .split("")
+          .map((char) =>
+            char === " " ? " " : `<span class="letter">${char}</span>`,
+          )
+          .join("");
+      }
+
+      function updateTitleAnimation(originalColors, correctedColors) {
+        // Remove existing style block if present
+        let styleEl = document.getElementById("title-animation-styles");
+        if (!styleEl) {
+          styleEl = document.createElement("style");
+          styleEl.id = "title-animation-styles";
+          document.head.appendChild(styleEl);
+        }
+
+        const n = originalColors.length;
+
+        // Generate CSS variables and keyframes for each color
+        let css = ":root {\n";
+        for (let i = 0; i < n; i++) {
+          css += `  --color-${i}-og: ${originalColors[i]};\n`;
+          css += `  --color-${i}-new: ${correctedColors[i]};\n`;
+        }
+        css += "}\n\n";
+
+        // Generate keyframe animations for each color index
+        for (let i = 0; i < n; i++) {
+          css += `@keyframes color-pulse-${i} {
+  0%, 100% { color: var(--color-${i}-og); }
+  50% { color: var(--color-${i}-new); }
+}\n\n`;
+        }
+
+        // Generate nth-child rules for each color index
+        for (let i = 0; i < n; i++) {
+          // nth-child is 1-indexed, so use (i + 1)
+          css += `h1 .letter:nth-child(${n}n+${i + 1}) { animation: color-pulse-${i} 2s steps(1, end) infinite; }\n`;
+        }
+
+        styleEl.textContent = css;
+      }
+
+      function runCorrection() {
+        const input = document.getElementById("colorInput").value;
+        const colors = extractColors(input);
+
+        if (colors.length < 2) {
+          alert("Please enter at least 2 valid hex colors.");
+          return;
+        }
+
+        const preset = document.getElementById("preset").value;
+        const iterations = parseInt(
+          document.getElementById("iterations").value,
+        );
+
+        currentResult = correctPalette(colors, preset, iterations);
+        const origAnalysis = analyzePalette(colors);
+
+        // Show report
+        document.getElementById("report").classList.add("visible");
+
+        // Original palette
+        renderPalette(colors, document.getElementById("originalPalette"), true);
+        document.getElementById("colorCount").textContent = colors.length;
+        document.getElementById("origMinDist").textContent =
+          origAnalysis.minDistance.toFixed(1);
+        document.getElementById("origAvgDist").textContent =
+          origAnalysis.avgDistance.toFixed(1);
+
+        // Similar pairs
+        const pairsHtml = origAnalysis.pairwiseDistances
+          .slice(0, 5)
+          .map(
+            (pair) => `
+        <div class="pair">
+          <div class="pair-swatch" style="background:${pair.color1}"></div>
+          <code>${pair.color1}</code>
+          <span>&harr;</span>
+          <div class="pair-swatch" style="background:${pair.color2}"></div>
+          <code>${pair.color2}</code>
+          <div class="pair-distance">${pair.distance.toFixed(1)}</div>
+        </div>
+      `,
+          )
+          .join("");
+        document.getElementById("similarPairs").innerHTML = pairsHtml;
+
+        // Correction steps
+        const stepsHtml = currentResult.steps
+          .map((step, i) => {
+            const stepAnalysis = analyzePalette(step);
+            return `
+          <div class="step ${i === selectedLevel ? "selected" : ""}" onclick="selectLevel(${i})">
+            <div class="step-header">
+              <span class="step-label">${i * 20}% Correction</span>
+              <span class="step-stats">min: ${stepAnalysis.minDistance.toFixed(1)} / avg: ${stepAnalysis.avgDistance.toFixed(1)}</span>
+            </div>
+            <div class="palette">${step.map((c) => renderSwatch(c)).join("")}</div>
+          </div>
+        `;
+          })
+          .join("");
+        document.getElementById("correctionSteps").innerHTML = stepsHtml;
+
+        updateSelectedStats();
+        updateURL();
+      }
+
+      // Initialize from URL on page load
+      loadStateFromURL();
+      initTitle();
+    </script>
+  </body>
+</html>
