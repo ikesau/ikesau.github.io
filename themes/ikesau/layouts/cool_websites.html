@@ -1,0 +1,10 @@
+{{ define "main" }}
+<ul>
+  {{ range .Site.Data.cool_websites }}
+  <li>
+    <a href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .title }}</a>
+    {{ with .comment }} - {{ . | safeHTML }}{{ end }}
+  </li>
+  {{ end }}
+</ul>
+{{ end }}
