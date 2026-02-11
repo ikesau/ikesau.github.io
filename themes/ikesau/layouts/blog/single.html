@@ -19,7 +19,7 @@ hljs.highlightAll();
 </script>
 {{ end }}
 <script>
-    tippy("sup", {
+    const tippyOpts = {
       content(e) {
         const labelledBy = e.getAttribute("aria-labelledby");
         const label = document.getElementById(labelledBy);
@@ -28,7 +28,11 @@ hljs.highlightAll();
       allowHTML: true,
       interactive: true,
       arrow: false,
-    });
+      onMount(instance) {
+        tippy(instance.popper.querySelectorAll("sup"), tippyOpts);
+      },
+    };
+    tippy("sup", tippyOpts);
 </script>
 {{ end }}
 
