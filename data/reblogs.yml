@@ -608,3 +608,8 @@
   title: Assistant to the Regional Manager
   comment: 'Paul Bloom on the problem with utopia: necessarily scarce positional goods'
   date: 2026-02-11
+
+- url: https://www.theatlantic.com/technology/2026/02/ai-prediction-human-forecasters/685955/
+  title: AI Is Getting Scary Good at Making Predictions
+  comment: '''Good forecasting requires reading and processing enormous amounts of information. To guess the winner of the Tour de France, for example, a human forecaster might spend hours building a basic regression model based on previous years’ results, while also scouring injury and conditioning reports and reading commentary from fans and experts. AIs have a natural advantage here. They can read much faster than humans, and their cognitive skills don’t break down after a string of all-nighters.'''
+  date: 2026-02-12
