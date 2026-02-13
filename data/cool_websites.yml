@@ -32,7 +32,7 @@
 
 - url: https://arxiv.org/
   title: arxiv
-  comment: 'open journal for physics/maths/compsci/astronomy preprints. (convert any article to html5 by changing the URL to use https://ar5iv.org/ instead)'
+  comment: "open journal for physics/maths/compsci/astronomy preprints. (convert any article to html5 by changing the URL to use https://ar5iv.org/ instead)"
 
 - url: https://warmplace.ru/soft/ans/
   title: virtual ANS
@@ -135,7 +135,7 @@
   comment: an essay on learning from the maker of the above, andy matuschak
 
 - url: https://parametric.press/issue-02/carbon-history/
-  title: 'parametric press issue 02: carbon history'
+  title: "parametric press issue 02: carbon history"
   comment: an interactive article that engages you in the history and context of climate change
 
 - url: https://www.hsph.harvard.edu/nutritionsource/
@@ -232,7 +232,7 @@
 
 - url: https://shelby.cool/
   title: shelby.cool
-  comment: 'website #goals'
+  comment: "website #goals"
 
 - url: https://solarpunks.net/
   title: solarpunks.net
@@ -268,7 +268,7 @@
 
 - url: https://1mb.club
   title: 1MB.club
-  comment: 'a collection of websites that are less than 1MB :'')'
+  comment: "a collection of websites that are less than 1MB :')"
 
 - url: https://www.openhumans.org/
   title: openhumans.org
@@ -550,13 +550,13 @@
   title: careful words
   comment: a clean, fast, exhaustive thesaurus
 
-
 - url: https://jesperordrup.github.io/vocal-guide
   title: Vocal Guide
   comment: A vocal technique reference covering 21 techniques across five categories
 
 - url: https://app.monosketch.io
-  title: drag and drop ascii diagrams
+  title: monosketch
+  comment: drag and drop ascii diagrams
 
 - url: https://cachemonet.com/
   title: cache monet
