@@ -565,3 +565,6 @@
 - url: https://osmp.ngo/
   title: Open Source Munitions Portal
   comment: what if we made wikipedia but for missiles and drones
+
+- url: https://verify.contentauthenticity.org/
+  title: content credentials verifier
