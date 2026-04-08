@@ -568,3 +568,7 @@
 
 - url: https://verify.contentauthenticity.org/
   title: content credentials verifier
+
+- url: https://python-maps-vis.vercel.app/
+  title: river basins
+  comment: an interactive map of river systems on the american continents
