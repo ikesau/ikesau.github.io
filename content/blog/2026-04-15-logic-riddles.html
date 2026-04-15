@@ -1,0 +1,221 @@
+---
+title: my favourite logic puzzles
+tags:
+  - misc.
+---
+
+<section id="riddle-me-these">
+  <style>
+    #riddle-me-these {
+      details {
+        margin-bottom: 1em;
+        border: 1px solid black;
+        padding: 16px;
+      }
+
+      .spoiler {
+        background: black;
+        color: black;
+        padding: 0 4px;
+        border-radius: 4px;
+        position: relative;
+        &:hover,
+        &:focus {
+          color: white;
+        }
+        &:before {
+          color: black;
+          background-color: transparent;
+          position: absolute;
+          font-family: monospace;
+        }
+      }
+
+      .spoiler.hint {
+        margin-left: 3.3em;
+        &:before {
+          left: -3.3em;
+          content: "Hint:";
+        }
+      }
+
+      .spoiler.answer {
+        margin-left: 4.5em;
+        &:before {
+          left: -4.5em;
+          content: "Answer:";
+        }
+      }
+    }
+  </style>
+  <p>
+    These are all repeated ad-infinitum across the internet but I may as well
+    republish my own no-nonsense repository.
+  </p>
+  <details>
+    <summary>the three gods</summary>
+    <p>
+      There are three gods: A, B, and C. One of them always tells the truth, one
+      always lies, and one answers randomly. You can ask them three yes-or-no
+      questions to determine which god is which. However, they will answer in
+      their own language, where "yes" and "no" are represented by "da" and "ja",
+      but you don't know which means which. What questions do you ask to figure
+      out who is who?
+    </p>
+    <p class="spoiler hint">
+      The language barrier can be neutralised: think of a question whose answer
+      you already know, so that "da" and "ja" reveal themselves regardless of
+      which means which.
+    </p>
+    <p class="spoiler hint">
+      Your first priority is to find a god who is definitely not Random — once
+      you have a reliable interlocutor, the rest follows.
+    </p>
+  </details>
+  <details>
+    <summary>the two doors</summary>
+    <p>
+      You are in a room with two doors. One door leads to freedom, and the other
+      leads to certain death. There are two guards, one in front of each door.
+      One guard always tells the truth, and the other always lies. You can ask
+      one guard one question to determine which door leads to freedom. What do
+      you ask?
+    </p>
+    <p class="spoiler hint">
+      If you ask "are you the lying guard?" both guards give the same answer. If
+      you ask "are you the truthful guard?" both guards also give the same
+      answer. You need to think of a question that will yield the same answer
+      from both guards, but that also gives you the information you need to
+      choose the correct door.
+    </p>
+  </details>
+  <details>
+    <summary>the bridge crossing</summary>
+    <p>
+      Four people need to cross a bridge at night. They have 17 minutes before
+      the bandits chasing them will catch up and cut the bridge's ropes. They
+      have one flashlight, and the bridge can only hold two people at a time.
+      Each person walks at a different speed: Person A takes 1 minute to cross,
+      Person B takes 2 minutes, Person C takes 5 minutes, and Person D takes 10
+      minutes. When two people cross together, they must go at the slower
+      person's pace. Can they cross the bridge in time?
+    </p>
+    <p class="spoiler hint">
+      The naive approach — always send the fastest person back with the
+      flashlight — takes 19 minutes. The saving comes from how you handle the
+      two slowest people.
+    </p>
+  </details>
+
+  <details>
+    <summary>the boat crossing</summary>
+    <p>
+      A farmer needs to cross a river with a wolf, a goat, and a cabbage. He has
+      a boat that can only carry himself and one other item. If he leaves the
+      wolf alone with the goat, the wolf will eat the goat. If he leaves the
+      goat alone with the cabbage, the goat will eat the cabbage. How can the
+      farmer get all three across the river safely?
+    </p>
+    <p class="spoiler hint">
+      The farmer is allowed to bring items back across the river.
+    </p>
+  </details>
+  <details>
+    <summary>the mixed pills</summary>
+    <p>
+      You take 2 essential medications daily, but you've mixed up the pills. You
+      have 2 A pills and 2 B pills in a pile. The pills look identical and weigh
+      the same amount. How can you ensure you take the correct dose for the next
+      2 days?
+    </p>
+    <p class="spoiler hint">
+      Think about what you could do to every pill in the pile such that you end
+      up with exactly the right amounts each day, without needing to tell them
+      apart.
+    </p>
+  </details>
+  <details>
+    <summary>the mislabeled boxes</summary>
+    <p>
+      You have three boxes: one contains only apples, one contains only oranges,
+      and one contains both apples and oranges. The boxes are labeled, but all
+      the labels are incorrect. You can only open one box and take out one piece
+      of fruit to determine which box is which. Which box do you open, and what
+      do you take out to figure out the correct labels?
+    </p>
+    <p class="spoiler hint">
+      Since every label is wrong, you know for certain that the box labeled
+      "apples & oranges" contains only one type of fruit. Start there.
+    </p>
+  </details>
+  <details>
+    <summary>the two wicks</summary>
+    <p>
+      You have two wicks of different lengths. Each wick takes exactly one hour
+      to burn completely, but neither burns at a constant rate (e.g. one wick
+      might burn its first half quickly and the second half slowly). How can you
+      measure 45 minutes using these two wicks?
+    </p>
+    <p class="spoiler hint">
+      You're not restricted to lighting a wick from one end only.
+    </p>
+  </details>
+  <details>
+    <summary>the hatted prisoners</summary>
+    <p>
+      Four men are lined up, one behind the other, with a wall separating the
+      first man from the remaining three:
+    </p>
+    <img
+      src="/images/lego-men-wall.jpg"
+      alt="four lego men standing in a line"
+      width="475"
+      height="281"
+    />
+    <p>
+      The men know that two of them are wearing red hats and two are wearing
+      blue hats. They can see the hats in front of them but not their own hat or
+      the hats behind them. No one can see the colour of the hat worn by the man
+      standing past the wall. They aren't allowed to communicate. Which man can
+      figure out the colour of his own hat, and how?
+    </p>
+    <p class="spoiler hint">
+      A person not claiming their hat colour is itself useful information —
+      think about what they would have had to see in order to know.
+    </p>
+  </details>
+  <details>
+    <summary>the counterfeit coins</summary>
+    <p>
+      You have 12 coins, and one of them is counterfeit. The counterfeit coin is
+      either heavier or lighter than the genuine coins, but you don't know
+      which. You have a balance scale that you can use three times. How can you
+      determine which coin is counterfeit and whether it is heavier or lighter?
+    </p>
+    <p class="spoiler hint">
+      Each weighing has three possible outcomes (left heavy, right heavy,
+      balanced). Three weighings give you at most 27 outcomes — enough to
+      distinguish between 24 possibilities (12 coins × heavier or lighter).
+    </p>
+    <p class="spoiler hint">
+      Your first weighing should leave some coins unweighed — coins you know are
+      genuine can be used as a reference in later weighings.
+    </p>
+  </details>
+  <details>
+    <summary>the bounty split</summary>
+    <p>
+      Pirates must divide 100 gold coins. The most senior proposes a split; if
+      50% or more approve it passes, otherwise he's thrown overboard and the
+      next takes over. What does the senior pirate propose?
+    </p>
+    <p class="spoiler hint">
+      Work backwards: start with just two pirates and figure out what happens,
+      then build up to three, four, and five.
+    </p>
+    <p class="spoiler hint">
+      A pirate will accept any offer that's strictly better than what they'd
+      receive if the proposal fails — even just one coin more.
+    </p>
+  </details>
+</section>

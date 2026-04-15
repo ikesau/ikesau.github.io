@@ -4,6 +4,10 @@
   --theme-colour-light: oklch(0.9095 0.148 37.71);
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   max-width: var(--body-width);
   margin: auto;
