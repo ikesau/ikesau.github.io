@@ -23,6 +23,13 @@ h3 {
   line-height: 1.2;
 }
 
+.homepage {
+  a:has(h3) {
+    display: inline-block;
+    margin-bottom: 0;
+  }
+}
+
 .go-away {
   text-transform: lowercase;
 }

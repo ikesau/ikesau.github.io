@@ -1,5 +1,5 @@
 {{ define "main" }}
-<div>
+<div class="homepage">
   <h2>hello</h2>
   <ul class="go-away">
     {{ range .Site.Data.bio_links }}
@@ -21,16 +21,7 @@
     {{ end }}
   </ul>
 
-  <a href="/blog"
-    ><h3
-      style="
-        display: inline-block;
-        margin-bottom: 0;
-        text-decoration: underline 1px;
-      "
-    >
-      blog
-    </h3></a
+  <a href="/blog"><h3>blog</h3></a
   ><a class="rss-link" href="/feed.xml" style="margin-left: 8px"
     ><span>RSS</span>
     <img src="/images/feed.svg" height="20" width="20" />
@@ -47,18 +38,7 @@
     {{ end }}
   </ul>
 
-  <a href="/reblogs"
-    ><h3
-      style="
-        display: inline-block;
-        margin-bottom: 0;
-        margin-left: 8px;
-        text-decoration: underline 1px;
-      "
-    >
-      reblogs
-    </h3></a
-  >
+  <a href="/reblogs"><h3>reblogs</h3></a>
 
   <h3>various code sketches</h3>
   <ul class="decorating-vice">
