@@ -1,0 +1,333 @@
+---
+title: dithering with css
+tags:
+  - computers
+---
+
+<section id="dither-demo">
+  <p>
+    handy if you're running a site with pictures but you want everything to
+    maintain a consistent aesthetic and colour scheme. might be better to just
+    process the images and save them already dithered, but this way can be
+    customized.
+  </p>
+  <svg width="0" height="0">
+    <filter
+      id="dither"
+      color-interpolation-filters="sRGB"
+      x="0%"
+      y="0%"
+      width="100%"
+      height="100%"
+    >
+      <feColorMatrix type="saturate" values="0" result="gray" />
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.9"
+        numOctaves="1"
+        seed="2"
+        result="noise"
+      />
+      <feComposite
+        in="gray"
+        in2="noise"
+        operator="arithmetic"
+        k1="0"
+        k2="0.75"
+        k3="0.35"
+        k4="-0.05"
+        result="mixed"
+      />
+      <feComponentTransfer in="mixed">
+        <feFuncR type="discrete" tableValues="0 1" />
+        <feFuncG type="discrete" tableValues="0 1" />
+        <feFuncB type="discrete" tableValues="0 1" />
+      </feComponentTransfer>
+    </filter>
+  </svg>
+
+  <style>
+    #dither-demo img {
+      margin: 0;
+      padding: 0;
+      max-width: 100%;
+      width: 100%;
+      max-height: unset;
+      image-rendering: pixelated;
+    }
+    #dither-demo img.dithered {
+      filter: url(#dither);
+    }
+    #dither-demo .controls {
+      display: grid;
+      grid-template-columns: max-content 1fr max-content;
+      column-gap: 12px;
+      row-gap: 8px;
+      align-items: center;
+      margin: 16px 0;
+      padding: 12px;
+      font-size: 14px;
+    }
+    #dither-demo .controls fieldset {
+      grid-column: 1 / -1;
+      display: contents;
+    }
+    #dither-demo .controls legend {
+      grid-column: 1 / -1;
+      font-weight: bold;
+      margin-top: 6px;
+      padding: 0;
+    }
+    #dither-demo .controls label {
+      justify-self: end;
+      font-family: monospace;
+    }
+    #dither-demo .controls input[type="range"] {
+      width: 100%;
+    }
+    #dither-demo .controls .value {
+      font-family: monospace;
+      min-width: 4ch;
+      text-align: right;
+    }
+    #dither-demo .color-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #dither-demo .color-row input[type="color"] {
+      width: 40px;
+      height: 28px;
+      padding: 0;
+      border: 1px solid #ccc;
+    }
+    #dither-demo .reset {
+      grid-column: 1 / -1;
+      justify-self: start;
+      margin-top: 8px;
+    }
+  </style>
+
+  <img id="d-image" class="dithered" src="/images/squidward-future.png" />
+
+  <h2>Noise dithering</h2>
+  <form class="controls" oninput="updateDither()" onsubmit="return false;">
+    <fieldset>
+      <legend>image</legend>
+      <label for="d-source">source</label>
+      <select id="d-source">
+        <option value="/images/squidward-future.png">squidward</option>
+        <option value="/images/OneTrillionLionsVSTheSun.png">
+          lions vs sun
+        </option>
+        <option value="/images/GRACE-FO_Launch.jpg">rocket launch</option>
+        <option value="/images/macaws.jpg">macaws</option>
+        <option value="/images/Orange_Retro_Cartoon.png">orange guy</option>
+      </select>
+      <span></span>
+    </fieldset>
+
+    <fieldset>
+      <legend>noise</legend>
+      <label for="d-freq">baseFrequency</label>
+      <input
+        id="d-freq"
+        type="range"
+        min="0.01"
+        max="2"
+        step="0.01"
+        value="0.9"
+      />
+      <span class="value" data-for="d-freq">0.90</span>
+
+      <label for="d-octaves">numOctaves</label>
+      <input id="d-octaves" type="range" min="1" max="5" step="1" value="1" />
+      <span class="value" data-for="d-octaves">1</span>
+
+      <label for="d-seed">seed</label>
+      <input id="d-seed" type="range" min="0" max="100" step="1" value="2" />
+      <span class="value" data-for="d-seed">2</span>
+    </fieldset>
+
+    <fieldset>
+      <legend>mix (feComposite arithmetic)</legend>
+      <label for="d-k1">k1</label>
+      <input id="d-k1" type="range" min="-1" max="1" step="0.05" value="0" />
+      <span class="value" data-for="d-k1">0.00</span>
+
+      <label for="d-k2">k2</label>
+      <input id="d-k2" type="range" min="-1" max="1" step="0.05" value="0.75" />
+      <span class="value" data-for="d-k2">0.75</span>
+
+      <label for="d-k3">k3</label>
+      <input id="d-k3" type="range" min="-1" max="1" step="0.05" value="0.35" />
+      <span class="value" data-for="d-k3">0.35</span>
+
+      <label for="d-k4">k4</label>
+      <input
+        id="d-k4"
+        type="range"
+        min="-1"
+        max="1"
+        step="0.05"
+        value="-0.05"
+      />
+      <span class="value" data-for="d-k4">-0.05</span>
+    </fieldset>
+
+    <fieldset>
+      <legend>two-tone</legend>
+      <label for="d-tone">enabled</label>
+      <div class="color-row">
+        <input id="d-tone" type="checkbox" />
+        <label for="d-dark" style="justify-self: start">dark</label>
+        <input id="d-dark" type="color" value="#1a0033" />
+        <label for="d-light" style="justify-self: start">light</label>
+        <input id="d-light" type="color" value="#ffee88" />
+      </div>
+      <span></span>
+    </fieldset>
+
+    <button type="button" class="reset" onclick="resetDither()">reset</button>
+  </form>
+</section>
+
+<script>
+  (function () {
+    const root = document.getElementById("dither-demo");
+    const turb = root.querySelector("feTurbulence");
+    const comp = root.querySelector("feComposite");
+    const funcR = root.querySelector("feFuncR");
+    const funcG = root.querySelector("feFuncG");
+    const funcB = root.querySelector("feFuncB");
+
+    const ids = [
+      "d-freq",
+      "d-octaves",
+      "d-seed",
+      "d-k1",
+      "d-k2",
+      "d-k3",
+      "d-k4",
+    ];
+    const inputs = Object.fromEntries(
+      ids.map((id) => [id, document.getElementById(id)]),
+    );
+    const tone = document.getElementById("d-tone");
+    const dark = document.getElementById("d-dark");
+    const light = document.getElementById("d-light");
+    const image = document.getElementById("d-image");
+    const source = document.getElementById("d-source");
+
+    source.addEventListener("change", () => {
+      image.src = source.value;
+    });
+
+    const defaults = {
+      "d-freq": "0.9",
+      "d-octaves": "1",
+      "d-seed": "2",
+      "d-k1": "0",
+      "d-k2": "0.75",
+      "d-k3": "0.35",
+      "d-k4": "-0.05",
+      tone: false,
+      dark: "#1a0033",
+      light: "#ffee88",
+    };
+
+    function hexToRgb01(hex) {
+      const n = parseInt(hex.slice(1), 16);
+      return [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => v / 255);
+    }
+
+    function fmt(id) {
+      const v = inputs[id].value;
+      if (id === "d-octaves" || id === "d-seed") return v;
+      return parseFloat(v).toFixed(2);
+    }
+
+    window.updateDither = function () {
+      turb.setAttribute("baseFrequency", inputs["d-freq"].value);
+      turb.setAttribute("numOctaves", inputs["d-octaves"].value);
+      turb.setAttribute("seed", inputs["d-seed"].value);
+
+      comp.setAttribute("k1", inputs["d-k1"].value);
+      comp.setAttribute("k2", inputs["d-k2"].value);
+      comp.setAttribute("k3", inputs["d-k3"].value);
+      comp.setAttribute("k4", inputs["d-k4"].value);
+
+      if (tone.checked) {
+        const [dr, dg, db] = hexToRgb01(dark.value);
+        const [lr, lg, lb] = hexToRgb01(light.value);
+        funcR.setAttribute("tableValues", `${dr} ${lr}`);
+        funcG.setAttribute("tableValues", `${dg} ${lg}`);
+        funcB.setAttribute("tableValues", `${db} ${lb}`);
+      } else {
+        funcR.setAttribute("tableValues", "0 1");
+        funcG.setAttribute("tableValues", "0 1");
+        funcB.setAttribute("tableValues", "0 1");
+      }
+
+      ids.forEach((id) => {
+        const span = root.querySelector(`.value[data-for="${id}"]`);
+        if (span) span.textContent = fmt(id);
+      });
+    };
+
+    window.resetDither = function () {
+      ids.forEach((id) => (inputs[id].value = defaults[id]));
+      tone.checked = defaults.tone;
+      dark.value = defaults.dark;
+      light.value = defaults.light;
+      window.updateDither();
+    };
+
+    window.updateDither();
+  })();
+</script>
+
+<section id="bayer-demo">
+  <svg width="0" height="0">
+    <filter
+      id="bayer-dither"
+      color-interpolation-filters="sRGB"
+      x="0%"
+      y="0%"
+      width="100%"
+      height="100%"
+    >
+      <feColorMatrix
+        in="SourceGraphic"
+        type="saturate"
+        values="0"
+        result="gray"
+      />
+      <feImage
+        href="/images/bayer16tile2.png"
+        x="0"
+        y="0"
+        width="64"
+        height="64"
+        preserveAspectRatio="none"
+        result="bayerTile"
+      />
+      <feTile in="bayerTile" result="bayerPattern" />
+      <feComposite
+        in="gray"
+        in2="bayerPattern"
+        operator="arithmetic"
+        k1="0"
+        k2="1"
+        k3="-1"
+        k4="0.5"
+        result="mixed"
+      />
+      <feComponentTransfer in="mixed">
+        <feFuncR type="discrete" tableValues="0 1" />
+        <feFuncG type="discrete" tableValues="0 1" />
+        <feFuncB type="discrete" tableValues="0 1" />
+      </feComponentTransfer>
+    </filter>
+  </svg>
+</section>
