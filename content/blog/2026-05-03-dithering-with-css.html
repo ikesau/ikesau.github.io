@@ -5,11 +5,37 @@ tags:
 ---
 
 <section id="dither-demo">
+  <div style="background-color: #f5f5f5; padding: 0px 8px">
+    <p>
+      <strong>update 2026-05-8: </strong>hello
+      <a
+        href="https://news.ycombinator.com/item?id=48009879"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        hackernews</a
+      >
+      - whoops, yes, i should have filtered out the noise specks. thanks to
+      kevinsyncs for the reminder.
+    </p>
+    <p>
+      this is not a power or bandwidth saving technique à la
+      <a
+        href="https://solar.lowtechmagazine.com/2023/06/rebuilding-a-solar-powered-website/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >low tech magazine</a
+      >. it's principally aesthetic.
+    </p>
+  </div>
+
   <p>
     handy if you're running a site with pictures but you want everything to
     maintain a consistent aesthetic and colour scheme. might be better to just
     process the images and save them already dithered, but this way can be
-    customized.
+    customized. (note that the original image is still there beneath the filter,
+    and that's what gets loaded, so, again, this doesn't save bandwidth - but it
+    also means users could vary the effect per theme or toggle it off)
   </p>
   <svg width="0" height="0">
     <filter
@@ -56,7 +82,7 @@ tags:
       image-rendering: pixelated;
     }
     #dither-demo img.dithered {
-      filter: url(#dither);
+      filter: url(#dither) grayscale(1);
     }
     #dither-demo .controls {
       display: grid;
