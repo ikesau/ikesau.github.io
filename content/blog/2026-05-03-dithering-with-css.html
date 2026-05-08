@@ -52,8 +52,9 @@ tags:
         baseFrequency="0.9"
         numOctaves="1"
         seed="2"
-        result="noise"
+        result="noiseRaw"
       />
+      <feColorMatrix in="noiseRaw" type="saturate" values="0" result="noise" />
       <feComposite
         in="gray"
         in2="noise"
@@ -82,7 +83,7 @@ tags:
       image-rendering: pixelated;
     }
     #dither-demo img.dithered {
-      filter: url(#dither) grayscale(1);
+      filter: url(#dither);
     }
     #dither-demo .controls {
       display: grid;
