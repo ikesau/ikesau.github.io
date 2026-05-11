@@ -453,7 +453,7 @@
   date: 2025-06-13
 
 - url: https://www.anthropic.com/research/project-vend-1
-  title: 'Project Vend: Can Claude run a small shop'
+  title: "Project Vend: Can Claude run a small shop"
   comment: In the longer term, fine-tuning models for managing businesses might be possible, potentially through an approach like reinforcement learning where sound business decisions would be rewarded—and selling heavy metals at a loss would be discouraged
   date: 2025-07-02
 
@@ -469,7 +469,7 @@
 
 - url: https://www.theverge.com/culture/700082/nyt-mamdani-news-judgment
   title: How The New York Times is (still) getting gamed by the right
-  comment: 'To look “objective” the Times must occasionally run stories that will irritate liberals and leftists...Again and again, when the Times attempts its false balance — trying to make Republicans sound less unhinged than they actually are — it results in bad journalism. It is the same problem social media platforms have encountered in moderation: removing misinformation and deplatforming bad actors means removing and deplatforming more Republicans. Eventually, using the excuse of “fairness,” social media companies gave up.'
+  comment: "To look “objective” the Times must occasionally run stories that will irritate liberals and leftists...Again and again, when the Times attempts its false balance — trying to make Republicans sound less unhinged than they actually are — it results in bad journalism. It is the same problem social media platforms have encountered in moderation: removing misinformation and deplatforming bad actors means removing and deplatforming more Republicans. Eventually, using the excuse of “fairness,” social media companies gave up."
   date: 2025-07-12
 
 - url: https://blog.decryption.net.au/posts/macpaint.html
@@ -606,12 +606,12 @@
 
 - url: https://smallpotatoes.paulbloom.net/p/assistant-to-the-regional-manager
   title: Assistant to the Regional Manager
-  comment: 'Paul Bloom on the problem with utopia: necessarily scarce positional goods'
+  comment: "Paul Bloom on the problem with utopia: necessarily scarce positional goods"
   date: 2026-02-11
 
 - url: https://www.theatlantic.com/technology/2026/02/ai-prediction-human-forecasters/685955/
   title: AI Is Getting Scary Good at Making Predictions
-  comment: '''Good forecasting requires reading and processing enormous amounts of information. To guess the winner of the Tour de France, for example, a human forecaster might spend hours building a basic regression model based on previous years’ results, while also scouring injury and conditioning reports and reading commentary from fans and experts. AIs have a natural advantage here. They can read much faster than humans, and their cognitive skills don’t break down after a string of all-nighters.'''
+  comment: "'Good forecasting requires reading and processing enormous amounts of information. To guess the winner of the Tour de France, for example, a human forecaster might spend hours building a basic regression model based on previous years’ results, while also scouring injury and conditioning reports and reading commentary from fans and experts. AIs have a natural advantage here. They can read much faster than humans, and their cognitive skills don’t break down after a string of all-nighters.'"
   date: 2026-02-12
 
 - url: https://rarehistoricalphotos.com/bizarre-vintage-beauty-pageants/
@@ -687,3 +687,8 @@
   title: The backlash to Billie Eilish’s vegan comments explains a lot about the American left (and everyone else)
   comment: ☝️☝️☝️
   date: 2026-05-07
+
+- url: https://worksinprogress.co/issue/whos-afraid-of-artificial-flavors
+  title: Artificial used to be a compliment
+  comment: "This article makes the argument that there's a false narrative around ice and refrigeration: ice shipping tycoon Frederic Tudor didn't meaningfully delay freezer adoption with his smear campaign, refrigeration just took a lot more R&D to make economically viable after the proof of concept stage. Despite Tudor's hit pieces, \"artificial\" was mostly used as positively in newspapers (in part because people hated Tudor's monopoly and wanted the industry to be disrupted.)\nThe article also talks about stem cell salmon, and how the industry's taking care to not market it as \"artificial salmon\" because nowadays the connotations of the word are negative.\nIt points out the unfairness of this — artificial ice and stem cell salmon are both much cleaner and more reliable than wild alternatives — while failing to acknowledge that many artificial things (artificial orange juice, artificial cheese, artificial grass) have for the most part, been strictly worse than the real thing (except for ease of mass production) for most of history.\nWe don't like artificial things because artificial things are often inferior but cheaper, not because of the legacy of a 100-year old media campaign. Plus we actually *do* like artificial things. That's why there's a market for them.\nStill, I enjoyed the piece for how it made me think about the history of the word!"
+  date: 2026-05-11
