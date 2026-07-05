@@ -122,6 +122,10 @@ img {
   display: none;
 }
 
+.blog-index .summary img {
+  display: none;
+}
+
 .blog-pagination {
   display: flex;
   justify-content: space-between;
