@@ -1,0 +1,863 @@
+---
+title: "Elo Ranker"
+description: Paste a list, vote on pairings, see your true preferences.
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Elo Preference Ranker</title>
+    <style>
+      :root {
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        color: #1f2937;
+        background: #f9fafb;
+      }
+
+      body {
+        margin: 0;
+        padding: 2rem;
+      }
+
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        margin-bottom: 0.25rem;
+      }
+
+      h2 {
+        margin-top: 0;
+      }
+
+      p {
+        line-height: 1.5;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 220px;
+        padding: 1rem;
+        font: inherit;
+        box-sizing: border-box;
+        border: 1px solid #d1d5db;
+        resize: vertical;
+        background: white;
+      }
+
+      button {
+        font: inherit;
+        border: 0;
+        padding: 0.8rem 1rem;
+        cursor: pointer;
+        background: #111827;
+        color: white;
+      }
+
+      button.secondary {
+        background: #e5e7eb;
+        color: #111827;
+      }
+
+      button.danger {
+        background: #991b1b;
+        color: white;
+      }
+
+      button.choice {
+        width: 100%;
+        min-height: 120px;
+        font-size: 1.25rem;
+        font-weight: 650;
+        background: white;
+        color: #111827;
+        border: 2px solid #d1d5db;
+        text-align: center;
+      }
+
+      button.choice:hover {
+        border-color: #111827;
+        background: #f3f4f6;
+      }
+
+      .row {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .choices {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+
+      .card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        padding: 1.25rem;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        margin: 1rem 0;
+      }
+
+      .muted {
+        color: #6b7280;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+        background: white;
+      }
+
+      th,
+      td {
+        padding: 0.65rem;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th.numeric,
+      td.numeric {
+        text-align: right;
+        white-space: nowrap;
+      }
+
+      .topline {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: baseline;
+      }
+
+      .small {
+        font-size: 0.9rem;
+      }
+
+      .pill {
+        display: inline-block;
+        padding: 0.2rem 0.45rem;
+        background: #f3f4f6;
+        margin: 0.1rem 0.15rem 0.1rem 0;
+        font-size: 0.85rem;
+      }
+
+      details {
+        margin-top: 0.5rem;
+      }
+
+      summary {
+        cursor: pointer;
+        color: #374151;
+        font-weight: 600;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+      }
+
+      .tabs button {
+        background: #e5e7eb;
+        color: #111827;
+      }
+
+      .tabs button.active {
+        background: #111827;
+        color: white;
+      }
+
+      .notice {
+        background: #fffbeb;
+        border: 1px solid #fde68a;
+        padding: 0.8rem 1rem;
+      }
+
+      @media (max-width: 750px) {
+        body {
+          padding: 1rem;
+        }
+
+        .choices {
+          grid-template-columns: 1fr;
+        }
+
+        table {
+          font-size: 0.9rem;
+        }
+
+        th.optional,
+        td.optional {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="topline">
+        <div>
+          <h1>Elo Preference Ranker</h1>
+          <p class="muted">
+            Paste a list, vote on pairings, see your true preferences.
+          </p>
+        </div>
+        <div class="row">
+          <button id="copyUrlButton" class="secondary hidden">Copy URL</button>
+          <button id="resetButton" class="danger hidden">Reset</button>
+        </div>
+      </div>
+
+      <section id="setup" class="card">
+        <h2>Start a ranking</h2>
+        <p>Paste one item per line.</p>
+        <textarea
+          id="itemInput"
+          placeholder="Item A&#10;Item B&#10;Item C&#10;Item D&#10;etc..."
+        ></textarea>
+        <div class="row" style="margin-top: 1rem">
+          <button id="startButton">Start ranking</button>
+        </div>
+        <p id="setupError" class="muted"></p>
+      </section>
+
+      <section id="voting" class="card hidden">
+        <div class="topline">
+          <h2>Which do you prefer?</h2>
+          <p id="stats" class="muted"></p>
+        </div>
+
+        <p id="roundRobinNotice" class="notice hidden"></p>
+
+        <div class="choices">
+          <button id="leftChoice" class="choice"></button>
+          <button id="rightChoice" class="choice"></button>
+        </div>
+
+        <div class="row">
+          <button id="skipButton" class="secondary">Skip</button>
+          <button id="tieButton" class="secondary">Tie / can’t choose</button>
+          <button id="undoButton" class="secondary">Undo</button>
+        </div>
+      </section>
+
+      <section id="rankings" class="card hidden">
+        <div class="topline">
+          <h2>Current rankings</h2>
+          <p class="muted small">
+            Sort by ranking method to see if they disagree.
+          </p>
+        </div>
+
+        <div class="tabs">
+          <button id="sortEloButton" class="active">Elo</button>
+          <button id="sortCopelandButton">Copeland</button>
+          <button id="sortWinRateButton">Win rate</button>
+          <button id="sortSeenButton">Most tested</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Item</th>
+              <th class="numeric">Elo</th>
+              <th class="numeric">W</th>
+              <th class="numeric">L</th>
+              <th class="numeric">T</th>
+              <th class="numeric">Copeland</th>
+              <th class="numeric">Win rate</th>
+              <th class="numeric optional">Seen</th>
+            </tr>
+          </thead>
+          <tbody id="rankingBody"></tbody>
+        </table>
+      </section>
+
+      <section id="audit" class="card hidden">
+        <div class="topline">
+          <h2>Pairwise audit</h2>
+          <p class="muted small">
+            Use this to inspect whether surprising placements came from your
+            votes or from Elo.
+          </p>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Beat</th>
+              <th>Lost to</th>
+              <th>Tied with</th>
+            </tr>
+          </thead>
+          <tbody id="auditBody"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script>
+      const INITIAL_ELO = 1000;
+      const K = 32;
+
+      let state = null;
+      let sortMode = "elo";
+
+      const setupEl = document.getElementById("setup");
+      const votingEl = document.getElementById("voting");
+      const rankingsEl = document.getElementById("rankings");
+      const auditEl = document.getElementById("audit");
+
+      const itemInput = document.getElementById("itemInput");
+      const setupError = document.getElementById("setupError");
+
+      const startButton = document.getElementById("startButton");
+      const resetButton = document.getElementById("resetButton");
+      const copyUrlButton = document.getElementById("copyUrlButton");
+
+      const leftChoice = document.getElementById("leftChoice");
+      const rightChoice = document.getElementById("rightChoice");
+      const skipButton = document.getElementById("skipButton");
+      const tieButton = document.getElementById("tieButton");
+      const undoButton = document.getElementById("undoButton");
+
+      const sortEloButton = document.getElementById("sortEloButton");
+      const sortCopelandButton = document.getElementById("sortCopelandButton");
+      const sortWinRateButton = document.getElementById("sortWinRateButton");
+      const sortSeenButton = document.getElementById("sortSeenButton");
+
+      const stats = document.getElementById("stats");
+      const roundRobinNotice = document.getElementById("roundRobinNotice");
+      const rankingBody = document.getElementById("rankingBody");
+      const auditBody = document.getElementById("auditBody");
+
+      function makeId() {
+        return Math.random().toString(36).slice(2, 10);
+      }
+
+      function normalizeItems(text) {
+        const seen = new Set();
+
+        return text
+          .split(/\r?\n/)
+          .map((line) => line.trim())
+          .filter(Boolean)
+          .filter((line) => {
+            const key = line.toLowerCase();
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+          });
+      }
+
+      function createState(labels) {
+        const items = labels.map((label) => ({
+          id: makeId(),
+          label,
+          elo: INITIAL_ELO,
+          wins: 0,
+          losses: 0,
+          ties: 0,
+          seen: 0,
+        }));
+
+        return {
+          version: 2,
+          items,
+          currentPair: null,
+          comparisons: 0,
+          results: [],
+          skippedPairs: [],
+          history: [],
+        };
+      }
+
+      function expectedScore(ratingA, ratingB) {
+        return 1 / (1 + Math.pow(10, (ratingB - ratingA) / 400));
+      }
+
+      function pairKey(a, b) {
+        return [a, b].sort().join("__");
+      }
+
+      function allPossiblePairCount() {
+        if (!state) return 0;
+        const n = state.items.length;
+        return (n * (n - 1)) / 2;
+      }
+
+      function comparedPairKeys() {
+        const keys = new Set();
+
+        for (const result of state.results || []) {
+          keys.add(pairKey(result.leftId, result.rightId));
+        }
+
+        return keys;
+      }
+
+      function skippedPairKeys() {
+        const keys = new Set();
+
+        for (const skipped of state.skippedPairs || []) {
+          keys.add(pairKey(skipped[0], skipped[1]));
+        }
+
+        return keys;
+      }
+
+      function allPairs() {
+        const pairs = [];
+
+        for (let i = 0; i < state.items.length; i++) {
+          for (let j = i + 1; j < state.items.length; j++) {
+            pairs.push([state.items[i].id, state.items[j].id]);
+          }
+        }
+
+        return pairs;
+      }
+
+      function choosePair() {
+        if (!state || state.items.length < 2) return null;
+
+        const compared = comparedPairKeys();
+        const skipped = skippedPairKeys();
+
+        let candidates = allPairs().filter(([a, b]) => {
+          const key = pairKey(a, b);
+          return !compared.has(key) && !skipped.has(key);
+        });
+
+        // Once all unique pairs have either been compared or skipped, allow repeats.
+        if (!candidates.length) {
+          candidates = allPairs();
+        }
+
+        // Prefer pairs where both items are under-tested.
+        candidates.sort(([a1, b1], [a2, b2]) => {
+          const itemA1 = getItem(a1);
+          const itemB1 = getItem(b1);
+          const itemA2 = getItem(a2);
+          const itemB2 = getItem(b2);
+
+          const score1 = itemA1.seen + itemB1.seen + Math.random() * 2;
+          const score2 = itemA2.seen + itemB2.seen + Math.random() * 2;
+
+          return score1 - score2;
+        });
+
+        const pair = [...candidates[0]];
+
+        if (Math.random() < 0.5) pair.reverse();
+
+        return pair;
+      }
+
+      function snapshot() {
+        state.history.push(
+          JSON.stringify({
+            items: state.items,
+            currentPair: state.currentPair,
+            comparisons: state.comparisons,
+            results: state.results,
+            skippedPairs: state.skippedPairs,
+          }),
+        );
+      }
+
+      function applyResult(leftId, rightId, result) {
+        const left = getItem(leftId);
+        const right = getItem(rightId);
+
+        if (!left || !right) return;
+
+        snapshot();
+
+        const expectedLeft = expectedScore(left.elo, right.elo);
+        const expectedRight = expectedScore(right.elo, left.elo);
+
+        let actualLeft;
+        let actualRight;
+        let winnerId = null;
+        let loserId = null;
+
+        if (result === "left") {
+          actualLeft = 1;
+          actualRight = 0;
+          winnerId = left.id;
+          loserId = right.id;
+          left.wins += 1;
+          right.losses += 1;
+        } else if (result === "right") {
+          actualLeft = 0;
+          actualRight = 1;
+          winnerId = right.id;
+          loserId = left.id;
+          right.wins += 1;
+          left.losses += 1;
+        } else {
+          actualLeft = 0.5;
+          actualRight = 0.5;
+          left.ties += 1;
+          right.ties += 1;
+        }
+
+        left.elo += K * (actualLeft - expectedLeft);
+        right.elo += K * (actualRight - expectedRight);
+
+        left.seen += 1;
+        right.seen += 1;
+        state.comparisons += 1;
+
+        state.results.push({
+          leftId,
+          rightId,
+          result,
+          winnerId,
+          loserId,
+        });
+
+        state.currentPair = choosePair();
+
+        saveStateToUrl();
+        render();
+      }
+
+      function skipCurrentPair() {
+        if (!state || !state.currentPair) return;
+
+        snapshot();
+
+        state.skippedPairs.push([...state.currentPair]);
+        state.currentPair = choosePair();
+
+        saveStateToUrl();
+        render();
+      }
+
+      function getItem(id) {
+        return state.items.find((item) => item.id === id);
+      }
+
+      function itemLabel(id) {
+        const item = getItem(id);
+        return item ? item.label : "(unknown)";
+      }
+
+      function winRate(item) {
+        const decisive = item.wins + item.losses;
+        if (decisive === 0) return 0;
+        return item.wins / decisive;
+      }
+
+      function copeland(item) {
+        return item.wins - item.losses;
+      }
+
+      function rankedItems() {
+        const ranked = [...state.items];
+
+        if (sortMode === "elo") {
+          ranked.sort((a, b) => b.elo - a.elo);
+        } else if (sortMode === "copeland") {
+          ranked.sort(
+            (a, b) =>
+              copeland(b) - copeland(a) ||
+              winRate(b) - winRate(a) ||
+              b.elo - a.elo,
+          );
+        } else if (sortMode === "winRate") {
+          ranked.sort(
+            (a, b) =>
+              winRate(b) - winRate(a) ||
+              copeland(b) - copeland(a) ||
+              b.elo - a.elo,
+          );
+        } else if (sortMode === "seen") {
+          ranked.sort((a, b) => b.seen - a.seen || b.elo - a.elo);
+        }
+
+        return ranked;
+      }
+
+      function auditForItem(itemId) {
+        const beat = [];
+        const lostTo = [];
+        const tiedWith = [];
+
+        for (const result of state.results || []) {
+          if (result.result === "tie") {
+            if (result.leftId === itemId) tiedWith.push(result.rightId);
+            if (result.rightId === itemId) tiedWith.push(result.leftId);
+            continue;
+          }
+
+          if (result.winnerId === itemId) beat.push(result.loserId);
+          if (result.loserId === itemId) lostTo.push(result.winnerId);
+        }
+
+        return { beat, lostTo, tiedWith };
+      }
+
+      function saveStateToUrl() {
+        if (!state) {
+          history.replaceState(null, "", location.pathname + location.search);
+          return;
+        }
+
+        const json = JSON.stringify(state);
+        const encoded = btoa(unescape(encodeURIComponent(json)));
+        history.replaceState(null, "", "#" + encoded);
+      }
+
+      function loadStateFromUrl() {
+        const encoded = location.hash.slice(1);
+        if (!encoded) return null;
+
+        try {
+          const json = decodeURIComponent(escape(atob(encoded)));
+          const loaded = JSON.parse(json);
+
+          if (
+            !loaded ||
+            !Array.isArray(loaded.items) ||
+            loaded.items.length < 2
+          ) {
+            return null;
+          }
+
+          loaded.history = Array.isArray(loaded.history) ? loaded.history : [];
+          loaded.results = Array.isArray(loaded.results) ? loaded.results : [];
+          loaded.skippedPairs = Array.isArray(loaded.skippedPairs)
+            ? loaded.skippedPairs
+            : [];
+          loaded.comparisons = loaded.comparisons || loaded.results.length || 0;
+          loaded.currentPair = loaded.currentPair || null;
+
+          for (const item of loaded.items) {
+            item.elo = Number(item.elo ?? INITIAL_ELO);
+            item.wins = Number(item.wins ?? 0);
+            item.losses = Number(item.losses ?? 0);
+            item.ties = Number(item.ties ?? 0);
+            item.seen = Number(item.seen ?? 0);
+          }
+
+          return loaded;
+        } catch {
+          return null;
+        }
+      }
+
+      function reset() {
+        state = null;
+        setupError.textContent = "";
+        itemInput.value = "";
+        saveStateToUrl();
+        render();
+      }
+
+      function undo() {
+        if (!state || !state.history.length) return;
+
+        const previous = JSON.parse(state.history.pop());
+        state.items = previous.items;
+        state.currentPair = previous.currentPair;
+        state.comparisons = previous.comparisons;
+        state.results = previous.results || [];
+        state.skippedPairs = previous.skippedPairs || [];
+
+        saveStateToUrl();
+        render();
+      }
+
+      function setSortMode(nextMode) {
+        sortMode = nextMode;
+
+        sortEloButton.classList.toggle("active", sortMode === "elo");
+        sortCopelandButton.classList.toggle("active", sortMode === "copeland");
+        sortWinRateButton.classList.toggle("active", sortMode === "winRate");
+        sortSeenButton.classList.toggle("active", sortMode === "seen");
+
+        render();
+      }
+
+      function render() {
+        const hasState = Boolean(state && state.items.length >= 2);
+
+        setupEl.classList.toggle("hidden", hasState);
+        votingEl.classList.toggle("hidden", !hasState);
+        rankingsEl.classList.toggle("hidden", !hasState);
+        auditEl.classList.toggle("hidden", !hasState);
+        resetButton.classList.toggle("hidden", !hasState);
+        copyUrlButton.classList.toggle("hidden", !hasState);
+
+        if (!hasState) return;
+
+        if (!state.currentPair) {
+          state.currentPair = choosePair();
+          saveStateToUrl();
+        }
+
+        const [leftId, rightId] = state.currentPair;
+        const left = getItem(leftId);
+        const right = getItem(rightId);
+
+        leftChoice.textContent = left ? left.label : "";
+        rightChoice.textContent = right ? right.label : "";
+
+        leftChoice.onclick = () => applyResult(leftId, rightId, "left");
+        rightChoice.onclick = () => applyResult(leftId, rightId, "right");
+        tieButton.onclick = () => applyResult(leftId, rightId, "tie");
+
+        const possible = allPossiblePairCount();
+        const uniqueCompared = comparedPairKeys().size;
+        const uniqueSkipped = skippedPairKeys().size;
+
+        stats.textContent = `${state.items.length} items · ${state.comparisons} comparisons · ${uniqueCompared}/${possible} unique pairs compared`;
+
+        if (uniqueCompared >= possible) {
+          roundRobinNotice.classList.remove("hidden");
+          roundRobinNotice.textContent =
+            "You have compared every unique pair at least once. Further votes will be repeats and may refine Elo, but the pairwise win/loss record is already complete.";
+        } else {
+          roundRobinNotice.classList.add("hidden");
+          roundRobinNotice.textContent = "";
+        }
+
+        renderRankings();
+        renderAudit();
+      }
+
+      function renderRankings() {
+        rankingBody.innerHTML = "";
+
+        rankedItems().forEach((item, index) => {
+          const tr = document.createElement("tr");
+
+          tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${escapeHtml(item.label)}</td>
+          <td class="numeric">${Math.round(item.elo)}</td>
+          <td class="numeric">${item.wins}</td>
+          <td class="numeric">${item.losses}</td>
+          <td class="numeric">${item.ties}</td>
+          <td class="numeric">${copeland(item)}</td>
+          <td class="numeric">${formatPercent(winRate(item))}</td>
+          <td class="numeric optional">${item.seen}</td>
+        `;
+
+          rankingBody.appendChild(tr);
+        });
+      }
+
+      function renderAudit() {
+        auditBody.innerHTML = "";
+
+        const items = rankedItems();
+
+        for (const item of items) {
+          const audit = auditForItem(item.id);
+          const tr = document.createElement("tr");
+
+          tr.innerHTML = `
+          <td><strong>${escapeHtml(item.label)}</strong></td>
+          <td>${renderPills(audit.beat)}</td>
+          <td>${renderPills(audit.lostTo)}</td>
+          <td>${renderPills(audit.tiedWith)}</td>
+        `;
+
+          auditBody.appendChild(tr);
+        }
+      }
+
+      function renderPills(ids) {
+        if (!ids.length) return `<span class="muted">—</span>`;
+
+        return ids
+          .map((id) => `<span class="pill">${escapeHtml(itemLabel(id))}</span>`)
+          .join("");
+      }
+
+      function formatPercent(value) {
+        if (!Number.isFinite(value)) return "—";
+        return `${Math.round(value * 100)}%`;
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      startButton.addEventListener("click", () => {
+        const labels = normalizeItems(itemInput.value);
+
+        if (labels.length < 2) {
+          setupError.textContent = "Please enter at least two unique items.";
+          return;
+        }
+
+        state = createState(labels);
+        state.currentPair = choosePair();
+        saveStateToUrl();
+        render();
+      });
+
+      skipButton.addEventListener("click", skipCurrentPair);
+      undoButton.addEventListener("click", undo);
+
+      resetButton.addEventListener("click", () => {
+        if (confirm("Clear this ranking and URL state?")) {
+          reset();
+        }
+      });
+
+      copyUrlButton.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(location.href);
+          copyUrlButton.textContent = "Copied";
+          setTimeout(() => {
+            copyUrlButton.textContent = "Copy URL";
+          }, 1000);
+        } catch {
+          alert("Could not copy URL. You can copy it from the address bar.");
+        }
+      });
+
+      sortEloButton.addEventListener("click", () => setSortMode("elo"));
+      sortCopelandButton.addEventListener("click", () =>
+        setSortMode("copeland"),
+      );
+      sortWinRateButton.addEventListener("click", () => setSortMode("winRate"));
+      sortSeenButton.addEventListener("click", () => setSortMode("seen"));
+
+      state = loadStateFromUrl();
+      render();
+    </script>
+  </body>
+</html>
