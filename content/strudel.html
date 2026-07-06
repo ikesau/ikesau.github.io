@@ -1,0 +1,93 @@
+---
+layout: strudel
+---
+
+<section>
+  <p>
+    <a href="https://strudel.cc">strudel</a> is a browser port of tidalcycles
+  </p>
+  <p>here are some notes from playing with it:</p>
+
+  <p>the foundational unit of time is a cycle. CPM = cycles per minute.</p>
+  <p>the default CPM is 120, which means that a cycle lasts 0.5 seconds.</p>
+  <p>any pattern written in quotes will play in one cycle</p>
+  <p>
+    if you surround that pattern with angle brackets, each note will play in one
+    cycle's length
+  </p>
+  <h2>The order you chain methods to set a pattern matters</h2>
+  {{< strudel "chain-order-notes-first" >}} {{< strudel
+  "chain-order-sound-first" >}}
+  <p>
+    calling <code class="language-js">setcpm()</code> is a one-off thing. it
+    doesn't reset if you delete the line and re-execute
+  </p>
+  <p>
+    there are lots of ways to do similar things with different methods, which
+    causes concepts to blur quite a bit. mininotation is another thing.
+  </p>
+
+  <p>
+    using the "numbers" sample set is quite a useful way to understand how notes
+    and rhythms are structured.
+  </p>
+  {{< strudel "numbers-sample-set" >}}
+  <p></p>
+  <p>
+    <code class="language-js">.begin()</code> to start a sample later (i.e. to
+    remove dead air)
+  </p>
+  <p>
+    <code class="language-js">.early()</code> to offset a pattern for cool
+    phases
+  </p>
+  <h2>
+    you can use
+    <code class="language-js" style="font-size: 20px !important">ribbon</code>
+    to create a buildup
+  </h2>
+  {{< strudel "ribbon-half" >}} then {{< strudel "ribbon-quarter" >}} then {{<
+  strudel "ribbon-eighth" >}}
+  <h2>Single quotes and double-quotes do different things</h2>
+  <code class="language-js">"1,2,3"</code> (evaluated as a pattern) is different
+  from <code class="language-js">'1,2,3'</code> (evaluated as a string)
+  <h1>random snippets, techniques & scratches</h1>
+  <h2>cool beat</h2>
+  {{< strudel "cool-beat" >}}
+  <h2>Arrange / stack</h2>
+  {{< strudel "arrange-stack" >}}
+  <h2>quick sample chopping</h2>
+  {{< strudel "quick-sample-chopping" >}}
+  <h2>snare rush</h2>
+  {{< strudel "snare-rush" >}}
+  <h2>jai paul</h2>
+  {{< strudel "jai-paul" >}}
+  <h2>cool hats</h2>
+  {{< strudel "cool-hats" >}}
+  <h2>footwork</h2>
+  {{< strudel "footwork" >}}
+  <h2>pads</h2>
+  {{< strudel "pads" >}}
+  <h2>busy looping melodies</h2>
+  {{< strudel "busy-looping-melodies" >}}
+  <h2>weird granular synth</h2>
+  {{< strudel "weird-granular-synth" >}}
+  <h2>next part helicopter (drum over this?)</h2>
+  {{< strudel "next-part-helicopter" >}}
+  <h2>dazed and confused and beading</h2>
+  {{< strudel "dazed-and-confused" >}}
+  <h2>deacon</h2>
+  {{< strudel "deacon" >}}
+  <h2>eyelash</h2>
+  {{< strudel "eyelash" >}}
+  <h2>i've been</h2>
+  {{< strudel "ive-been" >}}
+  <h2>control keys</h2>
+  {{< strudel "control-keys" >}}
+  <h2>fills</h2>
+  {{< strudel "fills" >}}
+  <h2>jungle gym</h2>
+  {{< strudel "jungle-gym" >}}
+  <h2>random chords</h2>
+  {{< strudel "random-chords" >}}
+</section>

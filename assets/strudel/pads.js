@@ -1,0 +1,22 @@
+$: s("gm_recorder")
+  .note("<E3 G2 D3 G2>")
+  .scale("G:pentatonic")
+  .dist(2)
+  .att(1 / 2)
+  .rel(3 / 2)
+  .room(1);
+$: s("sine")
+  .note("<E3 G2 D3 G2>".trans(-12))
+  .scale("G:pentatonic")
+  .gain(1)
+  .att(1 / 2);
+// $: note("<[B4 A4 D5]>")
+$: note("<[B4 A4 D5], [D6 B5 A5]>")
+  .slow(6)
+  .s("harp")
+  .scale("G:pentatonic")
+  .dist(2)
+  .rel(2)
+  .dec(2)
+  .penv("<4 -4>/2")
+  .patt(1 / 4);

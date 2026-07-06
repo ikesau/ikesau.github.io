@@ -1,0 +1,19 @@
+{{ define "extra-css" }}
+<link rel="stylesheet" href="/css/strudel.css">
+<link rel="stylesheet" href="/vendor/highlightjs-shades-of-purple.css">
+{{ end }}
+
+{{ define "extra-js" }}
+<script src="/vendor/highlight.min.js"></script>
+<script>
+hljs.configure({cssSelector: "code", languages: ["javascript"]});
+hljs.highlightAll();
+</script>
+{{ end }}
+
+{{ define "main" }}
+<article id="{{ .Title | urlize }}" class="strudel-notes">
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+</article>
+{{ end }}

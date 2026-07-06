@@ -1,0 +1,40 @@
+/* Styles for the standalone strudel notes/snippets page (layout: strudel).
+   Deliberately independent from blog.css so this page can evolve its own
+   design (e.g. a wider central column) without being coupled to blog posts. */
+
+/* Grey pill for inline code. Excludes .hljs so highlight.js's dark purple
+   theme (.hljs { background }) owns highlighted blocks — otherwise this
+   higher-specificity rule would override the theme background with grey. */
+.strudel-notes code:not(.hljs) {
+  background-color: #ededed;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.strudel-notes figure {
+  margin: 0;
+}
+
+.strudel-notes .strudel-snippet {
+  margin: 0 0 1.5rem;
+}
+
+.strudel-notes .strudel-snippet pre {
+  margin-bottom: 0;
+}
+
+.strudel-notes .strudel-open {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 2px 8px;
+  font-size: 0.8125rem;
+  text-decoration: none;
+  color: #603b42;
+  background-color: #f8f8f8;
+  border: 1px solid pink;
+  border-radius: 3px;
+}
+
+.strudel-notes .strudel-open:hover {
+  background-color: pink;
+}

@@ -1,0 +1,16 @@
+{{- $id := .Get 0 -}}
+{{- with resources.Get (printf "strudel/%s.js" $id) -}}
+{{- $code := .Content | strings.TrimSpace -}}
+{{- $enc := $code | base64Encode | replaceRE "\\+" "%2B" | replaceRE "/" "%2F" | replaceRE "=" "%3D" -}}
+<figure class="strudel-snippet">
+{{- /* Hugo indents each line of a shortcode's output to match the call's
+       indentation in the content file. Inside <pre> that whitespace is
+       significant and corrupts the code. So emit the <pre> body as ONE
+       physical line with newlines encoded as &#10; — no lines for Hugo to
+       indent. Do NOT replace this with plain {{ $code }} or the bug returns. */ -}}
+<pre><code class="language-js">{{- range $i, $l := (split $code "\n") -}}{{- if $i -}}&#10;{{- end -}}{{- $l -}}{{- end -}}</code></pre>
+<a class="strudel-open" href="https://strudel.cc/#{{ $enc | safeURL }}" target="_blank" rel="noopener">open in strudel ↗</a>
+</figure>
+{{- else -}}
+{{- errorf "strudel shortcode: no snippet %q in assets/strudel/" $id -}}
+{{- end -}}
