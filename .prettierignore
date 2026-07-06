@@ -1,0 +1,4 @@
+# Strudel snippets: quote style is SEMANTIC in strudel (double-quoted strings
+# are mini-notation patterns; single-quoted strings are raw JS). Prettier
+# normalizes quotes and would break playback, so it must not touch these.
+assets/strudel/
