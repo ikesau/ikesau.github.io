@@ -1,0 +1,23 @@
+/* Functional only — everything here is load-bearing for the sketch's
+   behaviour rather than its look. Styling is left open. */
+
+/* The beat animation is `opacity: 1 -> 0` applied per beat via
+   element.animate(). The emoji must therefore rest at 0, or it stays lit
+   between beats. */
+.emoji {
+  opacity: 0;
+}
+
+/* Without motion, the fade never runs, so the emoji would be permanently
+   invisible. Park it at a fixed visible value instead. */
+@media (prefers-reduced-motion: reduce) {
+  .emoji {
+    opacity: 0.35;
+  }
+}
+
+/* Hugo renders the controls div with the `hidden` attribute until audio is
+   running; `display: flex` on a class would otherwise override it. */
+#controls[hidden] {
+  display: none;
+}

@@ -1,0 +1,79 @@
+---
+title: "metronome-of-life-and-death"
+layout: "javascript-sketch"
+extra_css: "metronome-of-life-and-death"
+---
+
+<h1>The Metronome of Life &amp; Death</h1>
+
+<p>
+  Every beat is a birth or a death, played at the rate the world actually
+  managed that year. In 1950 births ran nearly two to one against deaths. Listen
+  to the two pulses converge.
+</p>
+
+<div class="panel">
+  <button id="start" type="button" disabled>Loading…</button>
+  <p id="status" role="status">Fetching population data…</p>
+
+  <div id="controls" hidden>
+    <div class="year-row">
+      <label for="year-number">Year</label>
+      <input
+        id="year-number"
+        type="number"
+        min="1950"
+        max="2100"
+        step="1"
+        inputmode="numeric"
+      />
+      <input
+        id="year-slider"
+        type="range"
+        min="1950"
+        max="2100"
+        step="1"
+        aria-label="Year"
+      />
+    </div>
+
+    <div class="voices">
+      <span class="voice">
+        <input id="births" type="checkbox" checked />
+        <label for="births">Births</label>
+      </span>
+      <span class="voice">
+        <input id="deaths" type="checkbox" checked />
+        <label for="deaths">Deaths</label>
+      </span>
+    </div>
+
+    <dl class="readout">
+      <dt>Births</dt>
+      <dd class="birth-val">
+        <span id="births-total"></span> per year — <span id="births-rate"></span>
+        per second
+      </dd>
+      <dt>Deaths</dt>
+      <dd class="death-val">
+        <span id="deaths-total"></span> per year — <span id="deaths-rate"></span>
+        per second
+      </dd>
+    </dl>
+
+    <p id="crossover"></p>
+  </div>
+</div>
+
+<div class="icons">
+  <p class="emoji" id="skull" aria-hidden="true">💀</p>
+  <p class="emoji" id="baby" aria-hidden="true">👶</p>
+</div>
+
+<footer>
+  Data: UN World Population Prospects 2022, via
+  <a href="https://ourworldindata.org/grapher/births-and-deaths-projected-to-2100"
+    >Our World in Data</a
+  >. Figures from 2024 onward are medium-variant projections. Rates assume a
+  365.2425-day year.
+</footer>
