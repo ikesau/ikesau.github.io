@@ -588,3 +588,7 @@
 - url: https://anthropeum.com/
   title: anthropeum
   comment: timeguessr but with museum artifacts
+
+- url: https://bento.page/slides/
+  title: bento slides
+  comment: create powerpoint presentations in a single, saveable, distributable html file
