@@ -184,6 +184,11 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
         padding: 1px 0;
       }
 
+      .tag-text mark.blank.linked {
+        border-bottom-style: double;
+        border-bottom-width: 4px;
+      }
+
       .tag-text mark.blank::after {
         content: attr(data-cat);
         font-size: 11px;
@@ -272,10 +277,60 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
         cursor: pointer;
       }
 
+      .reuse {
+        margin-top: 10px;
+        border-top: 1px dashed #ddd;
+        padding-top: 10px;
+      }
+
+      .reuse.hidden {
+        display: none;
+      }
+
+      .reuse p {
+        font-size: 14px;
+        margin: 0 0 8px 0;
+      }
+
+      .reuse .chips button {
+        border-style: dashed;
+      }
+
+      .repeat-offer {
+        margin-top: 10px;
+        background: #f4ffd4;
+        border: 1px solid #d5e8a8;
+        padding: 8px 10px;
+        font-size: 14px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .repeat-offer.hidden {
+        display: none;
+      }
+
+      .repeat-offer button {
+        font: inherit;
+        font-size: 14px;
+        padding: 4px 8px;
+        border: 1px solid #c9c9c9;
+        background: white;
+        cursor: pointer;
+      }
+
       /* ---- phase 3: filling ---- */
 
       .blank-field {
         margin-bottom: 14px;
+      }
+
+      .blank-field .field-note {
+        color: #666;
+        font-size: 13px;
+        font-weight: 400;
       }
 
       /* ---- phase 4: the story ---- */
@@ -338,6 +393,13 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
         Four steps: write a story, tag the words you want blanked out, hand the
         link to someone else, and they fill in the blanks without ever seeing
         the story.
+      </p>
+      <p>
+        Blanks can share an answer, so a character's name only has to be
+        supplied once. Tag a repeated word and you'll be offered the other
+        mentions in one click; to link words that aren't identical, tag the
+        first one, then select the second and pick it from the "reuse an answer"
+        row.
       </p>
       <p>
         There is no server. Every step is packed into the page's query string as
@@ -404,6 +466,18 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
             placeholder="or type your own prompt, e.g. a friend's name"
           />
           <button id="custom-category-add" type="button">Tag it</button>
+        </div>
+        <div class="reuse hidden" id="reuse">
+          <p>
+            Or reuse an answer you've already asked for - both spots get filled
+            with the same word:
+          </p>
+          <div class="chips" id="reuse-chips"></div>
+        </div>
+        <div class="repeat-offer hidden" id="repeat-offer">
+          <span id="repeat-offer-text"></span>
+          <button id="repeat-accept" type="button">Yes, tag them all</button>
+          <button id="repeat-dismiss" type="button">No thanks</button>
         </div>
       </div>
       <p class="warning" id="tag-warning"></p>
@@ -494,8 +568,11 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
 
       const state = { phase: 1, story: "", blanks: [], answers: [] };
       let pendingSelection = null;
+      let pendingRepeats = null;
       let revealWarned = false;
       let urlTimer = null;
+      // Blanks sharing a group id share one answer.
+      let nextGroupId = 1;
 
       const el = (id) => document.getElementById(id);
 
@@ -506,7 +583,7 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
           v: 1,
           p: state.phase,
           s: state.story,
-          b: state.blanks.map((b) => [b.start, b.end, b.cat]),
+          b: state.blanks.map((b) => [b.start, b.end, b.cat, b.group]),
           a: state.answers,
         };
         const base64 = btoa(
@@ -532,9 +609,15 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
             const start = Number(entry[0]);
             const end = Number(entry[1]);
             const cat = String(entry[2] || "word");
+            const group = Number(entry[3]);
             if (!Number.isInteger(start) || !Number.isInteger(end)) return null;
             if (start < 0 || end > story.length || start >= end) return null;
-            return { start, end, cat };
+            return {
+              start,
+              end,
+              cat,
+              group: Number.isInteger(group) && group > 0 ? group : null,
+            };
           })
           .filter(Boolean)
           .sort((a, b) => a.start - b.start)
@@ -543,7 +626,22 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
             return !previous || blank.start >= previous.end;
           });
 
-        const answers = blanks.map((_, index) => {
+        // Links made before this existed - and any link hand-edited into
+        // nonsense - just become one blank per group.
+        let nextId = blanks.reduce(
+          (highest, blank) => Math.max(highest, blank.group || 0),
+          0,
+        );
+        blanks.forEach((blank) => {
+          if (blank.group === null) blank.group = ++nextId;
+        });
+        nextGroupId = nextId + 1;
+
+        const order = [];
+        blanks.forEach((blank) => {
+          if (!order.includes(blank.group)) order.push(blank.group);
+        });
+        const answers = order.map((_, index) => {
           const answer = Array.isArray(payload.a) ? payload.a[index] : "";
           return typeof answer === "string" ? answer : "";
         });
@@ -609,6 +707,7 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
         if (!canReach(phase)) return;
         state.phase = phase;
         pendingSelection = null;
+        pendingRepeats = null;
         revealWarned = false;
         clearTimeout(urlTimer);
         syncUrl(push);
@@ -633,6 +732,38 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
         return parts;
       }
 
+      // One entry per answer the filler will be asked for, in story order.
+      // Blanks that share a group id collapse into a single entry.
+      function groups() {
+        const list = [];
+        const byId = new Map();
+        state.blanks.forEach((blank, index) => {
+          let group = byId.get(blank.group);
+          if (!group) {
+            group = {
+              id: blank.group,
+              cat: blank.cat,
+              text: state.story.slice(blank.start, blank.end),
+              indices: [],
+            };
+            byId.set(blank.group, group);
+            list.push(group);
+          }
+          group.indices.push(index);
+        });
+        return list;
+      }
+
+      function groupOrder() {
+        const order = new Map();
+        groups().forEach((group, index) => order.set(group.id, index));
+        return order;
+      }
+
+      function resetAnswers() {
+        state.answers = groups().map(() => "");
+      }
+
       function countWords(text) {
         const words = text.trim().split(/\s+/).filter(Boolean);
         return words.length;
@@ -651,7 +782,10 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
 
       function renderTagText() {
         const container = el("tag-text");
+        const groupList = groups();
+        const order = groupOrder();
         container.textContent = "";
+
         segments().forEach((part) => {
           const text = state.story.slice(part.start, part.end);
           if (!text) return;
@@ -662,27 +796,63 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
           node.dataset.start = String(part.start);
           node.textContent = text;
           if (part.index !== null) {
-            node.className = "blank";
+            const blank = state.blanks[part.index];
+            const position = order.get(blank.group);
+            const linked = groupList[position].indices.length > 1;
+            node.className = linked ? "blank linked" : "blank";
             node.dataset.index = String(part.index);
-            node.dataset.cat = state.blanks[part.index].cat;
-            node.title = "Click to untag";
+            node.dataset.cat = linked
+              ? `${blank.cat} ↺${position + 1}`
+              : blank.cat;
+            node.title = linked
+              ? `Shares an answer with the other ↺${position + 1} spots. Click to untag just this one.`
+              : "Click to untag";
           }
           container.appendChild(node);
         });
 
-        const count = state.blanks.length;
-        el("tag-count").textContent = count
-          ? `${count} blank${count === 1 ? "" : "s"} tagged.`
+        const spots = state.blanks.length;
+        const asks = groupList.length;
+        el("tag-count").textContent = spots
+          ? `${spots} blank${spots === 1 ? "" : "s"} tagged` +
+            (asks === spots
+              ? "."
+              : `, needing ${asks} answer${asks === 1 ? "" : "s"}.`)
           : "No blanks tagged yet.";
-        el("to-filling").disabled = count === 0;
-        el("clear-tags").disabled = count === 0;
+        el("to-filling").disabled = spots === 0;
+        el("clear-tags").disabled = spots === 0;
+        renderReuseChips();
+      }
+
+      function renderReuseChips() {
+        const container = el("reuse-chips");
+        const groupList = groups();
+        container.textContent = "";
+        el("reuse").classList.toggle("hidden", groupList.length === 0);
+
+        groupList.forEach((group, index) => {
+          const chip = document.createElement("button");
+          chip.type = "button";
+          chip.dataset.group = String(group.id);
+          chip.disabled = !pendingSelection;
+          const preview =
+            group.text.length > 22
+              ? group.text.slice(0, 20).trimEnd() + "…"
+              : group.text;
+          chip.textContent = `↺${index + 1} ${group.cat}: "${preview}"`;
+          chip.title = `Fill this in with the same word as "${group.text}"`;
+          chip.addEventListener("mousedown", (event) => event.preventDefault());
+          chip.addEventListener("click", () => addBlank(group.cat, group.id));
+          container.appendChild(chip);
+        });
       }
 
       function renderSelectionLabel() {
         const label = el("selection-label");
-        const chips = el("category-chips").querySelectorAll("button");
         const ready = Boolean(pendingSelection);
-        chips.forEach((chip) => (chip.disabled = !ready));
+        document
+          .querySelectorAll("#category-chips button, #reuse-chips button")
+          .forEach((chip) => (chip.disabled = !ready));
         el("custom-category-add").disabled = !ready;
 
         if (!ready) {
@@ -704,28 +874,36 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
 
       function renderFillForm() {
         const form = el("fill-form");
+        const groupList = groups();
         form.textContent = "";
-        state.blanks.forEach((blank, index) => {
+
+        groupList.forEach((group, index) => {
           const wrapper = document.createElement("div");
           wrapper.className = "blank-field";
 
           const label = document.createElement("label");
           label.setAttribute("for", `blank-${index}`);
-          label.textContent = `${index + 1}. ${sentenceCase(blank.cat)}`;
+          label.textContent = `${index + 1}. ${sentenceCase(group.cat)}`;
+          if (group.indices.length > 1) {
+            const note = document.createElement("span");
+            note.className = "field-note";
+            note.textContent = ` - used ${group.indices.length} times`;
+            label.appendChild(note);
+          }
 
           const input = document.createElement("input");
           input.type = "text";
           input.id = `blank-${index}`;
           input.dataset.index = String(index);
           input.value = state.answers[index] || "";
-          input.placeholder = blank.cat;
+          input.placeholder = group.cat;
 
           wrapper.appendChild(label);
           wrapper.appendChild(input);
           form.appendChild(wrapper);
         });
 
-        const count = state.blanks.length;
+        const count = groupList.length;
         el("fill-intro").textContent =
           `No peeking at the story - just answer the ${count} prompt` +
           (count === 1 ? "." : "s.");
@@ -753,10 +931,12 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
       }
 
       function storyPieces() {
+        const order = groupOrder();
         return segments().map((part) => {
           const original = state.story.slice(part.start, part.end);
           if (part.index === null) return { text: original, blank: false };
-          const answer = (state.answers[part.index] || "").trim();
+          const position = order.get(state.blanks[part.index].group);
+          const answer = (state.answers[position] || "").trim();
           if (!answer) {
             return {
               text: `[${state.blanks[part.index].cat}]`,
@@ -801,6 +981,7 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
         } else if (state.phase === 2) {
           renderTagText();
           renderSelectionLabel();
+          renderRepeatOffer();
           el("tag-warning").textContent = "";
         } else if (state.phase === 3) {
           renderFillForm();
@@ -899,6 +1080,7 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
         // pending one (e.g. while reaching for a chip) stays put.
         if (result === undefined) return;
         pendingSelection = result;
+        if (result) offerRepeats(null);
         if (result && overlapsBlank(result.start, result.end)) {
           pendingSelection = null;
           el("tag-warning").textContent =
@@ -909,27 +1091,97 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
         renderSelectionLabel();
       }
 
-      function addBlank(category) {
+      function addBlank(category, groupId) {
         const cat = category.trim().toLowerCase();
         if (!pendingSelection || !cat) return;
         const { start, end } = pendingSelection;
         if (overlapsBlank(start, end)) return;
 
-        state.blanks.push({ start, end, cat });
+        const group = groupId || nextGroupId++;
+        state.blanks.push({ start, end, cat, group });
         state.blanks.sort((a, b) => a.start - b.start);
-        state.answers = state.blanks.map(() => "");
+        resetAnswers();
         pendingSelection = null;
         window.getSelection().removeAllRanges();
         syncUrl(false);
+
+        // Only offer repeats for brand new blanks - if you just linked two
+        // spots by hand you've already said what you meant.
+        offerRepeats(groupId ? null : { start, end, cat, group });
         renderTagText();
         renderSelectionLabel();
       }
 
       function removeBlank(index) {
         state.blanks.splice(index, 1);
-        state.answers = state.blanks.map(() => "");
+        resetAnswers();
+        pendingRepeats = null;
         syncUrl(false);
         renderTagText();
+        renderRepeatOffer();
+      }
+
+      // Other whole-word occurrences of the phrase that aren't already tagged.
+      function findRepeats(phrase) {
+        const story = state.story;
+        const haystack = story.toLowerCase();
+        const needle = phrase.toLowerCase();
+        const hits = [];
+        let at = haystack.indexOf(needle);
+        while (at !== -1) {
+          const end = at + needle.length;
+          const clearBefore = at === 0 || !WORD_CHAR.test(story[at - 1]);
+          const clearAfter =
+            end === story.length || !WORD_CHAR.test(story[end]);
+          if (clearBefore && clearAfter && !overlapsBlank(at, end)) {
+            hits.push({ start: at, end });
+          }
+          at = haystack.indexOf(needle, at + 1);
+        }
+        return hits;
+      }
+
+      function offerRepeats(blank) {
+        pendingRepeats = null;
+        if (blank) {
+          const phrase = state.story.slice(blank.start, blank.end);
+          const hits = findRepeats(phrase);
+          if (hits.length) {
+            pendingRepeats = {
+              phrase,
+              hits,
+              cat: blank.cat,
+              group: blank.group,
+            };
+          }
+        }
+        renderRepeatOffer();
+      }
+
+      function renderRepeatOffer() {
+        const offer = el("repeat-offer");
+        offer.classList.toggle("hidden", !pendingRepeats);
+        if (!pendingRepeats) return;
+        const { phrase, hits, cat } = pendingRepeats;
+        el("repeat-offer-text").textContent =
+          `"${phrase}" appears ${hits.length} more time${
+            hits.length === 1 ? "" : "s"
+          }. Tag ${hits.length === 1 ? "it" : "them"} as ${cat} too, sharing the same answer?`;
+      }
+
+      function acceptRepeats() {
+        if (!pendingRepeats) return;
+        const { hits, cat, group } = pendingRepeats;
+        hits.forEach((hit) => {
+          if (overlapsBlank(hit.start, hit.end)) return;
+          state.blanks.push({ start: hit.start, end: hit.end, cat, group });
+        });
+        state.blanks.sort((a, b) => a.start - b.start);
+        resetAnswers();
+        pendingRepeats = null;
+        syncUrl(false);
+        renderTagText();
+        renderRepeatOffer();
       }
 
       /* ---------- clipboard ---------- */
@@ -1019,10 +1271,18 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
         addCustomCategory();
       });
 
+      el("repeat-accept").addEventListener("click", acceptRepeats);
+
+      el("repeat-dismiss").addEventListener("click", () => {
+        pendingRepeats = null;
+        renderRepeatOffer();
+      });
+
       el("clear-tags").addEventListener("click", () => {
         state.blanks = [];
         state.answers = [];
         pendingSelection = null;
+        pendingRepeats = null;
         syncUrl(false);
         render();
       });
@@ -1058,14 +1318,14 @@ description: "Write a story, tag the words to blank out, then hand it to a frien
       });
 
       el("clear-answers").addEventListener("click", () => {
-        state.answers = state.blanks.map(() => "");
+        resetAnswers();
         revealWarned = false;
         syncUrl(false);
         renderFillForm();
       });
 
       el("play-again").addEventListener("click", () => {
-        state.answers = state.blanks.map(() => "");
+        resetAnswers();
         goTo(3);
       });
 
