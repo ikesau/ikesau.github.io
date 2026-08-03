@@ -1,0 +1,702 @@
+---
+title: "Mad Libs Maker"
+description: "Write a story full of blanks, then fill them in (or send it to a friend to fill in for you)"
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mad Libs Maker</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 20px;
+        color: #2c2c2c;
+        line-height: 1.5;
+      }
+
+      h1 {
+        color: #2c9283;
+        background: #f4ffd4;
+        padding: 16px;
+        margin: 0 -16px;
+        margin-bottom: 8px;
+      }
+
+      .view.hidden {
+        display: none;
+      }
+
+      label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #333;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 260px;
+        padding: 12px;
+        font: inherit;
+        line-height: 1.6;
+        border: 2px solid #ddd;
+        outline: none;
+        resize: vertical;
+      }
+
+      textarea:focus,
+      input[type="text"]:focus {
+        border-color: #2c9283;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border: 2px solid #ddd;
+        outline: none;
+      }
+
+      button {
+        font: inherit;
+        border: 0;
+        padding: 10px 14px;
+        cursor: pointer;
+        background: #2c9283;
+        color: white;
+      }
+
+      button:hover {
+        background: #237569;
+      }
+
+      button.secondary {
+        background: #e9ecef;
+        color: #2c2c2c;
+      }
+
+      button.secondary:hover {
+        background: #dee2e6;
+      }
+
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-top: 16px;
+      }
+
+      .hint {
+        color: #666;
+        font-size: 14px;
+      }
+
+      .warning {
+        color: #b45309;
+        font-size: 14px;
+      }
+
+      .back-btn {
+        background: none;
+        border: none;
+        color: #007bff;
+        cursor: pointer;
+        padding: 0;
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+
+      .back-btn:hover {
+        background: none;
+        text-decoration: underline;
+      }
+
+      .samples {
+        margin-top: 28px;
+        border-top: 1px solid #ddd;
+        padding-top: 12px;
+      }
+
+      .blank-field {
+        margin-bottom: 14px;
+      }
+
+      .blank-field .field-note {
+        color: #666;
+        font-size: 13px;
+        font-weight: 400;
+      }
+
+      .story {
+        background: #f4ffd4;
+        border: 1px solid #d5e8a8;
+        padding: 20px;
+        white-space: pre-wrap;
+        font-size: 18px;
+        line-height: 1.7;
+      }
+
+      .story .filled {
+        color: #2c9283;
+        font-weight: 700;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .story .unfilled {
+        color: #999;
+        font-weight: 700;
+      }
+
+      .how-it-works {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 16px;
+      }
+
+      .how-it-works summary {
+        cursor: pointer;
+        color: #007bff;
+      }
+
+      .how-it-works summary:hover {
+        text-decoration: underline;
+      }
+
+      .how-it-works p {
+        margin: 8px 0;
+      }
+
+      code {
+        background: #e9ecef;
+        padding: 2px 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Mad Libs Maker</h1>
+
+    <details class="how-it-works">
+      <summary>How does this work?</summary>
+      <p>
+        Write a story and put your prompts inside square brackets:
+        <code>The [adjective] [animal] ate my [noun].</code> Anything in
+        brackets becomes a blank to fill in.
+      </p>
+      <p>
+        To use the same answer in more than one blank, give it a name after a
+        colon: <code>[name:hero]</code> anywhere else in the story will reuse
+        whatever was typed for the first <code>[name:hero]</code>.
+      </p>
+      <p>
+        Nothing is sent anywhere - the story lives in the page's URL, so
+        "Copy link to share" gives you a link that opens straight to the blanks
+        without spoiling the story. Your draft is also kept in this browser's
+        local storage so you don't lose it on refresh.
+      </p>
+    </details>
+
+    <section class="view" id="write-view">
+      <label for="template-input">
+        Write your story, with prompts in [square brackets]:
+      </label>
+      <textarea
+        id="template-input"
+        spellcheck="true"
+        placeholder="It was a [adjective] morning in [place]. I woke up and immediately [verb ending in -ed] my [noun]."
+      ></textarea>
+      <p class="hint" id="blank-summary">No blanks yet.</p>
+      <div class="row">
+        <button id="to-fill">Fill in the blanks &rarr;</button>
+        <button class="secondary" id="copy-blank-link">
+          Copy link to share
+        </button>
+        <button class="secondary" id="clear-template">Clear</button>
+      </div>
+
+      <div class="samples">
+        <p class="hint">Or start from an example:</p>
+        <div class="row" id="sample-buttons"></div>
+      </div>
+    </section>
+
+    <section class="view hidden" id="fill-view">
+      <button class="back-btn" id="back-to-write">
+        &larr; Edit the story
+      </button>
+      <p class="hint">
+        Fill these in without looking at the story - that's the whole point.
+      </p>
+      <form id="fill-form" autocomplete="off"></form>
+      <div class="row">
+        <button id="reveal">Reveal the story</button>
+        <button class="secondary" id="clear-answers">Clear answers</button>
+      </div>
+      <p class="warning" id="fill-status"></p>
+    </section>
+
+    <section class="view hidden" id="story-view">
+      <div class="story" id="story"></div>
+      <div class="row">
+        <button id="play-again">Play again</button>
+        <button class="secondary" id="edit-template">Edit the story</button>
+        <button class="secondary" id="copy-story">Copy story text</button>
+        <button class="secondary" id="copy-story-link">
+          Copy link to this version
+        </button>
+      </div>
+    </section>
+
+    <script>
+      const STORAGE_KEY = "mad-libs-template";
+
+      const SAMPLES = [
+        {
+          name: "Job interview",
+          text: `THE JOB INTERVIEW
+
+Thanks for coming in today, [name:candidate]. Your resume says you spent [number] years as a professional [plural noun] wrangler in [place]. Impressive.
+
+Here at [company:employer] we need someone who can [verb] under pressure while staying [adjective]. Our last hire kept [verb ending in -ing] in the supply closet, which was, frankly, [adjective].
+
+So tell me, [name:candidate] - where do you see yourself in [number] years?
+
+...
+
+Wonderful answer. Welcome to [company:employer]. Your desk is the [adjective] one next to the [noun].`,
+        },
+        {
+          name: "Nature documentary",
+          text: `A NATURE DOCUMENTARY
+
+Here, deep in the [adjective] [place], we find the [animal:beast] - the most [adjective] creature on the entire continent.
+
+Watch how it [verb ending in -s] silently through the [plural noun], hunting for its favourite meal: one perfectly ripe [food].
+
+But the [animal:beast] is not alone. A rival approaches: [number] kilograms of pure [noun]. The two circle each other, [verb ending in -ing], until at last one of them lets out a [adjective] [sound] and retreats.
+
+Nature, as always, is [adjective].`,
+        },
+        {
+          name: "Recipe",
+          text: `[ADJECTIVE] [FOOD] SURPRISE
+
+Preheat your [noun] to [number] degrees.
+
+In a large [container], combine [number] cups of [plural noun] with a generous splash of [liquid]. Stir [adverb] until the mixture looks [adjective] - about [number] minutes, or until your [family member] starts [verb ending in -ing].
+
+Bake until [adjective], garnish with [plural noun], and serve immediately to someone you [verb].
+
+Serves [number]. Leftovers keep in the [noun] for up to [number] [unit of time].`,
+        },
+      ];
+
+      const state = { template: "", answers: {} };
+      let parsed = { parts: [], blanks: [] };
+
+      const el = (id) => document.getElementById(id);
+
+      /* ---------- parsing ---------- */
+
+      function sentenceCase(text) {
+        return text.charAt(0).toUpperCase() + text.slice(1);
+      }
+
+      function parseTemplate(text) {
+        const parts = [];
+        const blanks = [];
+        const byName = new Map();
+        const pattern = /\[([^\[\]\n]*)\]/g;
+        let cursor = 0;
+        let match;
+
+        while ((match = pattern.exec(text)) !== null) {
+          if (match.index > cursor) {
+            parts.push({ type: "text", value: text.slice(cursor, match.index) });
+          }
+          cursor = match.index + match[0].length;
+
+          const raw = match[1].trim();
+          if (!raw) {
+            // An empty "[]" isn't a prompt, so leave it in the story as-is.
+            parts.push({ type: "text", value: match[0] });
+            continue;
+          }
+
+          const colon = raw.indexOf(":");
+          const prompt = (colon === -1 ? raw : raw.slice(0, colon)).trim();
+          const name =
+            colon === -1 ? "" : raw.slice(colon + 1).trim().toLowerCase();
+
+          let blank;
+          if (name && byName.has(name)) {
+            blank = byName.get(name);
+            blank.occurrences += 1;
+          } else {
+            blank = {
+              key: name ? "@" + name : "#" + blanks.length,
+              prompt: prompt || "word",
+              name,
+              occurrences: 1,
+            };
+            blanks.push(blank);
+            if (name) byName.set(name, blank);
+          }
+          parts.push({ type: "blank", blank });
+        }
+
+        if (cursor < text.length) {
+          parts.push({ type: "text", value: text.slice(cursor) });
+        }
+
+        // Number the labels when several blanks ask for the same thing.
+        const totals = {};
+        blanks.forEach((b) => {
+          const k = b.prompt.toLowerCase();
+          totals[k] = (totals[k] || 0) + 1;
+        });
+        const running = {};
+        blanks.forEach((b) => {
+          const k = b.prompt.toLowerCase();
+          running[k] = (running[k] || 0) + 1;
+          b.label =
+            sentenceCase(b.prompt) +
+            (totals[k] > 1 ? ` (${running[k]})` : "");
+        });
+
+        return { parts, blanks };
+      }
+
+      /* ---------- rendering the story ---------- */
+
+      function startsSentence(index) {
+        for (let i = index - 1; i >= 0; i--) {
+          const part = parsed.parts[i];
+          if (part.type !== "text") return false;
+          if (!part.value.trim()) continue;
+          return /[.!?:;"')\]\n]\s*$/.test(part.value);
+        }
+        return true;
+      }
+
+      function presentAnswer(answer, index) {
+        if (!startsSentence(index)) return answer;
+        // Don't "fix" words that are deliberately lowercase-then-capital, like iPhone.
+        if (!/^[a-z]/.test(answer) || /^.[A-Z]/.test(answer)) return answer;
+        return answer.charAt(0).toUpperCase() + answer.slice(1);
+      }
+
+      function storyText() {
+        return parsed.parts
+          .map((part, i) => {
+            if (part.type === "text") return part.value;
+            const answer = (state.answers[part.blank.key] || "").trim();
+            return answer
+              ? presentAnswer(answer, i)
+              : `[${part.blank.prompt}]`;
+          })
+          .join("");
+      }
+
+      function renderStory() {
+        const container = el("story");
+        container.textContent = "";
+        parsed.parts.forEach((part, i) => {
+          if (part.type === "text") {
+            container.appendChild(document.createTextNode(part.value));
+            return;
+          }
+          const answer = (state.answers[part.blank.key] || "").trim();
+          const span = document.createElement("span");
+          span.className = answer ? "filled" : "unfilled";
+          span.textContent = answer
+            ? presentAnswer(answer, i)
+            : `[${part.blank.prompt}]`;
+          container.appendChild(span);
+        });
+      }
+
+      /* ---------- views ---------- */
+
+      function showView(id) {
+        document
+          .querySelectorAll(".view")
+          .forEach((view) => view.classList.add("hidden"));
+        el(id).classList.remove("hidden");
+      }
+
+      function updateBlankSummary() {
+        const count = parsed.blanks.length;
+        const total = parsed.parts.filter((p) => p.type === "blank").length;
+        const reused = total - count;
+        if (count === 0) {
+          el("blank-summary").textContent =
+            "No blanks yet - put a prompt in [square brackets] to make one.";
+        } else {
+          el("blank-summary").textContent =
+            `${count} blank${count === 1 ? "" : "s"} to fill in` +
+            (reused > 0
+              ? `, plus ${reused} repeat${reused === 1 ? "" : "s"} of a named blank.`
+              : ".");
+        }
+        el("to-fill").disabled = count === 0;
+        el("copy-blank-link").disabled = count === 0;
+      }
+
+      function setTemplate(text, { save = true } = {}) {
+        state.template = text;
+        state.answers = {};
+        parsed = parseTemplate(text);
+        if (save) {
+          try {
+            localStorage.setItem(STORAGE_KEY, text);
+          } catch (e) {
+            // Private browsing, quota, etc. - the tool still works without it.
+          }
+        }
+        updateBlankSummary();
+      }
+
+      function renderFillForm() {
+        const form = el("fill-form");
+        form.textContent = "";
+
+        parsed.blanks.forEach((blank, index) => {
+          const wrapper = document.createElement("div");
+          wrapper.className = "blank-field";
+
+          const label = document.createElement("label");
+          label.setAttribute("for", `blank-${index}`);
+          label.textContent = `${index + 1}. ${blank.label}`;
+          if (blank.occurrences > 1) {
+            const note = document.createElement("span");
+            note.className = "field-note";
+            note.textContent = ` - used ${blank.occurrences} times`;
+            label.appendChild(note);
+          }
+
+          const input = document.createElement("input");
+          input.type = "text";
+          input.id = `blank-${index}`;
+          input.dataset.key = blank.key;
+          input.value = state.answers[blank.key] || "";
+          input.placeholder = blank.prompt;
+
+          wrapper.appendChild(label);
+          wrapper.appendChild(input);
+          form.appendChild(wrapper);
+        });
+
+        el("fill-status").textContent = "";
+        const first = form.querySelector("input");
+        if (first) first.focus();
+      }
+
+      function collectAnswers() {
+        el("fill-form")
+          .querySelectorAll("input")
+          .forEach((input) => {
+            state.answers[input.dataset.key] = input.value.trim();
+          });
+      }
+
+      /* ---------- sharing ---------- */
+
+      function encodeState(includeAnswers) {
+        const payload = { t: state.template };
+        if (includeAnswers) payload.a = state.answers;
+        return btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+      }
+
+      function loadFromHash() {
+        const encoded = location.hash.slice(1);
+        if (!encoded) return false;
+        try {
+          const payload = JSON.parse(
+            decodeURIComponent(escape(atob(encoded))),
+          );
+          if (!payload || typeof payload.t !== "string" || !payload.t.trim()) {
+            return false;
+          }
+          setTemplate(payload.t, { save: false });
+          el("template-input").value = payload.t;
+          if (payload.a && typeof payload.a === "object") {
+            parsed.blanks.forEach((blank) => {
+              const answer = payload.a[blank.key];
+              if (typeof answer === "string") state.answers[blank.key] = answer;
+            });
+          }
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+
+      function hasAnyAnswer() {
+        return Object.values(state.answers).some((a) => a && a.trim());
+      }
+
+      async function copyToClipboard(text, button) {
+        const original = button.dataset.label || button.textContent;
+        button.dataset.label = original;
+        try {
+          await navigator.clipboard.writeText(text);
+          button.textContent = "Copied!";
+        } catch (e) {
+          window.prompt("Copy this:", text);
+          button.textContent = original;
+          return;
+        }
+        setTimeout(() => {
+          button.textContent = original;
+        }, 1500);
+      }
+
+      function shareLink(includeAnswers) {
+        return (
+          location.origin +
+          location.pathname +
+          "#" +
+          encodeState(includeAnswers)
+        );
+      }
+
+      /* ---------- events ---------- */
+
+      el("template-input").addEventListener("input", (event) => {
+        setTemplate(event.target.value);
+      });
+
+      el("to-fill").addEventListener("click", () => {
+        if (parsed.blanks.length === 0) return;
+        renderFillForm();
+        showView("fill-view");
+      });
+
+      el("clear-template").addEventListener("click", () => {
+        el("template-input").value = "";
+        setTemplate("");
+        history.replaceState(null, "", location.pathname + location.search);
+        el("template-input").focus();
+      });
+
+      el("copy-blank-link").addEventListener("click", (event) => {
+        copyToClipboard(shareLink(false), event.currentTarget);
+      });
+
+      el("back-to-write").addEventListener("click", () => {
+        collectAnswers();
+        showView("write-view");
+      });
+
+      el("fill-form").addEventListener("keydown", (event) => {
+        if (event.key !== "Enter") return;
+        event.preventDefault();
+        const inputs = Array.from(
+          el("fill-form").querySelectorAll("input"),
+        );
+        const next = inputs[inputs.indexOf(event.target) + 1];
+        if (next) {
+          next.focus();
+        } else {
+          el("reveal").click();
+        }
+      });
+
+      el("reveal").addEventListener("click", () => {
+        collectAnswers();
+        const empty = parsed.blanks.filter(
+          (blank) => !state.answers[blank.key],
+        ).length;
+        if (empty > 0 && !el("fill-status").textContent) {
+          el("fill-status").textContent =
+            `${empty} blank${empty === 1 ? " is" : "s are"} still empty. ` +
+            "Press again to reveal the story anyway.";
+          return;
+        }
+        renderStory();
+        showView("story-view");
+      });
+
+      el("clear-answers").addEventListener("click", () => {
+        state.answers = {};
+        renderFillForm();
+      });
+
+      el("play-again").addEventListener("click", () => {
+        state.answers = {};
+        renderFillForm();
+        showView("fill-view");
+      });
+
+      el("edit-template").addEventListener("click", () => {
+        showView("write-view");
+        el("template-input").focus();
+      });
+
+      el("copy-story").addEventListener("click", (event) => {
+        copyToClipboard(storyText(), event.currentTarget);
+      });
+
+      el("copy-story-link").addEventListener("click", (event) => {
+        copyToClipboard(shareLink(true), event.currentTarget);
+      });
+
+      SAMPLES.forEach((sample) => {
+        const button = document.createElement("button");
+        button.className = "secondary";
+        button.textContent = sample.name;
+        button.addEventListener("click", () => {
+          el("template-input").value = sample.text;
+          setTemplate(sample.text);
+          history.replaceState(null, "", location.pathname + location.search);
+        });
+        el("sample-buttons").appendChild(button);
+      });
+
+      /* ---------- start ---------- */
+
+      function init() {
+        if (loadFromHash()) {
+          if (hasAnyAnswer()) {
+            renderStory();
+            showView("story-view");
+          } else {
+            renderFillForm();
+            showView("fill-view");
+          }
+          return;
+        }
+
+        let saved = "";
+        try {
+          saved = localStorage.getItem(STORAGE_KEY) || "";
+        } catch (e) {
+          saved = "";
+        }
+        el("template-input").value = saved;
+        setTemplate(saved, { save: false });
+      }
+
+      init();
+    </script>
+  </body>
+</html>
