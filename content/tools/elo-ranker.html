@@ -223,6 +223,7 @@ description: Paste a list, vote on pairings, see your true preferences.
           </p>
         </div>
         <div class="row">
+          <span id="urlSize" class="muted small"></span>
           <button id="copyUrlButton" class="secondary hidden">Copy URL</button>
           <button id="resetButton" class="danger hidden">Reset</button>
         </div>
@@ -320,9 +321,26 @@ description: Paste a list, vote on pairings, see your true preferences.
     <script>
       const INITIAL_ELO = 1000;
       const K = 32;
+      const STATE_VERSION = 3;
 
+      // Section separator for the serialized payload. Stripped from labels on
+      // input, so it can never appear inside one.
+      const SEPARATOR = "\u001f";
+
+      const OUTCOME_CODES = { left: "L", right: "R", tie: "T", skip: "S" };
+      const OUTCOME_NAMES = { L: "left", R: "right", T: "tie", S: "skip" };
+
+      const CAN_COMPRESS =
+        typeof CompressionStream === "function" &&
+        typeof DecompressionStream === "function";
+
+      // Canonical state is only { labels, log, currentPair }. Everything else
+      // (elo, records, results, skips) is replayed from the log by derive().
       let state = null;
+      let view = null;
       let sortMode = "elo";
+      let pendingSave = Promise.resolve();
+      let saveToken = 0;
 
       const setupEl = document.getElementById("setup");
       const votingEl = document.getElementById("voting");
@@ -335,6 +353,7 @@ description: Paste a list, vote on pairings, see your true preferences.
       const startButton = document.getElementById("startButton");
       const resetButton = document.getElementById("resetButton");
       const copyUrlButton = document.getElementById("copyUrlButton");
+      const urlSize = document.getElementById("urlSize");
 
       const leftChoice = document.getElementById("leftChoice");
       const rightChoice = document.getElementById("rightChoice");
@@ -352,16 +371,12 @@ description: Paste a list, vote on pairings, see your true preferences.
       const rankingBody = document.getElementById("rankingBody");
       const auditBody = document.getElementById("auditBody");
 
-      function makeId() {
-        return Math.random().toString(36).slice(2, 10);
-      }
-
       function normalizeItems(text) {
         const seen = new Set();
 
         return text
           .split(/\r?\n/)
-          .map((line) => line.trim())
+          .map((line) => line.replace(/[\u0000-\u001f]/g, " ").trim())
           .filter(Boolean)
           .filter((line) => {
             const key = line.toLowerCase();
@@ -372,8 +387,17 @@ description: Paste a list, vote on pairings, see your true preferences.
       }
 
       function createState(labels) {
-        const items = labels.map((label) => ({
-          id: makeId(),
+        return { version: STATE_VERSION, labels, log: [], currentPair: null };
+      }
+
+      function expectedScore(ratingA, ratingB) {
+        return 1 / (1 + Math.pow(10, (ratingB - ratingA) / 400));
+      }
+
+      // Replay the log into the shape the UI wants to read.
+      function derive({ labels, log }) {
+        const items = labels.map((label, index) => ({
+          id: index,
           label,
           elo: INITIAL_ELO,
           wins: 0,
@@ -382,35 +406,79 @@ description: Paste a list, vote on pairings, see your true preferences.
           seen: 0,
         }));
 
-        return {
-          version: 2,
-          items,
-          currentPair: null,
-          comparisons: 0,
-          results: [],
-          skippedPairs: [],
-          history: [],
-        };
+        const results = [];
+        const skippedPairs = [];
+
+        for (const [leftId, rightId, outcome] of log) {
+          const left = items[leftId];
+          const right = items[rightId];
+
+          if (!left || !right) continue;
+
+          if (outcome === "skip") {
+            skippedPairs.push([leftId, rightId]);
+            continue;
+          }
+
+          const expectedLeft = expectedScore(left.elo, right.elo);
+          const expectedRight = expectedScore(right.elo, left.elo);
+
+          let actualLeft;
+          let actualRight;
+          let winnerId = null;
+          let loserId = null;
+
+          if (outcome === "left") {
+            actualLeft = 1;
+            actualRight = 0;
+            winnerId = leftId;
+            loserId = rightId;
+            left.wins += 1;
+            right.losses += 1;
+          } else if (outcome === "right") {
+            actualLeft = 0;
+            actualRight = 1;
+            winnerId = rightId;
+            loserId = leftId;
+            right.wins += 1;
+            left.losses += 1;
+          } else {
+            actualLeft = 0.5;
+            actualRight = 0.5;
+            left.ties += 1;
+            right.ties += 1;
+          }
+
+          left.elo += K * (actualLeft - expectedLeft);
+          right.elo += K * (actualRight - expectedRight);
+
+          left.seen += 1;
+          right.seen += 1;
+
+          results.push({ leftId, rightId, result: outcome, winnerId, loserId });
+        }
+
+        return { items, results, skippedPairs, comparisons: results.length };
       }
 
-      function expectedScore(ratingA, ratingB) {
-        return 1 / (1 + Math.pow(10, (ratingB - ratingA) / 400));
+      function refresh() {
+        view = state ? derive(state) : null;
       }
 
       function pairKey(a, b) {
-        return [a, b].sort().join("__");
+        return Math.min(a, b) + "-" + Math.max(a, b);
       }
 
       function allPossiblePairCount() {
-        if (!state) return 0;
-        const n = state.items.length;
+        if (!view) return 0;
+        const n = view.items.length;
         return (n * (n - 1)) / 2;
       }
 
       function comparedPairKeys() {
         const keys = new Set();
 
-        for (const result of state.results || []) {
+        for (const result of view.results) {
           keys.add(pairKey(result.leftId, result.rightId));
         }
 
@@ -420,7 +488,7 @@ description: Paste a list, vote on pairings, see your true preferences.
       function skippedPairKeys() {
         const keys = new Set();
 
-        for (const skipped of state.skippedPairs || []) {
+        for (const skipped of view.skippedPairs) {
           keys.add(pairKey(skipped[0], skipped[1]));
         }
 
@@ -430,9 +498,9 @@ description: Paste a list, vote on pairings, see your true preferences.
       function allPairs() {
         const pairs = [];
 
-        for (let i = 0; i < state.items.length; i++) {
-          for (let j = i + 1; j < state.items.length; j++) {
-            pairs.push([state.items[i].id, state.items[j].id]);
+        for (let i = 0; i < view.items.length; i++) {
+          for (let j = i + 1; j < view.items.length; j++) {
+            pairs.push([i, j]);
           }
         }
 
@@ -440,7 +508,7 @@ description: Paste a list, vote on pairings, see your true preferences.
       }
 
       function choosePair() {
-        if (!state || state.items.length < 2) return null;
+        if (!view || view.items.length < 2) return null;
 
         const compared = comparedPairKeys();
         const skipped = skippedPairKeys();
@@ -457,13 +525,10 @@ description: Paste a list, vote on pairings, see your true preferences.
 
         // Prefer pairs where both items are under-tested.
         candidates.sort(([a1, b1], [a2, b2]) => {
-          const itemA1 = getItem(a1);
-          const itemB1 = getItem(b1);
-          const itemA2 = getItem(a2);
-          const itemB2 = getItem(b2);
-
-          const score1 = itemA1.seen + itemB1.seen + Math.random() * 2;
-          const score2 = itemA2.seen + itemB2.seen + Math.random() * 2;
+          const score1 =
+            getItem(a1).seen + getItem(b1).seen + Math.random() * 2;
+          const score2 =
+            getItem(a2).seen + getItem(b2).seen + Math.random() * 2;
 
           return score1 - score2;
         });
@@ -475,90 +540,47 @@ description: Paste a list, vote on pairings, see your true preferences.
         return pair;
       }
 
-      function snapshot() {
-        state.history.push(
-          JSON.stringify({
-            items: state.items,
-            currentPair: state.currentPair,
-            comparisons: state.comparisons,
-            results: state.results,
-            skippedPairs: state.skippedPairs,
-          }),
-        );
-      }
-
       function applyResult(leftId, rightId, result) {
-        const left = getItem(leftId);
-        const right = getItem(rightId);
+        if (!state) return;
 
-        if (!left || !right) return;
-
-        snapshot();
-
-        const expectedLeft = expectedScore(left.elo, right.elo);
-        const expectedRight = expectedScore(right.elo, left.elo);
-
-        let actualLeft;
-        let actualRight;
-        let winnerId = null;
-        let loserId = null;
-
-        if (result === "left") {
-          actualLeft = 1;
-          actualRight = 0;
-          winnerId = left.id;
-          loserId = right.id;
-          left.wins += 1;
-          right.losses += 1;
-        } else if (result === "right") {
-          actualLeft = 0;
-          actualRight = 1;
-          winnerId = right.id;
-          loserId = left.id;
-          right.wins += 1;
-          left.losses += 1;
-        } else {
-          actualLeft = 0.5;
-          actualRight = 0.5;
-          left.ties += 1;
-          right.ties += 1;
-        }
-
-        left.elo += K * (actualLeft - expectedLeft);
-        right.elo += K * (actualRight - expectedRight);
-
-        left.seen += 1;
-        right.seen += 1;
-        state.comparisons += 1;
-
-        state.results.push({
-          leftId,
-          rightId,
-          result,
-          winnerId,
-          loserId,
-        });
-
+        state.log.push([leftId, rightId, result]);
+        refresh();
         state.currentPair = choosePair();
 
-        saveStateToUrl();
-        render();
+        commit();
       }
 
       function skipCurrentPair() {
         if (!state || !state.currentPair) return;
 
-        snapshot();
+        const [leftId, rightId] = state.currentPair;
 
-        state.skippedPairs.push([...state.currentPair]);
+        state.log.push([leftId, rightId, "skip"]);
+        refresh();
         state.currentPair = choosePair();
 
+        commit();
+      }
+
+      // The popped event's pair is exactly the pair that was on screen when it
+      // was recorded, so undo restores it for free. Survives a page reload.
+      function undo() {
+        if (!state || !state.log.length) return;
+
+        const [leftId, rightId] = state.log.pop();
+        refresh();
+        state.currentPair = [leftId, rightId];
+
+        commit();
+      }
+
+      function commit() {
         saveStateToUrl();
         render();
       }
 
       function getItem(id) {
-        return state.items.find((item) => item.id === id);
+        return view ? view.items[id] : undefined;
       }
 
       function itemLabel(id) {
@@ -577,7 +599,7 @@ description: Paste a list, vote on pairings, see your true preferences.
       }
 
       function rankedItems() {
-        const ranked = [...state.items];
+        const ranked = [...view.items];
 
         if (sortMode === "elo") {
           ranked.sort((a, b) => b.elo - a.elo);
@@ -607,7 +629,7 @@ description: Paste a list, vote on pairings, see your true preferences.
         const lostTo = [];
         const tiedWith = [];
 
-        for (const result of state.results || []) {
+        for (const result of view.results) {
           if (result.result === "tie") {
             if (result.leftId === itemId) tiedWith.push(result.rightId);
             if (result.rightId === itemId) tiedWith.push(result.leftId);
@@ -621,73 +643,259 @@ description: Paste a list, vote on pairings, see your true preferences.
         return { beat, lostTo, tiedWith };
       }
 
-      function saveStateToUrl() {
-        if (!state) {
-          history.replaceState(null, "", location.pathname + location.search);
-          return;
-        }
+      /* ---------------------------------------------------------------- *
+       * Serialization
+       *
+       * Payload is three sections: labels, log, current pair. Nothing that
+       * can be replayed is stored. The whole thing is then deflated, which
+       * is where the prose labels actually shrink.
+       * ---------------------------------------------------------------- */
 
-        const json = JSON.stringify(state);
-        const encoded = btoa(unescape(encodeURIComponent(json)));
-        history.replaceState(null, "", "#" + encoded);
+      function encodeLog(log) {
+        return log
+          .map(
+            ([leftId, rightId, outcome]) =>
+              leftId.toString(36) +
+              "." +
+              rightId.toString(36) +
+              OUTCOME_CODES[outcome],
+          )
+          .join(",");
       }
 
-      function loadStateFromUrl() {
-        const encoded = location.hash.slice(1);
-        if (!encoded) return null;
+      function decodeLog(block, itemCount) {
+        if (!block) return [];
 
+        const log = [];
+
+        for (const token of block.split(",")) {
+          const match = /^([0-9a-z]+)\.([0-9a-z]+)([LRTS])$/.exec(token);
+          if (!match) continue;
+
+          const leftId = parseInt(match[1], 36);
+          const rightId = parseInt(match[2], 36);
+
+          if (leftId >= itemCount || rightId >= itemCount) continue;
+          if (leftId === rightId) continue;
+
+          log.push([leftId, rightId, OUTCOME_NAMES[match[3]]]);
+        }
+
+        return log;
+      }
+
+      function serializeState(current) {
+        return [
+          String(STATE_VERSION),
+          current.labels.join("\n"),
+          encodeLog(current.log),
+          current.currentPair
+            ? current.currentPair.map((id) => id.toString(36)).join(".")
+            : "",
+        ].join(SEPARATOR);
+      }
+
+      function deserializeState(payload) {
+        const [version, labelBlock, logBlock, pairBlock] =
+          payload.split(SEPARATOR);
+
+        if (Number(version) !== STATE_VERSION) return null;
+
+        const labels = labelBlock ? labelBlock.split("\n") : [];
+        if (labels.length < 2) return null;
+
+        const pair = pairBlock
+          ? pairBlock.split(".").map((token) => parseInt(token, 36))
+          : [];
+
+        const validPair =
+          pair.length === 2 &&
+          pair.every(
+            (id) => Number.isInteger(id) && id >= 0 && id < labels.length,
+          );
+
+        return {
+          version: STATE_VERSION,
+          labels,
+          log: decodeLog(logBlock, labels.length),
+          currentPair: validPair ? pair : null,
+        };
+      }
+
+      async function compress(bytes) {
+        const stream = new Blob([bytes])
+          .stream()
+          .pipeThrough(new CompressionStream("deflate-raw"));
+
+        return new Uint8Array(await new Response(stream).arrayBuffer());
+      }
+
+      async function decompress(bytes) {
+        const stream = new Blob([bytes])
+          .stream()
+          .pipeThrough(new DecompressionStream("deflate-raw"));
+
+        return new Uint8Array(await new Response(stream).arrayBuffer());
+      }
+
+      function bytesToBase64Url(bytes) {
+        let binary = "";
+        for (const byte of bytes) binary += String.fromCharCode(byte);
+
+        return btoa(binary)
+          .replaceAll("+", "-")
+          .replaceAll("/", "_")
+          .replace(/=+$/, "");
+      }
+
+      function base64UrlToBytes(text) {
+        const binary = atob(text.replaceAll("-", "+").replaceAll("_", "/"));
+        const bytes = new Uint8Array(binary.length);
+
+        for (let i = 0; i < binary.length; i++) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+
+        return bytes;
+      }
+
+      async function encodeHash(current) {
+        const bytes = new TextEncoder().encode(serializeState(current));
+
+        if (!CAN_COMPRESS) return "u" + bytesToBase64Url(bytes);
+
+        return "z" + bytesToBase64Url(await compress(bytes));
+      }
+
+      async function decodeHash(hash) {
+        const marker = hash.slice(0, 1);
+        const body = hash.slice(1);
+
+        if (marker === "z") {
+          if (!CAN_COMPRESS) return null;
+          return new TextDecoder().decode(
+            await decompress(base64UrlToBytes(body)),
+          );
+        }
+
+        if (marker === "u") {
+          return new TextDecoder().decode(base64UrlToBytes(body));
+        }
+
+        return null;
+      }
+
+      // Version 2 hashes were raw base64 of the whole state object. Read them
+      // once, then let the next save rewrite the URL in the new format.
+      function loadLegacyState(hash) {
         try {
-          const json = decodeURIComponent(escape(atob(encoded)));
-          const loaded = JSON.parse(json);
+          const loaded = JSON.parse(decodeURIComponent(escape(atob(hash))));
 
-          if (
-            !loaded ||
-            !Array.isArray(loaded.items) ||
-            loaded.items.length < 2
-          ) {
-            return null;
+          if (!loaded || !Array.isArray(loaded.items)) return null;
+          if (loaded.items.length < 2) return null;
+
+          const labels = loaded.items.map((item) =>
+            String(item.label)
+              .replace(/[\u0000-\u001f]/g, " ")
+              .trim(),
+          );
+
+          const indexById = new Map(
+            loaded.items.map((item, index) => [item.id, index]),
+          );
+
+          const log = [];
+
+          for (const result of loaded.results || []) {
+            const leftId = indexById.get(result.leftId);
+            const rightId = indexById.get(result.rightId);
+
+            if (leftId === undefined || rightId === undefined) continue;
+            if (!OUTCOME_CODES[result.result]) continue;
+
+            log.push([leftId, rightId, result.result]);
           }
 
-          loaded.history = Array.isArray(loaded.history) ? loaded.history : [];
-          loaded.results = Array.isArray(loaded.results) ? loaded.results : [];
-          loaded.skippedPairs = Array.isArray(loaded.skippedPairs)
-            ? loaded.skippedPairs
+          for (const skipped of loaded.skippedPairs || []) {
+            const leftId = indexById.get(skipped[0]);
+            const rightId = indexById.get(skipped[1]);
+
+            if (leftId === undefined || rightId === undefined) continue;
+
+            log.push([leftId, rightId, "skip"]);
+          }
+
+          const pair = Array.isArray(loaded.currentPair)
+            ? loaded.currentPair.map((id) => indexById.get(id))
             : [];
-          loaded.comparisons = loaded.comparisons || loaded.results.length || 0;
-          loaded.currentPair = loaded.currentPair || null;
 
-          for (const item of loaded.items) {
-            item.elo = Number(item.elo ?? INITIAL_ELO);
-            item.wins = Number(item.wins ?? 0);
-            item.losses = Number(item.losses ?? 0);
-            item.ties = Number(item.ties ?? 0);
-            item.seen = Number(item.seen ?? 0);
-          }
+          const validPair =
+            pair.length === 2 && pair.every((id) => id !== undefined);
 
-          return loaded;
+          return {
+            version: STATE_VERSION,
+            labels,
+            log,
+            currentPair: validPair ? pair : null,
+          };
         } catch {
           return null;
         }
       }
 
-      function reset() {
-        state = null;
-        setupError.textContent = "";
-        itemInput.value = "";
-        saveStateToUrl();
-        render();
+      function saveStateToUrl() {
+        const token = ++saveToken;
+
+        if (!state) {
+          history.replaceState(null, "", location.pathname + location.search);
+          pendingSave = Promise.resolve();
+          updateUrlSize();
+          return pendingSave;
+        }
+
+        pendingSave = encodeHash(state).then((hash) => {
+          // A later save may have finished first; last write wins.
+          if (token !== saveToken) return;
+          history.replaceState(null, "", "#" + hash);
+          updateUrlSize();
+        });
+
+        return pendingSave;
       }
 
-      function undo() {
-        if (!state || !state.history.length) return;
+      async function loadStateFromUrl() {
+        const hash = location.hash.slice(1);
+        if (!hash) return null;
 
-        const previous = JSON.parse(state.history.pop());
-        state.items = previous.items;
-        state.currentPair = previous.currentPair;
-        state.comparisons = previous.comparisons;
-        state.results = previous.results || [];
-        state.skippedPairs = previous.skippedPairs || [];
+        try {
+          const payload = await decodeHash(hash);
+          if (payload !== null) return deserializeState(payload);
+        } catch {
+          return null;
+        }
 
+        return loadLegacyState(hash);
+      }
+
+      function updateUrlSize() {
+        if (!state) {
+          urlSize.textContent = "";
+          return;
+        }
+
+        const bytes = new Blob([location.href]).size;
+
+        urlSize.textContent =
+          bytes < 1024
+            ? `${bytes} B URL`
+            : `${(bytes / 1024).toFixed(1)} kB URL`;
+      }
+
+      function reset() {
+        state = null;
+        refresh();
+        setupError.textContent = "";
+        itemInput.value = "";
         saveStateToUrl();
         render();
       }
@@ -704,7 +912,7 @@ description: Paste a list, vote on pairings, see your true preferences.
       }
 
       function render() {
-        const hasState = Boolean(state && state.items.length >= 2);
+        const hasState = Boolean(view && view.items.length >= 2);
 
         setupEl.classList.toggle("hidden", hasState);
         votingEl.classList.toggle("hidden", !hasState);
@@ -731,11 +939,12 @@ description: Paste a list, vote on pairings, see your true preferences.
         rightChoice.onclick = () => applyResult(leftId, rightId, "right");
         tieButton.onclick = () => applyResult(leftId, rightId, "tie");
 
+        undoButton.disabled = state.log.length === 0;
+
         const possible = allPossiblePairCount();
         const uniqueCompared = comparedPairKeys().size;
-        const uniqueSkipped = skippedPairKeys().size;
 
-        stats.textContent = `${state.items.length} items · ${state.comparisons} comparisons · ${uniqueCompared}/${possible} unique pairs compared`;
+        stats.textContent = `${view.items.length} items · ${view.comparisons} comparisons · ${uniqueCompared}/${possible} unique pairs compared`;
 
         if (uniqueCompared >= possible) {
           roundRobinNotice.classList.remove("hidden");
@@ -775,9 +984,7 @@ description: Paste a list, vote on pairings, see your true preferences.
       function renderAudit() {
         auditBody.innerHTML = "";
 
-        const items = rankedItems();
-
-        for (const item of items) {
+        for (const item of rankedItems()) {
           const audit = auditForItem(item.id);
           const tr = document.createElement("tr");
 
@@ -823,9 +1030,10 @@ description: Paste a list, vote on pairings, see your true preferences.
         }
 
         state = createState(labels);
+        refresh();
         state.currentPair = choosePair();
-        saveStateToUrl();
-        render();
+
+        commit();
       });
 
       skipButton.addEventListener("click", skipCurrentPair);
@@ -839,6 +1047,8 @@ description: Paste a list, vote on pairings, see your true preferences.
 
       copyUrlButton.addEventListener("click", async () => {
         try {
+          // The hash is written asynchronously, so wait for the in-flight save.
+          await pendingSave;
           await navigator.clipboard.writeText(location.href);
           copyUrlButton.textContent = "Copied";
           setTimeout(() => {
@@ -856,8 +1066,15 @@ description: Paste a list, vote on pairings, see your true preferences.
       sortWinRateButton.addEventListener("click", () => setSortMode("winRate"));
       sortSeenButton.addEventListener("click", () => setSortMode("seen"));
 
-      state = loadStateFromUrl();
-      render();
+      (async () => {
+        state = await loadStateFromUrl();
+        refresh();
+
+        // Rewrites legacy hashes into the compact format on arrival.
+        if (state) saveStateToUrl();
+
+        render();
+      })();
     </script>
   </body>
 </html>
