@@ -775,3 +775,8 @@
   title: The Day WhatsApp Goes Dark
   comment: Tomorrow morning, WhatsApp goes dark, and it’s not just a short downtime, but it is a termination of the service. The servers turn off, the domains don’t resolve anymore and no mobile client is able to connect. Have you ever asked yourself what would happen in that case? What if WhatsApp actually went dark?
   date: 2026-08-14
+
+- url: https://blog.andymasley.com/p/other-large-industries-show-how-impoverished
+  title: Thinking about other industries like we think about data centers shows how impoverished the debate is
+  comment: Clumsy, arbitrary environmental ideas ignore the incredible complexity of the systems modern society depends on
+  date: 2026-08-21
