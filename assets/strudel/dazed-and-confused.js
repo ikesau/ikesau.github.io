@@ -1,3 +1,6 @@
+/*
+title: dazed and confused and beading
+*/
 $: note("<0 1 2 3 4 5 6 7>*2".add(30))
   .sound("sine")
   .revv()

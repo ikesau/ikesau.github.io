@@ -20,6 +20,21 @@ def "main create til" [slug: string] {
     create-post $slug "bin/templates/til-template.html" "content/things-i-like"
 }
 
+# New strudel snippet at assets/strudel/$slug.js with blank front matter.
+# The gallery on /strudel/ picks it up automatically; every field is optional.
+def "main create strudel" [slug: string] {
+    let todays_date = date now | format date "%Y-%m-%d"
+    let root = get-repo-root
+    let out = $"($root)/assets/strudel/($slug).js"
+    if ($out | path exists) {
+        error make { msg: $"($out) already exists" }
+    }
+    open --raw ($root | path join "bin/templates/strudel-template.js")
+        | str replace --all "{{date}}" $todays_date
+        | save $out
+    print $out
+}
+
 def "append-and-commit" [data_file: string, record: record, commit_message: string] {
     let root = get-repo-root
     let data_path = $root | path join $data_file
@@ -56,6 +71,7 @@ def main [] {
     print "Commands:"
     print "  create blog $slug"
     print "  create til $slug"
+    print "  create strudel $slug"
     print "  reblog $url $title $comment?"
     print "  cool-website $url $title $comment?"
 }

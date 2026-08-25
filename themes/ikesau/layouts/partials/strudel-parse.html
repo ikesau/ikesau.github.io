@@ -1,0 +1,68 @@
+{{- /* Parse one assets/strudel/*.js resource into a dict:
+         id, title, category, tags, draft, date, preamble, code, sortkey
+
+       Optional front matter lives in a leading block comment. Everything
+       above a line containing only --- is YAML; everything below it is
+       preamble (markdown). Every key is optional, as is the comment itself:
+
+         /*
+         title: bumping groove
+         category: song-snippet
+         tags: [drums, vintage]
+         date: 2026-08-25
+         draft: true
+         ---
+         Free-form notes about the snippet.
+         *\/
+
+       The comment is stripped from the rendered code. A leading block
+       comment whose body is not a YAML map is left alone and treated as
+       ordinary code. */ -}}
+{{- $r := . -}}
+{{- $id := path.Base $r.Name | strings.TrimSuffix ".js" -}}
+{{- $raw := $r.Content -}}
+{{- $code := $raw | strings.TrimSpace -}}
+{{- $meta := dict -}}
+{{- $preamble := "" -}}
+{{- with findRESubmatch `(?s)^\s*/\*(.*?)\*/` $raw 1 -}}
+  {{- $m := index . 0 -}}
+  {{- $body := index $m 1 -}}
+  {{- /* Editors expand /** into JSDoc style with a leading " * " on every
+         line. If every non-blank line starts with "*", strip that prefix. */ -}}
+  {{- if not (findRE "(?m)^[ \t]*[^ \t*\n]" $body) -}}
+    {{- $body = replaceRE "(?m)^[ \t]*\\*[ \t]?" "" $body -}}
+  {{- end -}}
+  {{- $body = $body | replaceRE "(?m)^[ \t]*---[ \t]*$" "---" | strings.TrimSpace -}}
+  {{- /* Trailing newline so a closing --- with no preamble after it still splits. */ -}}
+  {{- $parts := split (printf "%s\n" $body) "\n---\n" -}}
+  {{- $yaml := index $parts 0 -}}
+  {{- if eq $yaml "---" -}}{{- $yaml = "" -}}{{- end -}}
+  {{- $try := try (transform.Unmarshal $yaml) -}}
+  {{- with $try.Err -}}
+    {{- errorf "strudel: front matter in assets%s is not valid YAML (%s). Comment body was:\n%s" $r.Name . $yaml -}}
+  {{- end -}}
+  {{- $parsed := $try.Value -}}
+  {{- if reflect.IsMap $parsed -}}
+    {{- $meta = $parsed -}}
+    {{- if gt (len $parts) 1 -}}
+      {{- $preamble = delimit (after 1 $parts) "\n---\n" | strings.TrimSpace -}}
+    {{- end -}}
+    {{- $code = strings.TrimPrefix (index $m 0) $raw | strings.TrimSpace -}}
+  {{- end -}}
+{{- end -}}
+{{- $title := $meta.title | default (replace $id "-" " ") -}}
+{{- $date := "" -}}
+{{- with $meta.date -}}{{- $date = time . | time.Format "2006-01-02" -}}{{- end -}}
+{{- /* Dated snippets first (oldest to newest, matching how the page grew),
+       then undated ones alphabetically. */ -}}
+{{- $sortkey := cond (ne $date "") (printf "0-%s-%s" $date $id) (printf "1-%s" $id) -}}
+{{- return (dict
+      "id" $id
+      "title" $title
+      "category" ($meta.category | default "")
+      "tags" ($meta.tags | default slice)
+      "draft" ($meta.draft | default false)
+      "date" $date
+      "preamble" $preamble
+      "code" $code
+      "sortkey" $sortkey) -}}

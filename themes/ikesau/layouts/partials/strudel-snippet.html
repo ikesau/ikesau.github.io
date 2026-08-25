@@ -1,0 +1,22 @@
+{{- /* Render one parsed snippet (see partials/strudel-parse.html).
+       Expects the dict returned by that partial. */ -}}
+{{- $code := .code -}}
+{{- $enc := $code | base64Encode | replaceRE "\\+" "%2B" | replaceRE "/" "%2F" | replaceRE "=" "%3D" -}}
+{{- if or .category .tags -}}
+<p class="strudel-meta">
+  {{- with .category }}<span class="strudel-category">{{ . }}</span>{{ end -}}
+  {{- range .tags }} <span class="strudel-tag">#{{ . }}</span>{{ end -}}
+</p>
+{{- end -}}
+{{- with .preamble -}}
+<div class="strudel-preamble">{{ . | markdownify }}</div>
+{{- end -}}
+<figure class="strudel-snippet">
+{{- /* Hugo indents each line of a shortcode output to match the indentation
+       of the call in the content file. Inside <pre> that whitespace is
+       significant and corrupts the code. So emit the <pre> body as ONE
+       physical line with newlines encoded as &#10; — no lines for Hugo to
+       indent. Do NOT replace this with plain {{ $code }} or the bug returns. */ -}}
+<pre><code class="language-js">{{- range $i, $l := (split $code "\n") -}}{{- if $i -}}&#10;{{- end -}}{{- $l -}}{{- end -}}</code></pre>
+<a class="strudel-open" href="https://strudel.cc/#{{ $enc | safeURL }}" target="_blank" rel="noopener">open in strudel ↗</a>
+</figure>

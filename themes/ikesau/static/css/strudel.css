@@ -38,3 +38,29 @@
 .strudel-notes .strudel-open:hover {
   background-color: pink;
 }
+
+/* Optional prose above a snippet, from the front-matter preamble. */
+.strudel-notes .strudel-preamble {
+  margin-bottom: 0.75rem;
+}
+
+.strudel-notes .strudel-preamble p:last-child {
+  margin-bottom: 0;
+}
+
+/* Category / tags line under a gallery heading, from front matter. */
+.strudel-notes .strudel-meta {
+  margin: -0.5rem 0 0.75rem;
+  font-size: 0.8125rem;
+  color: #603b42;
+}
+
+.strudel-notes .strudel-category {
+  padding: 1px 6px;
+  border: 1px solid pink;
+  border-radius: 3px;
+}
+
+.strudel-notes .strudel-tag {
+  opacity: 0.7;
+}

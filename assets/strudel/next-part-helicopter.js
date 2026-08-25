@@ -1,3 +1,6 @@
+/*
+title: next part helicopter (drum over this?)
+*/
 $: note("<C2!4 A0!4>*4".add(28))
   .sound("sine")
   .gain(2)

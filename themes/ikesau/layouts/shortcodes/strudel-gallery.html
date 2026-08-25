@@ -1,0 +1,37 @@
+{{- /* Render assets/strudel/*.js snippets as <h2> + preamble + code.
+
+         {{< strudel-gallery "song-snippet" >}}  snippets with that category
+         {{< strudel-gallery >}}                 every other snippet: any
+                                                 category that has no gallery
+                                                 of its own on this page
+
+       Always skipped: drafts (draft: true) and snippets embedded inline on
+       this page via {{< strudel "id" >}}. Both of those exclusions are
+       computed by scanning the page source (.RawContent), NOT by remembering
+       what was rendered earlier — page-level state such as .Store survives
+       dev-server rebuilds and would make the gallery go blank on the second
+       render. The result is order-independent: a snippet can never be lost,
+       it is only moved under its category heading when one exists.
+       Front matter format is documented in partials/strudel-parse.html.
+       Adding a new .js file to assets/strudel/ is all it takes to publish. */ -}}
+{{- $category := .Get 0 | default "" -}}
+{{- $raw := $.Page.RawContent -}}
+{{- $embedded := dict -}}
+{{- range findRESubmatch `{{<\s*strudel\s+"([^"]+)"` $raw -}}
+  {{- $embedded = merge $embedded (dict (index . 1) true) -}}
+{{- end -}}
+{{- $claimed := dict -}}
+{{- range findRESubmatch `{{<\s*strudel-gallery\s+"([^"]+)"` $raw -}}
+  {{- $claimed = merge $claimed (dict (index . 1) true) -}}
+{{- end -}}
+{{- $items := slice -}}
+{{- range resources.Match "strudel/*.js" -}}
+  {{- $items = $items | append (partial "strudel-parse.html" .) -}}
+{{- end -}}
+{{- range sort $items "sortkey" -}}
+  {{- $wanted := cond (ne $category "") (eq .category $category) (not (index $claimed .category)) -}}
+  {{- if and $wanted (not .draft) (not (index $embedded .id)) -}}
+<h2 id="{{ .id }}">{{ .title }}</h2>
+{{ partial "strudel-snippet.html" . }}
+  {{- end -}}
+{{- end -}}

@@ -1,0 +1,1 @@
+$: s("sin*8").set("<1 2>*8".fmap(v => ({ decay: v - .6, gain: v })))

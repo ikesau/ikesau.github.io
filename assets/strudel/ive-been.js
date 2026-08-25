@@ -1,3 +1,6 @@
+/*
+title: i've been
+*/
 setcpm(160 / 4);
 
 $: sound("<ocean:3*2 [ocean:4 | ocean:3]>")
