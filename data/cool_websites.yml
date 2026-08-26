@@ -596,3 +596,7 @@
 - url: https://scaruffi.com/
   title: scaruffi
   comment: an immense, web 1.0, ongoing collection of aesthetic criticism
+
+- url: https://numbat.dev
+  title: numbat
+  comment: a soulver-like REPL for very precise back-of-envelope calculations
