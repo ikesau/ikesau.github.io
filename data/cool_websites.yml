@@ -600,3 +600,7 @@
 - url: https://numbat.dev
   title: numbat
   comment: a soulver-like REPL for very precise back-of-envelope calculations
+
+- url: https://www.euclidea.xyz
+  title: euclidea
+  comment: euclid's elements turned into a puzzle game
