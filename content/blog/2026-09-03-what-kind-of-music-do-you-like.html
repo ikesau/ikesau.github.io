@@ -1,0 +1,110 @@
+---
+title: what kind of music do you like?
+tags:
+  - essay
+---
+
+<section id="music-question">
+  <style>
+    #music-question {
+      #bwomp {
+        font-style: italic;
+        position: relative;
+        &::after {
+          font-style: normal;
+          content: "▶︎";
+          position: absolute;
+          margin-left: 4px;
+        }
+        &.playing {
+          &::after {
+            content: "⏸︎";
+          }
+        }
+      }
+    }
+  </style>
+  <audio id="loser">
+    <source src="/audio/losing-my-edge.mp3" type="audio/mpeg" />
+    Your browser does not support the
+    <pre>audio</pre>
+    element, which I use to trigger playback of a music sample in this post.
+  </audio>
+  <p>
+    As a teenager, I used to have a really easy time answering this question. I
+    understood who my peers were, what their answers were, and what I could say
+    to differentiate myself from them:
+    <a id="bwomp" href="/audio/losing-my-edge.mp3"
+      >James Murphy's prattled list in Losing My Edge</a
+    >
+  </p>
+  <p>
+    Basically, interpreting the question as a signaling exercise - the grown up
+    version of "what's your favourite colour?" from when I was three years old
+    and responding "red" meant that I was a bit of a hotshot 😎
+  </p>
+  <p>
+    I did sincerely love
+    <a
+      href="https://www.youtube.com/watch?v=jdMDcG3zAEI"
+      target="_blank"
+      rel="noopener noreferrer"
+      title="biblical violence by hella (live)"
+      >math rock</a
+    >
+    and
+    <a
+      href="https://www.youtube.com/watch?v=KTeRpmBVPPo"
+      target="_blank"
+      rel="noopener noreferrer"
+      title="eggdog by beak"
+    >
+      BEAK></a
+    >
+    and wanted to express this passion with people, but given how often those
+    responses lead to unsatisfying nonparticipatory conversations, the fact that
+    I continued to respond with namedrops for so long suggests I remained
+    motivated by ego.
+  </p>
+  <p>
+    Now, instead of trying to demonstrate my superior taste like a shotputter, I
+    try to respond in a way that invites connection and good conversation.
+  </p>
+  <p>
+    The trouble is that these days the answer is "Everything", which is boring.
+  </p>
+  <p>
+    But really: I will listen to country music. I will listen to rap music. I
+    will listen to someone rubbing their dick on a piezo microphone. It's not
+    out of some striving patrician insecurity — I just like sounds and culture
+    and thinking about how and why any kind of music was made.
+  </p>
+  <p>
+    Omnivorous musician curiosity is maybe just the next step in this game: who
+    can be more sensitive? More open? More gracious?
+  </p>
+  <p>
+    I don't fucken know, man. I've been listening to
+    <a href="/things-i-like#nested-in-tangles">Hannah Frances</a>
+    a lot these days.
+  </p>
+  <script>
+    const link = document.getElementById("bwomp");
+    const player = document.getElementById("loser");
+
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (player.ended) {
+        player.currentTime = 0;
+        player.play();
+        link.classList.add("playing");
+      } else if (player.paused) {
+        player.play();
+        link.classList.add("playing");
+      } else {
+        player.pause();
+        link.classList.remove("playing");
+      }
+    });
+  </script>
+</section>
