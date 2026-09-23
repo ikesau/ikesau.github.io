@@ -1,0 +1,469 @@
+---
+title: "French Addition Practice"
+description: "Random sums written out in French, with the answer revealed after a countdown."
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>French Addition Practice</title>
+    <meta
+      name="description"
+      content="Practice reading numbers and doing addition in French. A random sum is shown in written French, then the answer is revealed after a countdown."
+    />
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        --page-background: #fafafa;
+        --page-foreground: #212121;
+        --muted: #666;
+        --subtle: rgba(0, 0, 0, 0.06);
+        --border: rgba(0, 0, 0, 0.18);
+        --accent: #1d4ed8;
+        margin: 0;
+        padding: 0;
+        background: var(--page-background);
+        color: var(--page-foreground);
+      }
+
+      .container {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 24px 16px 48px;
+      }
+
+      h1 {
+        margin-bottom: 0.2em;
+        font-size: clamp(2rem, 4vw, 2.8rem);
+      }
+
+      p.description {
+        margin-top: 0;
+        margin-bottom: 1.5em;
+        line-height: 1.5;
+        color: var(--muted);
+      }
+
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 18px;
+        margin-bottom: 24px;
+      }
+
+      .control {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      label {
+        font-weight: 600;
+      }
+
+      input[type="number"] {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        font-size: 1rem;
+        background: transparent;
+        color: inherit;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        appearance: none;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        background: #222;
+        color: #fff;
+      }
+
+      button.secondary {
+        background: var(--subtle);
+        color: inherit;
+      }
+
+      .card {
+        margin-top: 28px;
+        padding: 28px 24px;
+        background: var(--subtle);
+        min-height: 260px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 18px;
+      }
+
+      .sum {
+        font-size: clamp(1.4rem, 4vw, 2rem);
+        line-height: 1.35;
+        font-weight: 600;
+        margin: 0;
+        overflow-wrap: break-word;
+      }
+
+      .sum .plus {
+        font-weight: 400;
+        color: var(--muted);
+      }
+
+      .answer {
+        font-size: clamp(1.4rem, 4vw, 2rem);
+        line-height: 1.35;
+        margin: 0;
+        color: var(--accent);
+        overflow-wrap: break-word;
+        min-height: 1.35em;
+      }
+
+      .answer.hidden {
+        visibility: hidden;
+      }
+
+      .digits {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .digits.hidden {
+        visibility: hidden;
+      }
+
+      .timer {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .timer-bar {
+        flex: 1;
+        height: 6px;
+        background: var(--subtle);
+        overflow: hidden;
+      }
+
+      .timer-fill {
+        height: 100%;
+        width: 0%;
+        background: var(--accent);
+      }
+
+      .timer-label {
+        min-width: 11ch;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .placeholder {
+        color: var(--muted);
+        margin: 0;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          --page-background: #111;
+          --page-foreground: #f5f5f5;
+          --muted: rgba(255, 255, 255, 0.6);
+          --subtle: rgba(255, 255, 255, 0.08);
+          --border: rgba(255, 255, 255, 0.2);
+          --accent: #93c5fd;
+        }
+
+        button {
+          background: #f5f5f5;
+          color: #111;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <h1>French Addition Practice</h1>
+      <p class="description">
+        A random sum is written out in French. Work out the answer before the
+        countdown ends, then check it against the reveal.
+      </p>
+
+      <section class="controls">
+        <div class="control">
+          <label for="maxInput">Largest number</label>
+          <input type="number" id="maxInput" min="1" max="999999999" value="100" />
+        </div>
+        <div class="control">
+          <label for="revealInput">Seconds until answer</label>
+          <input
+            type="number"
+            id="revealInput"
+            min="0.5"
+            max="120"
+            step="0.5"
+            value="5"
+          />
+        </div>
+        <div class="control">
+          <label for="nextInput">Seconds until next sum</label>
+          <input
+            type="number"
+            id="nextInput"
+            min="0.5"
+            max="120"
+            step="0.5"
+            value="3"
+          />
+        </div>
+      </section>
+
+      <div class="buttons">
+        <button id="startStopBtn">Start</button>
+        <button class="secondary" id="skipBtn">Skip ahead</button>
+      </div>
+
+      <section class="card" aria-live="polite">
+        <p class="placeholder" id="placeholder">Press Start to begin.</p>
+        <p class="sum" id="sum" hidden></p>
+        <p class="answer hidden" id="answer"></p>
+        <p class="digits hidden" id="digits"></p>
+        <div class="timer" id="timer" hidden>
+          <div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
+          <span class="timer-label" id="timerLabel"></span>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // ---- French number words (France/Belgium traditional spelling) ----
+
+      const UNITS = [
+        "zéro", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit",
+        "neuf", "dix", "onze", "douze", "treize", "quatorze", "quinze", "seize",
+        "dix-sept", "dix-huit", "dix-neuf",
+      ];
+
+      const TENS = {
+        2: "vingt",
+        3: "trente",
+        4: "quarante",
+        5: "cinquante",
+        6: "soixante",
+      };
+
+      function below100(n) {
+        if (n < 20) return UNITS[n];
+        const tens = Math.floor(n / 10);
+        const unit = n % 10;
+
+        if (tens <= 6) {
+          if (unit === 0) return TENS[tens];
+          if (unit === 1) return `${TENS[tens]} et un`;
+          return `${TENS[tens]}-${UNITS[unit]}`;
+        }
+        if (tens === 7) {
+          // 70–79 is soixante + 10–19
+          if (unit === 1) return "soixante et onze";
+          return `soixante-${UNITS[10 + unit]}`;
+        }
+        // 80–99 is quatre-vingt + 0–19, with no "et"
+        const rest = n - 80;
+        if (rest === 0) return "quatre-vingts";
+        return `quatre-vingt-${UNITS[rest]}`;
+      }
+
+      // `beforeMille` drops the plural s from "quatre-vingts" / "cents",
+      // since "mille" is an adjective and doesn't pluralize them.
+      function below1000(n, beforeMille = false) {
+        const hundreds = Math.floor(n / 100);
+        const rest = n % 100;
+        let words = "";
+
+        if (hundreds === 1) {
+          words = "cent";
+        } else if (hundreds > 1) {
+          words = `${UNITS[hundreds]} cent`;
+          if (rest === 0 && !beforeMille) words += "s";
+        }
+
+        if (rest > 0) {
+          let restWords = below100(rest);
+          if (beforeMille && rest === 80) restWords = "quatre-vingt";
+          words = words ? `${words} ${restWords}` : restWords;
+        }
+        return words;
+      }
+
+      function toFrench(n) {
+        if (n === 0) return UNITS[0];
+
+        const parts = [];
+        const milliards = Math.floor(n / 1e9);
+        const millions = Math.floor((n % 1e9) / 1e6);
+        const thousands = Math.floor((n % 1e6) / 1000);
+        const rest = n % 1000;
+
+        // million and milliard are nouns, so they take "un" and pluralize
+        if (milliards > 0) {
+          parts.push(
+            `${below1000(milliards)} milliard${milliards > 1 ? "s" : ""}`,
+          );
+        }
+        if (millions > 0) {
+          parts.push(`${below1000(millions)} million${millions > 1 ? "s" : ""}`);
+        }
+        if (thousands > 0) {
+          parts.push(
+            thousands === 1 ? "mille" : `${below1000(thousands, true)} mille`,
+          );
+        }
+        if (rest > 0) {
+          parts.push(below1000(rest));
+        }
+        return parts.join(" ");
+      }
+
+      // ---- Practice loop ----
+
+      const maxInput = document.getElementById("maxInput");
+      const revealInput = document.getElementById("revealInput");
+      const nextInput = document.getElementById("nextInput");
+      const startStopBtn = document.getElementById("startStopBtn");
+      const skipBtn = document.getElementById("skipBtn");
+
+      const placeholderEl = document.getElementById("placeholder");
+      const sumEl = document.getElementById("sum");
+      const answerEl = document.getElementById("answer");
+      const digitsEl = document.getElementById("digits");
+      const timerEl = document.getElementById("timer");
+      const timerFill = document.getElementById("timerFill");
+      const timerLabel = document.getElementById("timerLabel");
+
+      const MAX_ALLOWED = 999999999;
+
+      let isRunning = false;
+      let phase = "question"; // "question" | "answer"
+      let phaseStart = 0;
+      let phaseDuration = 0;
+      let frameId = null;
+
+      function readNumber(input, fallback, min, max) {
+        const value = Number(input.value);
+        if (!Number.isFinite(value)) return fallback;
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function randomUpTo(max) {
+        return Math.floor(Math.random() * (max + 1));
+      }
+
+      function showNewSum() {
+        const max = Math.floor(readNumber(maxInput, 100, 1, MAX_ALLOWED));
+        const a = randomUpTo(max);
+        const b = randomUpTo(max);
+        const total = a + b;
+
+        placeholderEl.hidden = true;
+        sumEl.hidden = false;
+        timerEl.hidden = false;
+        sumEl.innerHTML = "";
+        sumEl.append(
+          toFrench(a),
+          Object.assign(document.createElement("span"), {
+            className: "plus",
+            textContent: " plus ",
+          }),
+          toFrench(b),
+        );
+        answerEl.textContent = `égale ${toFrench(total)}`;
+        digitsEl.textContent = `${a.toLocaleString("fr-FR")} + ${b.toLocaleString("fr-FR")} = ${total.toLocaleString("fr-FR")}`;
+        answerEl.classList.add("hidden");
+        digitsEl.classList.add("hidden");
+
+        startPhase("question", readNumber(revealInput, 5, 0.5, 120));
+      }
+
+      function revealAnswer() {
+        answerEl.classList.remove("hidden");
+        digitsEl.classList.remove("hidden");
+        startPhase("answer", readNumber(nextInput, 3, 0.5, 120));
+      }
+
+      function startPhase(name, seconds) {
+        phase = name;
+        phaseStart = performance.now();
+        phaseDuration = seconds * 1000;
+      }
+
+      function tick(now) {
+        const elapsed = now - phaseStart;
+        const remaining = Math.max(0, phaseDuration - elapsed);
+        const progress = Math.min(1, elapsed / phaseDuration);
+
+        timerFill.style.width = `${progress * 100}%`;
+        timerLabel.textContent =
+          phase === "question"
+            ? `answer in ${(remaining / 1000).toFixed(1)}s`
+            : `next in ${(remaining / 1000).toFixed(1)}s`;
+
+        if (remaining <= 0) {
+          if (phase === "question") revealAnswer();
+          else showNewSum();
+        }
+        frameId = requestAnimationFrame(tick);
+      }
+
+      function start() {
+        isRunning = true;
+        startStopBtn.textContent = "Pause";
+        showNewSum();
+        frameId = requestAnimationFrame(tick);
+      }
+
+      function stop() {
+        isRunning = false;
+        startStopBtn.textContent = "Start";
+        cancelAnimationFrame(frameId);
+        timerLabel.textContent = "paused";
+      }
+
+      startStopBtn.addEventListener("click", () => {
+        if (isRunning) stop();
+        else start();
+      });
+
+      skipBtn.addEventListener("click", () => {
+        if (!isRunning) {
+          start();
+          return;
+        }
+        if (phase === "question") revealAnswer();
+        else showNewSum();
+      });
+    </script>
+  </body>
+</html>
