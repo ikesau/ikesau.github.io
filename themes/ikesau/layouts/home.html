@@ -2,7 +2,7 @@
 <div class="homepage">
   <h2>hello</h2>
   <ul class="go-away">
-    {{ range .Site.Data.bio_links }}
+    {{ range hugo.Data.bio_links }}
     <li>
       <a href="{{ .url }}" target="_blank" rel="noopener noreferrer"
         >{{ .name }}</a

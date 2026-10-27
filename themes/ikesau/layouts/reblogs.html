@@ -18,7 +18,7 @@
   }
 </style>
 <ul>
-  {{ range sort .Site.Data.reblogs "date" "desc" }}
+  {{ range sort hugo.Data.reblogs "date" "desc" }}
   <li>
     <a href="{{ .url }}" target="_blank" rel="noopener noreferrer">
       {{ .title }}

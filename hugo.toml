@@ -1,5 +1,5 @@
 baseURL = 'https://ikesau.co'
-languageCode = 'en-ca'
+locale = 'en-ca'
 title = 'ikesau.co'
 theme = 'ikesau'
 
@@ -26,3 +26,6 @@ permalinks.blog = "/:section/:title/"
 
 [frontmatter]
 date = [ "date", ":filename" ]
+
+[security]
+allowContent = ['^text/html$', '^text/markdown$']
