@@ -783,7 +783,7 @@
 
 - url: https://www.theargumentmag.com/p/reading-wont-save-liberalism
   title: Reading won't save liberalism
-  comment: '''The classes that taught me the most at university were the ones that forced me to contend with other people’s ideas in real time. They were also the ones that made me want to do the readings.'''
+  comment: "'The classes that taught me the most at university were the ones that forced me to contend with other people’s ideas in real time. They were also the ones that made me want to do the readings.'"
   date: 2026-09-01
 
 - url: https://www.theverge.com/ai-artificial-intelligence/977623/mark-zuckerberg-ai-manifesto-dim-vision
@@ -797,18 +797,13 @@
 
 - url: https://notnottalmud.substack.com/p/why-i-cant-stop-thinking-about-papua
   title: why I can't stop thinking about Papua New Guinea and what I think everyone should know about it
-  comment: 'A summary of ''First Contact: New Guinea’s Highlanders Encounter the Outside World'', which describes the 1930 discovery of a million people living in the highlands of New Guinea—a group the colonial governments and local coastal populations had no idea existed, and who themselves had no knowledge of the outside world.'
+  comment: "A summary of 'First Contact: New Guinea’s Highlanders Encounter the Outside World', which describes the 1930 discovery of a million people living in the highlands of New Guinea—a group the colonial governments and local coastal populations had no idea existed, and who themselves had no knowledge of the outside world."
   date: 2026-09-16
 
 - url: https://scottaaronson.blog/?p=10169
   title: The Mathocalypse
   comment: Scott Aaronson on what OpenAI hath wrought
   date: 2026-10-07
-
-- url: https://tinylittleoffice.com/
-  title: tiny little office
-  comment: browser-only office software suite
-  date: 2026-10-16
 
 - url: https://blog.val.town/trust-and-safety
   title: Scammers, exit nodes, and my part-time job fighting abuse
