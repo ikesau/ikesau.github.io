@@ -1,7 +1,6 @@
 baseURL = 'https://ikesau.co'
 locale = 'en-ca'
 title = 'ikesau.co'
-theme = 'ikesau'
 
 [taxonomies]
   tag = "tags"
