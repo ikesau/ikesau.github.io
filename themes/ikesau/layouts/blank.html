@@ -1,8 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="/css/main.css" />
-    {{ partial "head.html" . }} 
+    {{ partial "head.html" . }}
     {{ if .Params.extra_css }}
     <link rel="stylesheet" href="/css/{{.Params.extra_css}}.css" />
     {{ end }} {{ if .Params.extra_js }}

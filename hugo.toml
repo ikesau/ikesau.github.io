@@ -9,10 +9,12 @@ theme = 'ikesau'
     description = 'The website of Ike Saunders'
     gotosocial_token = 'MZRINTC0Y2MTNTI4NI0ZY2VMLTKZOGQTNWMZODU0NTUYNZCZ'
 
-permalinks.blog = "/:section/:title/"
-
+# Only the hand-rolled Atom feed at /feed.xml; no default RSS anywhere.
 [outputs]
-  home = ['html', 'rss', 'atom']
+  home = ['html', 'atom']
+  section = ['html']
+  taxonomy = ['html']
+  term = ['html']
 
 [mediaTypes]
   [mediaTypes."application/atom+xml"]

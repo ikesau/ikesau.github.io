@@ -2,5 +2,5 @@
 <link rel="stylesheet" href="/css/thing-i-like.css">
 {{ end }}
 {{ define "main" }}
-<article id="{{ .Title | urlize }}">{{ .Content }}</article>
+<article class="thing-i-like" id="{{ .Title | urlize }}">{{ .Content }}</article>
 {{ end }}

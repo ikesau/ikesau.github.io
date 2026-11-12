@@ -1,38 +1,20 @@
-#i-like-it-when-you-click-me {
-  cursor: pointer;
-  list-style: none;
-  background: #333;
-  display: inline-block;
-  line-height: 1;
-  width: 16px;
-  height: 16px;
-  font-size: 16px;
-  color: #eee;
-  padding: 2px;
-  text-align: center;
-  position: absolute;
-  right: 8px;
-  top: 8px;
-}
-#what-is-this[open] {
-  border: 1px solid black;
-  padding: 8px 32px;
-  margin: 16px 0;
-}
+/* Scoped to the posts themselves so the wiggle doesn't leak into the
+   site header. */
+.thing-i-like {
+  section {
+    margin: 16px 0;
+    padding: 8px;
+  }
 
-section {
-  margin: 16px 0;
-  padding: 8px;
-}
+  a,
+  a:visited {
+    color: blue;
+    display: inline-block;
+  }
 
-a,
-a:visited {
-  color: blue;
-  display: inline-block;
-}
-
-a:hover {
-  animation: oscillate 200ms infinite steps(1, start);
+  a:hover {
+    animation: oscillate 200ms infinite steps(1, start);
+  }
 }
 
 @keyframes oscillate {

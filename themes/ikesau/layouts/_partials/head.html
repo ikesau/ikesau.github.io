@@ -1,10 +1,10 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width" />
 <title>
-  {{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" .Title
-  site.Title }}{{ end }}
+  {{ with .Title }}{{ if $.IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" . site.Title }}{{ end }}{{ else }}{{ site.Title }}{{ end }}
 </title>
 <meta name="description" content="{{ site.Param "description" }}" />
+<link rel="alternate" type="application/atom+xml" title="{{ site.Title }}" href="/feed.xml" />
 <link rel="stylesheet" href="/css/main.css" />
 <script>
   const themeColors = [
@@ -45,4 +45,3 @@
 
   setRandomThemeColor();
 </script>
-{{ block "extra-css" . }}{{ end }}
