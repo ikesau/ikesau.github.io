@@ -61,16 +61,33 @@ h3 {
   }
 
   img {
-    margin: 0;
+    display: block;
   }
 }
 
 img {
-  max-height: 300px;
   max-width: 100%;
+}
+
+/* Default look for images in posts (and loose images on the homepage):
+   small, centred, with room around them. :where() keeps this at zero
+   specificity so any rule in a post overrides it. */
+:where(.blog-post, .thing-i-like, .page) img,
+:where(.homepage) > img {
+  display: block;
+  max-height: 300px;
   width: auto;
   margin: 48px auto;
-  display: block;
+}
+
+/* Opt out of the default: put this on an image, or on a wrapper to apply
+   it to every image inside. */
+.full-width img,
+img.full-width {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  margin: 0;
 }
 
 .dont-ask-what-just-put-it-in-the-grease {
