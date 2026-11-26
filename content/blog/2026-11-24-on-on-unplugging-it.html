@@ -7,10 +7,16 @@ title: on On unplugging it
     #on-on-unplugging-it {
       font-family: serif;
       font-size: 1.3rem;
+      @media (max-width: 798px) {
+        font-size: 1rem;
+      }
       blockquote {
         background-color: #5f2b48;
         color: #dad8d8;
         padding: 8px;
+        @media (max-width: 798px) {
+          margin: 0;
+        }
       }
     }
   </style>
@@ -518,10 +524,11 @@ title: on On unplugging it
     humans pored through the transcripts to summarize what happened? Would we
     get a story radically different from the one we got? Of course, this is
     unknowable because the information will not be publically released, but I’ve
-    built a number of tools that require LLMs to code events. They're still
-    really bad at humour, but I don’t think human analysis would have changed
-    the key takeaway: OpenAI’s LLMs hacked into Hugging Face's servers against
-    their wishes and despite their attempts at securing their systems.
+    built a number of tools that require LLMs to code events and I find their
+    judgement to be basically reliable. They're still really bad at humour, but
+    I don’t think human analysis would have changed the key takeaway: OpenAI’s
+    LLMs hacked into Hugging Face's servers against their wishes and despite
+    their attempts at securing their systems.
   </p>
   <p>
     Could METR more often acknowledge the completely insane bubble they’re in?
