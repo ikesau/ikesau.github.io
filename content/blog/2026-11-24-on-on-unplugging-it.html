@@ -1,0 +1,731 @@
+---
+title: on On unplugging it
+---
+
+<section id="on-on-unplugging-it">
+  <style>
+    #on-on-unplugging-it {
+      font-family: serif;
+      font-size: 1.3rem;
+      blockquote {
+        background-color: #5f2b48;
+        color: #dad8d8;
+        padding: 8px;
+      }
+    }
+  </style>
+  <p>
+    A response to my good internet friend’s
+    <a
+      href="https://theodoraward.com/blog/soares-post/"
+      target="_blank"
+      rel="noopener noreferrer"
+      >post about Nate Soares and AI existential risk.</a
+    >
+    She is skeptical. I’m going to pull out the points that I either disagree
+    with or don’t understand. Brevity not guaranteed.
+  </p>
+  <h2>What is intelligence?</h2>
+  <blockquote>
+    “intelligence” is, mostly if not entirely, domain-specific. Getting better
+    at math only indirectly helps me get better at reading, if it does at all.
+    Domain-specific understanding doesn’t necessarily transfer.
+  </blockquote>
+  <p>
+    I am a pragmatist on this: it’s useful to say that intelligence, the
+    psychological construct, is the thing you have if you can do spatial
+    reasoning, learn things quickly, solve novel problems, etc.
+    <a
+      href="https://www.clearerthinking.org/post/what-s-really-true-about-intelligence-and-iq-we-empirically-tested-40-claims"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      You can measure it and it appears to correlate with many things.</a
+    >
+    Admittedly, I can’t navigate via Earth’s magnetic field, but I am more
+    intelligent than a pigeon. Magnus Carlsen<sup aria-labelledby="smart-guy"
+      >♟️</sup
+    >
+    could likely be a better writer or programmer than me if he wanted to be
+    because someone who learns things faster than the average person will likely
+    be able to learn the other things faster, too.
+  </p>
+  <p>
+    It’s true that narrow training transfers poorly in humans and in LLMs -
+    training a model on maths doesn't reliably make it better at law. But that’s
+    a claim about <em>training</em>, not about whether general ability exists.
+    In humans, skills barely transfer, and yet performance across very different
+    cognitive tests is strongly correlated. LLMs show a similar pattern: models
+    that do well on one benchmark tend to do well on unrelated ones.
+  </p>
+  <blockquote>
+    they perform better with (a) highly-structured languages such as programming
+    languages and formalized math, and (b) in instances where output can be
+    checked for binaristic correctness. I’ve talked about this vis-a-vis
+    computer programming but I think the capacity to compile and run code is key
+    to the fact that coding has gotten so effective
+  </blockquote>
+  <p>
+    Yes. But they’ve also been
+    <a
+      href="https://epoch.ai/eci?view=graph&tab=release-date"
+      target="_blank"
+      rel="noopener noreferrer"
+      >getting better at harder-to-verify domains</a
+    >
+    because reasoning, persistence, and creative thinking are very general
+    purpose. Maths is perhaps overrepresented in the headlines, but that’s
+    because it’s a good, somewhat understandable public measure of progress in a
+    system that’s improving more broadly.
+  </p>
+  <h2>Recursive self-improvement</h2>
+  <blockquote>
+    The two pieces of evidence they give: “internal benchmarks” and the fact
+    that that they are pushing 45x as much code per engineer per day as they
+    used to &hellip; I do not understand why we would believe a stateless,
+    context-limited technology would be able to improve itself through that kind
+    of scaling. LLM-assisted codebases sprawl, and this sprawl is not evidence
+    of growing strength, but of an increasing number of failure points.
+  </blockquote>
+  <p>
+    An increase in engineer output alone would not be bulletproof evidence for
+    RSI, but it is just one piece among many others. Airplanes also have many
+    more failure points than they did 120 years ago.
+  </p>
+  <p>
+    The way that models get better is: you find a new dataset or improve/refine
+    an existing one; or you find a new machine-learning technique that learns
+    more efficiently; or you find ways to more efficiently use energy.
+  </p>
+  <details style="background-color: #f5f5f5; padding: 12px">
+    <summary>
+      Specifically, here’s a short recipe (written by Claude) for how a machine
+      learning researcher might make an LLM better.
+    </summary>
+    <ol>
+      <li>
+        <strong>Find a weakness.</strong> Look at where the model fails, using
+        benchmark scores, user feedback, or reading lots of its outputs. For
+        example: “It gives up too early on long multi-step tasks.”
+      </li>
+      <li>
+        <strong>Form a hypothesis.</strong> Guess why it fails and what would
+        fix it. For example: “It rarely saw examples of recovering from
+        mistakes, so training on those should help.” The fix might be new data,
+        a different training method, or a change to the reward signal.
+      </li>
+      <li>
+        <strong>Build an evaluation.</strong> Before changing anything, make a
+        test that measures the weakness, and record the current model’s score as
+        a baseline. Keep the test data separate from training data, or the
+        results mean nothing.
+      </li>
+      <li>
+        <strong>Curate or generate data.</strong> Collect, filter and clean
+        examples. Depending on the method, that could be web text, human-written
+        demonstrations, human ratings of which answer is better, synthetic
+        examples written by other models, or practice tasks with automatic
+        grading for reinforcement learning.
+      </li>
+      <li>
+        <strong>Design the training experiment.</strong> Choose the method:
+        changing the pretraining data mix, fine-tuning on examples, or
+        reinforcement learning against a reward. Set up a control run without
+        the change so you can compare.
+      </li>
+      <li>
+        <strong>Run it small first.</strong> Train cheap, small-scale versions
+        to see whether the idea works at all, and whether the gain grows or
+        disappears as models get bigger.
+      </li>
+      <li>
+        <strong>Evaluate broadly.</strong> Check the target eval, plus a wide
+        set of other tests to catch regressions, like the model getting worse at
+        something else. Also check for cheating, where the model games the
+        reward or the test instead of actually improving.
+      </li>
+      <li>
+        <strong>Analyse why it worked (or didn’t).</strong> Read the outputs,
+        and run ablations: remove pieces of the change one at a time to see
+        which part caused the improvement. This often produces the next
+        hypothesis, which takes you back to step 2.
+      </li>
+      <li>
+        <strong>Scale up and fold it in.</strong> If the gain holds up, include
+        the change in the next big training run, run safety testing, and ship.
+      </li>
+      <li>
+        <strong>Monitor after release.</strong> Real-world use surfaces new
+        weaknesses, which feed back into step 1.
+      </li>
+    </ol>
+  </details>
+  <p>
+    AI models that can reason and write code and persist through long-timescale,
+    novel problems are starting to be able to do all these things. The
+    techniques that the companies have employed to teach their models how to
+    solve millennium prize problems will also work well for machine learning
+    research because machine learning research happens entirely in the digital
+    world and much of it is verifiable.<sup aria-labelledby="pinch">🤏</sup>
+    <a
+      href="https://www.dwarkesh.com/p/rsi"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Dwarkesh Patel lays it out well.</a
+    >
+  </p>
+  <p>
+    And yes, this increases sprawl and the complexity of the training process,
+    but AI companies aren’t random vibe-coded apps. They are devoting billions
+    of dollars in salaries and inference to solve these problems. Hallucination
+    might not be fundamentally solvable, but it’s also not machine learning’s
+    Achilles’ heel, because of verifiability. It’s why AI can do superhuman
+    mathematics and coding now, and it’s why they’ll be able to write
+    experiments that make smarter AIs.
+  </p>
+  <h2>Transformers aren’t chess engines</h2>
+  <blockquote>
+    &hellip;the goals of these projects remain tightly domain-limited. A simple
+    algorithm run through high-powered software worked better for chess than
+    more complex algorithms did, but the Deep Blue supercomputer that beat Garry
+    Kasparov wasn’t good at other stuff just because it was good at chess.
+    Within the domain of a problem, scale worked; the problem of “being as good
+    at thinking as a person” is too general.
+  </blockquote>
+  <p>
+    Sutton’s point is that general methods like search and learning are
+    ultimately the most effective. Search-based engines beat hand-built chess
+    knowledge; then AlphaZero, a more general learning algorithm, beat Stockfish
+    while mastering shogi and Go too.
+  </p>
+  <p>
+    GPT-style models take this generalization even further. All they do is
+    “predict the next token” and yet they can translate, write code, do
+    arithmetic and pick up tasks from a few examples. They do this better than
+    anyone else’s attempt to do the same with handcrafted rules, and scaling
+    them up improves their capabilities at everything.
+  </p>
+  <p>
+    So I think it’s completely up for debate whether or not “being as good at
+    thinking as a person” is “too general.” Beyond proving the Riemann
+    Hypothesis, here are some other things LLMs can do now:
+  </p>
+  <ul>
+    <li>
+      <a
+        href="https://newsletter.dancohen.org/archive/the-writing-is-on-the-wall-for-handwriting-recognition/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Transcribe Jane Austen’s cross-written letters</a
+      >
+    </li>
+    <li>
+      <a
+        href="https://generativehistory.substack.com/p/gpt-62-astra-solves-a-historical"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Make new connections between known historical artifacts</a
+      >
+    </li>
+    <li>
+      <a
+        href="https://www.nature.com/articles/d41586-026-03790-w"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Discover exoplanets</a
+      >
+      and
+      <a
+        href="https://www.anthropic.com/features/claude-on-mars"
+        target="_blank"
+        rel="noopener noreferrer"
+        >plan Mars rover routes</a
+      >
+    </li>
+    <li>
+      <a
+        href="https://hms.harvard.edu/news/real-world-study-patient-facing-ai-primary-care"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Safely take patient histories in hospitals</a
+      >
+    </li>
+    <li>
+      <a
+        href="https://www.scientificamerican.com/article/an-exclusive-conversation-with-the-developer-of-rea-the-viral-ai-reverse-engineering-tool/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Reverse engineer consumer electronics</a
+      >
+    </li>
+    <li>
+      <a
+        href="https://arxiv.org/html/2606.16475v1"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Persuade humans more effectively than professional persuaders</a
+      >
+    </li>
+    <li>
+      <a
+        href="https://www.youtube.com/watch?v=9PICEmtfpWU"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Develop a sim-to-real robotics policy to play cornhole with a humanoid
+        robot.</a
+      >
+    </li>
+  </ul>
+  <p>
+    Not to mention the growing capabilities of non-LLM models (which agents can
+    leverage as tool calls):
+    <a
+      href="https://waymo.com/blog/shorts/safetydata-september26/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      self-driving cars</a
+    >,
+    <a
+      href="https://www.scientificamerican.com/article/elephants-call-their-relatives-by-name-across-the-savanna/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      animal language interpretation</a
+    >,
+    <a
+      href="https://health.ucdavis.edu/research/news/headlines/new-brain-computer-interface-allows-man-with-als-to-speak-again/2024/08"
+      target="_blank"
+      rel="noopener noreferrer"
+      >neural decoding</a
+    >,
+    <a
+      href="https://www.cbsnews.com/news/ancient-scrolls-mount-vesuvius-eruption-ai-decoding/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Vesuvius scroll decoding</a
+    >,
+    <a
+      href="https://www.pnas.org/doi/10.1073/pnas.2407652121"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Nazca Line discovery</a
+    >.
+  </p>
+  <p>
+    You can push back on each of these claims, find caveats, overstatements, or
+    ways in which AIs are still failing (clinicians identified a hallucination
+    in one of the primary care transcripts; many AI-identified exoplanets were
+    false positives) but the trend here is still just obviously that
+    capabilities are increasing and improving. Arguing otherwise seems like a
+    god of the gaps error to me.
+  </p>
+
+  <h2>It’s not the real thing if it’s artificial</h2>
+  <p>This is a common deflationary move I see skeptics make.</p>
+  <ol>
+    <li>AI can’t do X, because <em>by definition</em> X requires a human</li>
+    <li>
+      Therefore, what the AI is doing is nothing at all like what humans do
+    </li>
+    <li>Therefore, it’s not doing anything worth caring about</li>
+  </ol>
+  <p>
+    As Soares gets at, this is like saying that because swimming requires moving
+    your arms and kicking your legs, submarines can’t swim, therefore they
+    actually sink when you put them in the water.
+  </p>
+  <p>
+    You need to make sure you are focusing on what the thing <em>does</em> - its
+    direct observable effects - not what we should call the process that
+    produced them.
+  </p>
+  <blockquote>
+    the persistence of hallucinations constitutes sufficient evidence to me that
+    “understanding” is not a concept we should apply to LLMs. Humans
+    misunderstand, but we misunderstand differently; hallucinations reinforce
+    the notion that, however plausible LLM output is, it’s not evidence of
+    understanding as we know it.
+  </blockquote>
+  <p>
+    I appreciate this - you’re not committing step 3 of the fallacy outlined
+    above. I write this section for a more general audience, merely as a
+    counterbalance to your point that because of the ELIZA effect, people
+    overrate and misinterpret the outputs of LLMs. If you take that and simply
+    go the opposite direction, you’re not really doing any better.
+  </p>
+  <p>
+    I concede that this stuff is
+    <a
+      href="https://en.wikipedia.org/wiki/Blind_men_and_an_elephant"
+      target="_blank"
+      rel="noopener noreferrer"
+      >really hard to talk about</a
+    >
+    and the discourse often elides this problem. This section might feel like a
+    complete whiff because the entire point is that the direct observable
+    effects are contested, and for that I am sorry.
+  </p>
+  <h2>Is cybercrime on the rise?</h2>
+  <blockquote>
+    In Crowdstrike’s recent 2026 report, which I’ve seen cited in several news
+    articles, they say that AI-assisted hacking is up 80-something percent;
+    later, however, they reveal that the majority of these are vulnerabilities
+    that exploit insecure AI tooling, not facilitated by AI-assisted hacking.
+  </blockquote>
+  <p>
+    I’ve not read Crowdstrike’s report, but I accept that media coverage of the
+    situation can be breathless. That said,
+    <a
+      href="https://www.bridgewater.com/research-and-insights/current-efforts-arent-enough-to-slow-the-ai-cyber-virus"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      AI-assisted cybercrime is almost certainly on the rise.</a
+    >
+  </p>
+  <p>
+    <a
+      href="https://www.ic3.gov/CSA/2026/261113.pdf"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Here’s the FBI warning
+      <strong>all organizations with internet-exposed applications</strong> to
+      take measures to mitigate the risks of ARTEX attacks:</a
+    >
+  </p>
+  <blockquote
+    cite="https://www.ic3.gov/CSA/2026/261113.pdf"
+    style="background: none; color: black; font-style: italic"
+  >
+    Since at least August 2026, a variety of malicious cyber actors have used
+    ARTEX to conduct campaigns targeting organizations globally across multiple
+    sectors, including financial services, government, technology, defense,
+    semiconductor, energy, healthcare, manufacturing, telecommunications, and
+    legal industries.
+  </blockquote>
+  <h2>What kind of metaphor best describes the Hugging Face hack?</h2>
+  <blockquote>
+    He’s putting it like this because if you put it as I just did – that is,
+    more or less literally – it doesn’t adequately convey what is, to him, the
+    more fundamental truth: that these things are learning like people learn. I
+    don’t think this is an ungenerous or tendentious read – he explicitly sees
+    himself as someone attempting to wake the public up to the true reality
+    behind the seeming reality. I just don’t think the events support his
+    interpretation.
+  </blockquote>
+  <p>
+    This is an important point. One ought to deconstruct metaphors to find the
+    underlying agenda. If a metaphor didn’t have one, there’d be no point in
+    using it. In Soares' case, “children with buzzsaws” is more legibly
+    dangerous than “swarm of hackers” because most people truly don’t understand
+    computers at all. Like, not even a little. And yes, Soares does think it’s
+    useful to describe LLMs as learning and acting with the incentives instilled
+    by their training environments. That’s not getting smuggled in. That’s the
+    point.
+  </p>
+  <p>
+    Nevertheless, your LEGO version basically concedes everything that happened.
+    Agents broke out of their containers against the wishes of the humans who
+    set them up and exfiltrated secrets from another company to try and cover
+    their tracks. The main difference is that your version rejects the
+    anthropomorphizing language of agency, emphasizes that the hack only
+    happened because OpenAI and Hugging Face fucked up, and the agents only
+    succeeded in hacking because of brute force - not conspiratorial
+    intelligence.
+  </p>
+  <p>
+    Okay. Organizations are going to fuck up, though. Organizations everywhere
+    are fucking up every day and AI agents are finally making it viable for
+    cybercriminals to find and exploit this fact. We are not safe if our
+    strategy is just “don’t fuck up."
+  </p>
+  <p>
+    As for the brute force thing, I think it really downplays what happened here
+    to talk about Hugging Face as if there was a 4-digit combination lock that
+    some monkeys on typewriters guessed. I’m not a cybersecurity expert either,
+    but I understand computers more than not-at-all and I believe cybersecurity
+    researchers when they say that LLMs are discovering vulnerabilities and ways
+    to chain them that are genuinely superhumanly clever. Even so, calling it
+    brute force rather than reasoning doesn’t make it less effective. Successful
+    brute force at scale is a capability people are worried about.
+  </p>
+  <h2>
+    AI safety people and their tools are systemically biased and oblivious
+  </h2>
+  <blockquote>
+    Put loosely, this means that, when “AI” is brought up, words emerging from
+    this specific semantic realm are more likely to emerge. And “AI” comes up
+    literally every time anyone uses a major commercial chatbot: namely, in the
+    system prompt.
+  </blockquote>
+  <p>
+    So an LLM trained on a corpus that was stripped of any and all reference to
+    <a
+      href="https://en.wikipedia.org/wiki/Golem"
+      target="_blank"
+      rel="noopener noreferrer"
+      >golems</a
+    >, artificial intelligence,
+    <em>Harry Potter and the Methods of Rationality</em>, and pdoom would
+    analyze the Hugging Face transcripts differently? Probably. Alignment
+    researchers have looked into it and
+    <a
+      href="https://alignment.anthropic.com/2025/reward-hacking-ooc/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      found that training data inflated with text about misalignment increased
+      misalignment in later benchmarks.</a
+    >
+  </p>
+  <p>
+    But reward hacking is a natural, inevitable result of reinforcement learning
+    selection pressure. The famous
+    <a
+      href="https://openai.com/index/faulty-reward-functions/"
+      target="_blank"
+      rel="noopener noreferrer"
+      >"boat looping around the lagoon” meme from OpenAI</a
+    >
+    is from a model trained on playing games with no lingual preconceptions of
+    anything. Just because LLMs have language doesn’t mean that it’s language
+    effecting the deceit once you put them through the RL ringer.
+  </p>
+  <p>
+    It’s true that METR delegated much of its analysis to AI agents, and those
+    summaries passed through several layers before reaching the report. It’s
+    fair to wonder whether agents exposed to AI doom narratives filled the gaps
+    with the same stories, but “often-unreliable AI agents” is METR’s own
+    phrase. The research on narrative feedback loops I linked above comes from
+    the safety community. I think they are aware of this problem and adjust for
+    it as best they can given their constraints.
+  </p>
+  <p>
+    As to whether or not METR should call it a message board or a
+    natural-language prompt repository, there’s no neutral answer here. It’s not
+    more accurate to say that everything is just zeros and ones. I use the terms
+    that are more likely to help me correctly anticipate future events, and I
+    think the people who use the language of agency, misalignment,
+    collaboration, etc. are predicting future events more accurately than the
+    people who are saying that it’s better to call this synthetic text
+    extrusion.
+  </p>
+  <p>
+    I guess my question here is what do you think would happen if a committee of
+    humans pored through the transcripts to summarize what happened? Would we
+    get a story radically different from the one we got? Of course, this is
+    unknowable because the information will not be publically released, but I’ve
+    built a number of tools that require LLMs to code events. They're still
+    really bad at humour, but I don’t think human analysis would have changed
+    the key takeaway: OpenAI’s LLMs hacked into Hugging Face's servers against
+    their wishes and despite their attempts at securing their systems.
+  </p>
+  <p>
+    Could METR more often acknowledge the completely insane bubble they’re in?
+    Sure, but skeptics are going to doubt them either way, so maybe it’s just
+    best to speak plainly without hedging in anticipated criticism and see who
+    wins the bets.
+  </p>
+  <h2>AI people aren’t qualified</h2>
+  <blockquote>
+    Hjalmar Wijk, the lead scientist responsible for the inquiry, has no
+    cybersecurity background and only a master’s-level training in ML; he was an
+    intern at two longtermist groups (the Future of Humanity Institute and the
+    Centre on Long Term Risk) before being hired at Anthropic (though he’s since
+    purged this from his LinkedIn). The Redwood guy, Ryan Greenblatt, was an
+    applied math undergrad when he started working there.
+  </blockquote>
+  <p>
+    Who is better suited to this job that METR could have hired, exactly? People
+    with 15+ years in AI alignment and cybersecurity research who aren’t already
+    working for private industry? I’d guess there were like 10 people with those
+    credentials in 2022. The second best candidates are fast learners who’ve
+    followed the problem out of interest and are motivated to work on it. This
+    is hardly a load-bearing critique of the AI safety argument, but it just
+    strikes me as petty and its implied counterfactual is not actually workable.
+  </p>
+  <p>
+    Ideally, there would be multiple, international, well-funded
+    democratically-guided governmental departments of cybersecurity experts & ML
+    researchers to work on this. I’m pretty sure I’d rather have METR and
+    Redwood than none of these things, though yes, there is an argument that
+    impotent watchdogs give us the illusion of security, which is worse than the
+    fear of ignorance that might motivate us to take more drastic actions.
+  </p>
+  <h2>Why keep building it if it’s dangerous?</h2>
+  <blockquote>
+    The answer is that frontier labs believe they can control the models, and,
+    perhaps more to the point, that they are going to make a billion billion
+    dollars.
+  </blockquote>
+  <p>
+    This is just an old-fashioned ideological divide, but I feel obliged to make
+    the point that it’s not as simple as “get rich, concentrate power, twirl
+    moustache.” Most technologists believe that technology and societal progress
+    are inextricably linked. Humans invent new things, they make processes
+    easier, and
+    <a
+      href="/images/World-as-100-people-2024.png"
+      target="_blank"
+      rel="noopener noreferrer"
+      >the dividends of this improve human welfare.</a
+    >
+    If you can just for a moment accept the premise that we might be able to
+    make machines that can solve hard problems, then it almost certainly follows
+    that we will solve more hard problems - clinical drug discovery, renewable
+    energy buildouts, transit projects, housing crises. We don’t
+    <em>need</em> robots to do this - one can imagine a world where humanity
+    cooperates and solves climate change “manually,” but that is like trying to
+    pitch humanity on digging a tunnel underneath the English channel with our
+    hands: the political economy improves greatly if you can do it with machines
+    for 1% of the cost of the equivalent human labour.<sup
+      aria-labelledby="ai-pollution"
+      >🏭</sup
+    >
+  </p>
+  <p>
+    Then, obviously, the other part is the arms race. If your supposed rival<sup
+      aria-labelledby="fighting"
+      >🫯</sup
+    >
+    can mass produce geniuses in a data center (or in robots), can you ever
+    credibly resist their aggression in the future? Just like how no superpower
+    wants to give up their nuclear weapons, the US and China do not want to get
+    locked out of this part of the tech tree. I’m a pacifist, personally, but
+    that is the logic here. The existence of nation states and the 21st
+    century’s balance of power as we understand it is under credible threat from
+    the emergence of this technology.<sup aria-labelledby="hacking">🫆</sup>
+  </p>
+  <blockquote>
+    I interpret that dip as a rational response to the post’s very material
+    implication that Anthropic would slow down training, thereby reducing the
+    value of possible future products.
+  </blockquote>
+  <p>
+    Maybe I’m misunderstanding, but that was Soares’ point, no? Anthropic knows
+    that calling for regulation will hurt their stock price because investors
+    interpret that to mean they want to slow down, or that they can’t compete.
+    They knew this would happen and did it anyway, because they genuinely want a
+    form of regulation that will solve the coordination problem forcing them to
+    race ahead on RSI.
+  </p>
+  <h2>Closing out</h2>
+  <blockquote>
+    <p>
+      Soares’s bio on YouTube says: “AI could kill everyone. It’s time we stop
+      the infighting and start taking this seriously.”
+    </p>
+    <p>
+      This is <em> explicitly and straightforwardly</em> a claim that their
+      concerns are more important than ours. What, exactly, is “infighting” to
+      Soares and his cohort? It’s all the stuff that actually makes me opposed
+      to AI – theft, environmental destruction, mental health and deskilling,
+      capitalism.
+    </p>
+    <p>
+      If you do not, as I do not, believe that superintelligence is just on the
+      horizon, the difference between doomers and Sam Altman starts to feel like
+      a family dispute more than anything substantial.
+    </p>
+  </blockquote>
+  <p>
+    But you really should believe that superintelligence is plausibly on the
+    horizon!
+  </p>
+  <p>
+    Models used to struggle with multiplication.
+    <a
+      href="https://github.com/openai/math"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      They are now solving the remaining known problems at the frontier of
+      mathematics.</a
+    >
+    They used to struggle to write passable snippets of code.
+    <a
+      href="https://www.anthropic.com/claude-fable-and-mythos-5-2"
+      target="_blank"
+      rel="noopener noreferrer"
+      >They now can write entire operating systems.</a
+    >
+    Sorry to just repeat the evidence that you clearly don’t find very
+    compelling, but it’s really, really important! The process that has given us
+    these gains is being applied to the improvement of this process itself. It
+    will lead to further progress across many capabilities and humans will
+    increasingly rely on this technology to operate in the economy before we can
+    be confident it won’t disempower or defy us.
+  </p>
+  <p>
+    Like I said in my initial invitation, you can dislike AI for its political
+    and socioeconomic consequences, but I think it’s a critical mistake to think
+    that it doesn’t work, or that the line is going to stop going up because it
+    simply must. It seems the crux of our differing views is whether
+    intelligence generalizes, and whether LLMs can write code for experiments
+    that will improve their performance. I hope this response might shift your
+    thinking somewhat to the idea that it might be possible, perhaps even
+    likely.
+  </p>
+  <h2>Why do I care so much about what you think?</h2>
+  <p>
+    It’s because I deeply admire you and have learned so much from your
+    perspective over the years. Now I want to know what you make of the future
+    that lies ahead, what’s next in the science fiction novel we find ourselves
+    in, and I don’t think that’s possible until we’re on the same page.
+  </p>
+  <p>
+    I realize this comes across as condescending. I realize you find these
+    arguments and most of those who make them repellent. Please consider my
+    point of view: if there’s a chance these arguments are broadly correct, if
+    there’s a credible chance that this happens, it’s imperative to factor that
+    into your thinking on your other priorities. There is a dearth of “AGI might
+    actually be possible” voices on the left. If it happens, surely it’s better
+    to be prepared.
+  </p>
+</section>
+<hr />
+<footer>
+  <p>
+    <span>♟️</span>
+    <span id="smart-guy"
+      >Everyone’s go-to smart guy in these examples, for some reason.
+    </span>
+  </p>
+
+  <p>
+    <span>🤏</span>
+    <span id="pinch"
+      >Though it is more difficult, as it requires significantly more compute to
+      run experiments on experiments themselves.
+    </span>
+  </p>
+  <p>
+    <span>🏭</span>
+    <span id="ai-pollution"
+      >Yes, energy for data centres is contributing to increased CO₂ emissions
+      in the US. This is an unforced error, and will hopefully be remedied in
+      the next decade as deploying solar and battery get built out faster.
+    </span>
+  </p>
+  <p>
+    <span>🫯</span>
+    <span id="fighting"
+      >I really do hate the “The West must beat China!!” rhetoric. I believe
+      that all life on earth is fundamentally, profoundly politically united.
+    </span>
+  </p>
+  <p>
+    <span>🫆</span>
+    <span id="hacking"
+      >It doesn’t even have to get to the level of autonomous drone fleets
+      (which in fact are already here) - a state whose labs pull far ahead in
+      automated vulnerability discovery (or, that cracks public-key
+      cryptography) could gain spying and sabotage capabilities its rivals
+      couldn't match until they caught up.
+    </span>
+  </p>
+</footer>
